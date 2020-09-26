@@ -17,6 +17,8 @@ public class Main {
      * 笔记 ！这个看文件！！！  synchronized关键字.md
      */
     public void func() {
+        new StringBuilder().append("dsada");
+        new StringBuffer().append("dads");
         synchronized (this) {
             System.out.println("java!!!");
         }
