@@ -15,7 +15,6 @@ public class LockTest01 {
 
 }
 
-
 class BoundedBuffer {
     private Lock lock = new ReentrantLock();
     private Condition condition = lock.newCondition();

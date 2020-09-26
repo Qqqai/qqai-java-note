@@ -13,8 +13,14 @@ import java.util.List;
 
 public class Main {
 
+    /**
+     * 由 list的源码我们不难发现，不管是ArrayList还是LinkedList都是线程不安全的
+     *
+     * @param
+     */
     public static void main(String[] args) {
         List<Integer> linkedList = new LinkedList<Integer>();
+        linkedList.add(2);
 //        LinkedList.Node;内部类  所以LinkedList是一个双向链表。
         //private static class Node<E> {
         //        E item;
