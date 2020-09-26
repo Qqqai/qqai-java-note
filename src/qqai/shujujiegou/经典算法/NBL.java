@@ -1,3 +1,5 @@
+package qqai.shujujiegou.经典算法;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Stack;
