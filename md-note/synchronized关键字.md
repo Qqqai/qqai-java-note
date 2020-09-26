@@ -16,13 +16,13 @@ public class Main {
 
 编译:
 
-```txt
+```shell script
 javac Main.java
 ```
 
 报错：
 
-```txt
+```shell script
 D:\idea\sources\jvm\qqai\src\qqai\synchronizedtest>javac Main.java
 Main.java:4: 错误: 编码 GBK 的不可映射字符 (0x97)
  * 鎻忚堪锛歴ynchronized鍏抽敭瀛?
@@ -31,13 +31,13 @@ Main.java:4: 错误: 编码 GBK 的不可映射字符 (0x97)
 
 修改命令重新编译：
 
-```
+```shell script
 javac -encoding UTF-8 Main.java
 ```
 
 成功，或者javap命令反编译：
 
-```
+```shell script
 javap -c -s -v -l Main.class
 ```
 
