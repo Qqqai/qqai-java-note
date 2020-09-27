@@ -1,10 +1,9 @@
 package qqai.reflection.dynamic;
 
 
-import com.sun.security.ntlm.Client;
-
-import javax.security.auth.Subject;
-import java.lang.reflect.*;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 /**
  * 描述：动态代理

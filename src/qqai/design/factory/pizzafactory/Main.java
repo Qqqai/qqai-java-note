@@ -1,6 +1,6 @@
 package qqai.design.factory.pizzafactory;
 
-import design.factory.pizzafactory.order.OrderPizza;
+import qqai.design.factory.pizzafactory.order.OrderPizza;
 
 /**
  * 描述：调用类

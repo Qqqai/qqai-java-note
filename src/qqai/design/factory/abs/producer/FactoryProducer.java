@@ -1,8 +1,8 @@
 package qqai.design.factory.abs.producer;
 
-import design.factory.abs.factory.AbstractFactory;
-import design.factory.abs.factory.extend.ColorFactory;
-import design.factory.abs.factory.extend.ShapeFactory;
+import qqai.design.factory.abs.factory.AbstractFactory;
+import qqai.design.factory.abs.factory.extend.ColorFactory;
+import qqai.design.factory.abs.factory.extend.ShapeFactory;
 
 /**
  * 描述：创建一个工厂创造器/生成器类，通过传递形状或颜色信息来获取工厂。

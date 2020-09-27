@@ -1,14 +1,7 @@
 package qqai.design.builderPattern;
 
-import design.builderPattern.builder.Meal;
-import design.builderPattern.builder.MealBuilder;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import qqai.design.builderPattern.builder.Meal;
+import qqai.design.builderPattern.builder.MealBuilder;
 
 /**
  * 描述：构建者模式

@@ -1,7 +1,8 @@
 package qqai.design.prototype;
 
-import design.prototype.abs.Shape;
-import design.prototype.table.ShapeCache;
+
+import qqai.design.prototype.abs.Shape;
+import qqai.design.prototype.table.ShapeCache;
 
 /**
  * 描述：原型模式

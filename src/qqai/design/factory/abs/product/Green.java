@@ -1,6 +1,6 @@
 package qqai.design.factory.abs.product;
 
-import design.factory.abs.inter.Color;
+import qqai.design.factory.abs.inter.Color;
 
 /**
  * 描述：颜色实现2

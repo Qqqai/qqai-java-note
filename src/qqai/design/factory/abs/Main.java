@@ -1,9 +1,9 @@
 package qqai.design.factory.abs;
 
-import design.factory.abs.factory.AbstractFactory;
-import design.factory.abs.inter.Color;
-import design.factory.abs.inter.Shape;
-import design.factory.abs.producer.FactoryProducer;
+import qqai.design.factory.abs.factory.AbstractFactory;
+import qqai.design.factory.abs.inter.Color;
+import qqai.design.factory.abs.inter.Shape;
+import qqai.design.factory.abs.producer.FactoryProducer;
 
 /**
  * 描述：入口

@@ -1,9 +1,10 @@
 package qqai.design.builderPattern.builder;
 
-import design.builderPattern.abs.extend.ChickenBurger;
-import design.builderPattern.abs.extend.Coke;
-import design.builderPattern.abs.extend.Pepsi;
-import design.builderPattern.abs.extend.VegBurger;
+
+import qqai.design.builderPattern.abs.extend.ChickenBurger;
+import qqai.design.builderPattern.abs.extend.Coke;
+import qqai.design.builderPattern.abs.extend.Pepsi;
+import qqai.design.builderPattern.abs.extend.VegBurger;
 
 /**
  * 描述：builder对象

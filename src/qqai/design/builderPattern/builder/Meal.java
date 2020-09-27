@@ -1,6 +1,7 @@
 package qqai.design.builderPattern.builder;
 
-import design.builderPattern.inter.Item;
+
+import qqai.design.builderPattern.inter.Item;
 
 import java.util.ArrayList;
 import java.util.List;

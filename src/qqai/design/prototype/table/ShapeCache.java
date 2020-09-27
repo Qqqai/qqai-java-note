@@ -1,9 +1,10 @@
 package qqai.design.prototype.table;
 
-import design.prototype.abs.Shape;
-import design.prototype.abs.extend.Circle;
-import design.prototype.abs.extend.Rectangle;
-import design.prototype.abs.extend.Square;
+
+import qqai.design.prototype.abs.Shape;
+import qqai.design.prototype.abs.extend.Circle;
+import qqai.design.prototype.abs.extend.Rectangle;
+import qqai.design.prototype.abs.extend.Square;
 
 import java.util.Hashtable;
 

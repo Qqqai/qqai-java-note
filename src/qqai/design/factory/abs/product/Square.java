@@ -1,6 +1,7 @@
 package qqai.design.factory.abs.product;
 
-import design.factory.abs.inter.Shape;
+
+import qqai.design.factory.abs.inter.Shape;
 
 /**
  * 描述：接口实现2

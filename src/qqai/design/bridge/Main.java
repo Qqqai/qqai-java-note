@@ -1,9 +1,9 @@
 package qqai.design.bridge;
 
-import design.bridge.abs.Shape;
-import design.bridge.abs.extend.Circle;
-import design.bridge.inter.impl.GreenCircle;
-import design.bridge.inter.impl.RedCircle;
+import qqai.design.bridge.abs.Shape;
+import qqai.design.bridge.abs.extend.Circle;
+import qqai.design.bridge.inter.impl.GreenCircle;
+import qqai.design.bridge.inter.impl.RedCircle;
 
 /**
  * 描述：桥接模式

@@ -1,7 +1,6 @@
 package qqai.design.adapter;
 
-import design.adapter.adapter.MediaAdapter;
-import design.adapter.inter.impl.AudioPlayer;
+import qqai.design.adapter.adapter.MediaAdapter;
 
 /**
  * 描述：入口

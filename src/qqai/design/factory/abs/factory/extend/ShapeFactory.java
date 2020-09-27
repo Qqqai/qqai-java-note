@@ -1,8 +1,8 @@
 package qqai.design.factory.abs.factory.extend;
 
 import qqai.design.factory.abs.factory.AbstractFactory;
-import design.factory.abs.inter.Color;
-import design.factory.abs.inter.Shape;
+import qqai.design.factory.abs.inter.Color;
+import qqai.design.factory.abs.inter.Shape;
 import qqai.design.factory.abs.product.Circle;
 import qqai.design.factory.abs.product.Rectangle;
 import qqai.design.factory.abs.product.Square;

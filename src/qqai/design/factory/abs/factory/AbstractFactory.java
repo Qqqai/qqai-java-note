@@ -1,7 +1,7 @@
 package qqai.design.factory.abs.factory;
 
-import design.factory.abs.inter.Color;
-import design.factory.abs.inter.Shape;
+import qqai.design.factory.abs.inter.Color;
+import qqai.design.factory.abs.inter.Shape;
 
 /**
  * 描述：抽象工厂

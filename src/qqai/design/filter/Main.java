@@ -1,8 +1,9 @@
 package qqai.design.filter;
 
-import design.filter.entity.Person;
-import design.filter.inter.Criteria;
-import design.filter.inter.impl.*;
+
+import qqai.design.filter.entity.Person;
+import qqai.design.filter.inter.Criteria;
+import qqai.design.filter.inter.impl.*;
 
 import java.util.ArrayList;
 import java.util.List;
