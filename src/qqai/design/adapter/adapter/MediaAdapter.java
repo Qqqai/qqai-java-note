@@ -1,10 +1,10 @@
 package qqai.design.adapter.adapter;
 
-import design.adapter.inter.AdvancedMediaPlayer;
-import design.adapter.inter.MediaPlayer;
-import design.adapter.inter.impl.AudioPlayer;
-import design.adapter.inter.impl.Mp4Player;
-import design.adapter.inter.impl.VlcPlayer;
+import qqai.design.adapter.inter.AdvancedMediaPlayer;
+import qqai.design.adapter.inter.MediaPlayer;
+import qqai.design.adapter.inter.impl.AudioPlayer;
+import qqai.design.adapter.inter.impl.Mp4Player;
+import qqai.design.adapter.inter.impl.VlcPlayer;
 
 /**
  * 描述：创建实现了 MediaPlayer 接口的适配器类。
