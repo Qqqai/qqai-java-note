@@ -6,7 +6,11 @@
 
     <groupId>org.example</groupId>
     <artifactId>qqai</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>spring/ioc</module>
+    </modules>
 
     <dependencies>
         <dependency>
