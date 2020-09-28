@@ -1,4 +1,4 @@
-package qqai.service;
+package springmvc.service;
 
 /**
  * @author qqai

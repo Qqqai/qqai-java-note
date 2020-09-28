@@ -1,4 +1,4 @@
-package qqai.utils;
+package springmvc.utils;
 
 /**
  * 描述：下载文件得工具类

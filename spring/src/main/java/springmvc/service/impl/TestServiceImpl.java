@@ -1,7 +1,7 @@
-package qqai.service.impl;
+package springmvc.service.impl;
 
 import org.springframework.stereotype.Service;
-import qqai.service.TestService;
+import springmvc.service.TestService;
 
 /**
  * @author qqai

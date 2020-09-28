@@ -16,8 +16,8 @@ public class LockTest01 {
 }
 
 class BoundedBuffer {
-    private Lock lock = new ReentrantLock();
-    private Condition condition = lock.newCondition();
+    private final Lock lock = new ReentrantLock();
+    private final Condition condition = lock.newCondition();
     private int num = 0;
 
     private void increment() throws InterruptedException {

@@ -71,13 +71,23 @@ class Constant {
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println(Constant.HELLO_WORLD);
+//        System.out.println(Constant.HELLO_WORLD);
+        new NewClassBeginToEnd();
     }
 }
 
 class Father {
     public String name = "我们之间";
     public int age = 18;
+
+    {
+        System.out.println(this.name + "....f");
+        System.out.println(this.age + "....f");
+    }
+
+    static {
+        System.out.println("father static....");
+    }
 
     public Father() {
         System.out.println("Father....noArgs");

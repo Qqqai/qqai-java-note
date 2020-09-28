@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * 描述：阻塞队列测试
@@ -22,7 +23,7 @@ public class LockQueueTest {
         *SynchronousQueue:不存储元素的阻塞队列，也即单个元素的队列。
         LinkedTransferQueue:由链表组成的无界阻塞队列。
         LinkedBlockingDeque:由链表组成的双向阻塞队列。
-        DelayQueue:使用优先级队列实现的延迟无
+        DelayQueue:使用优先级队列实现的延迟无界队列
      */
     public static void main(String[] args) {
 //        Collection collection = null;

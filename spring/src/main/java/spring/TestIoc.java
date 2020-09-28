@@ -1,7 +1,7 @@
 package spring;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import qqai.service.TestService;
+import springmvc.service.TestService;
 
 /**
  * @author qqai
