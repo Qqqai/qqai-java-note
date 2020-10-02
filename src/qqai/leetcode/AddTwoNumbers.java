@@ -99,6 +99,7 @@ public class AddTwoNumbers {
 
 
 class ListNode {
+
     int val;
     ListNode next;
 
