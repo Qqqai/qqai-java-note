@@ -22,6 +22,7 @@ public class AddTwoNumbers {
         System.out.println(node);
     }
 
+    /*标记 成功  按位运算，一个节点算一位  最后一位进位按1算*/
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         l1 = new ListNode(2);
         l1.next = new ListNode(4);
@@ -51,7 +52,7 @@ public class AddTwoNumbers {
         return head.next;
     }
 
-
+    /*标记 递归失败*/
     public ListNode addTwoNumbersQQQQ(ListNode l1, ListNode l2) {
         ListNode node1 = new ListNode(0);
         node1.next = new ListNode(4);
