@@ -1,12 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/context
-	http://www.springframework.org/schema/context/spring-context.xsd">
+	http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
     <context:component-scan base-package="springmvc.service"/>
+    <!--    <context:component-scan base-package="mybatis.mapper"/>-->
+    <!--引入外部配置文件--> <!--标记 项目路径有问题 这里如果写相对路径编译之后获取不到-->
+    <!--        <context:property-placeholder location="classpath*:db.properties"/>-->
+<!--    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:db.properties</value>
+            </list>
+        </property>
+    </bean>-->
+
+    <!-- 阿里 druid 数据库连接池 配置  -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+        <!-- 数据库基本信息配置 -->
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql:///heimadb?serverTimezone=UTC"/>
+        <property name="username" value="root"/>
+        <property name="password" value="1234"/>
+        <!--<property name="filters" value="${jdbc.filters}"/>
+        &lt;!&ndash; 最大并发连接数 &ndash;&gt;
+        <property name="maxActive" value="${jdbc.maxActive}"/>
+        &lt;!&ndash; 初始化连接数量 &ndash;&gt;
+        <property name="initialSize" value="${jdbc.initialSize}"/>
+        &lt;!&ndash; 配置获取连接等待超时的时间 &ndash;&gt;
+        <property name="maxWait" value="${jdbc.maxWait}"/>
+        &lt;!&ndash; 最小空闲连接数 &ndash;&gt;
+        <property name="minIdle" value="${jdbc.minIdle}"/>
+        &lt;!&ndash; 最大空闲连接数 &ndash;&gt;
+        <property name="maxIdle" value="${jdbc.maxIdle}"/>
+        &lt;!&ndash; 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 &ndash;&gt;
+        <property name="timeBetweenEvictionRunsMillis" value="${jdbc.timeBetweenEvictionRunsMillis}"/>
+        &lt;!&ndash; 配置一个连接在池中最小生存的时间，单位是毫秒 &ndash;&gt;
+        <property name="minEvictableIdleTimeMillis" value="${jdbc.minEvictableIdleTimeMillis}"/>
+        <property name="validationQuery" value="${jdbc.validationQuery}"/>
+        <property name="testWhileIdle" value="${jdbc.testWhileIdle}"/>
+        <property name="testOnBorrow" value="${jdbc.testOnBorrow}"/>
+        <property name="testOnReturn" value="${jdbc.testOnReturn}"/>
+        <property name="maxOpenPreparedStatements" value="${jdbc.maxOpenPreparedStatements}"/>
+        &lt;!&ndash; 超过时间限制是否回收 &ndash;&gt;
+        <property name="removeAbandoned" value="${jdbc.removeAbandoned}"/>
+        &lt;!&ndash; 1800 秒，也就是 30 分钟 &ndash;&gt;
+        <property name="removeAbandonedTimeout" value="${jdbc.removeAbandonedTimeout}"/>
+        &lt;!&ndash; 关闭 abanded 连接时输出错误日志 &ndash;&gt;
+        <property name="logAbandoned" value="${jdbc.logAbandoned}"/>-->
+    </bean>
+
+    <!--配置扫描dao接口-->
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="mybatis.mapper"/>
+    </bean>
+
+    <!--讲dao代理对象交给IOC容器-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="typeAliasesPackage" value="mybatis.entity"/>
+        <property name="mapperLocations" value="classpath:mapper/*Dao.xml"/>
+        <!--分页-->
+        <!-- 传入PageHelper的插件 -->
+        <!-- <property name="plugins">
+             <array>
+                 &lt;!&ndash; 传入插件的对象 &ndash;&gt;
+                 <bean class="com.github.pagehelper.PageInterceptor">
+                     <property name="properties">
+                         <props>
+                             <prop key="helperDialect">mysql</prop>
+                             <prop key="reasonable">true</prop>
+                         </props>
+                     </property>
+                 </bean>
+             </array>
+         </property>-->
+    </bean>
+
+    <!--    配置事务管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
 </beans>
 
 

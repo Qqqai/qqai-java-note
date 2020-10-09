@@ -14,6 +14,14 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath:applicationContext.xml</param-value>
     </context-param>
+    <context-param>
+        <param-name/>
+        <param-value/>
+    </context-param>
+    <context-param>
+        <param-name/>
+        <param-value/>
+    </context-param>
 
     <!--配置前端控制器-->
     <servlet>
