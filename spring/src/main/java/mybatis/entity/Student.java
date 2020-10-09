@@ -2,17 +2,19 @@ package mybatis.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import lombok.Data;
 
 /**
  * student
- * @author 
+ *
+ * @author
  */
 @Data
 public class Student implements Serializable {
     private Integer sid;
 
-    private String NAME;
+    private String name;
 
     private Integer age;
 
