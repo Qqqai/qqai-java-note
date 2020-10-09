@@ -10,13 +10,13 @@
     <!--    <context:component-scan base-package="mybatis.mapper"/>-->
     <!--引入外部配置文件--> <!--标记 项目路径有问题 这里如果写相对路径编译之后获取不到-->
     <!--        <context:property-placeholder location="classpath*:db.properties"/>-->
-<!--    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="locations">
-            <list>
-                <value>classpath:db.properties</value>
-            </list>
-        </property>
-    </bean>-->
+    <!--    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+            <property name="locations">
+                <list>
+                    <value>classpath:db.properties</value>
+                </list>
+            </property>
+        </bean>-->
 
     <!-- 阿里 druid 数据库连接池 配置  -->
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
