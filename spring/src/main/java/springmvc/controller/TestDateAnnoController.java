@@ -35,7 +35,6 @@ public class TestDateAnnoController {
         return user;
     }
 
-
     @GetMapping("/mybatis")
     @ResponseBody
     public List<Student> student() {

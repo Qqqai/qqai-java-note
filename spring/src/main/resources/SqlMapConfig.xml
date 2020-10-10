@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!--引用别名实现不用写返回值或参数路径
+        <typeAliases>
+            type实体类的全限定类名  alias为别名  配置完成不区分大小写
+            <typeAlias type="com.it.domain.User" alias="user"></typeAlias>
+           别名第二种配置方法直接注册实体类所在包  所在包内所有文件全部注册  别名即类名不区分大小写
+            <package name="com.it.domain"/>
+        </typeAliases>-->
+    <!-- 引用其他的配置文件 -->
+    <properties resource="db.properties"/>
+    <!-- 配置环境 -->
+    <environments default="mysql">
+        <!-- 配置environments中mysql的环境 -->
+        <environment id="mysql">
+            <!-- 配置事务类型 -->
+            <transactionManager type="JDBC"></transactionManager>
+            <!-- 配置数据源  连接池  -->
+            <dataSource type="POOLED">
+                <!-- 配置数据库的四个基本信息-->
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <!-- 指定映射配置文件的位置，每个dao的xml的位置 -->
+    <mappers>
+        <mapper resource="mapper/StudentDao.xml"/>
+    </mappers>
+</configuration>

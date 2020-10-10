@@ -19,6 +19,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  */
 
 @Configuration
+@EnableConfigurationProperties(CacheProperties.class)
 public class RedisConfigTest {
     /**
      * 笔记 自定义 redisTemplate  这是一种方法 还有一种方法
@@ -26,16 +27,16 @@ public class RedisConfigTest {
      * @param factory
      * @return
      */
-    @Bean
-    RedisTemplate<String, Object> CustomRedisTemplateOne(RedisConnectionFactory factory) {
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(factory);
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashValueSerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-        return redisTemplate;
-    }
+//    @Bean
+//    RedisTemplate<String, Object> CustomRedisTemplateOne(RedisConnectionFactory factory) {
+//        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+//        redisTemplate.setConnectionFactory(factory);
+//        redisTemplate.setKeySerializer(new StringRedisSerializer());
+//        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+//        redisTemplate.setHashValueSerializer(new StringRedisSerializer());
+//        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+//        return redisTemplate;
+//    }
 
     //  标记 在类上加上 @EnableConfigurationProperties(CacheProperties.class) 这个注解这种配置方式才能生效，这个是在自定义RedisCacheConfiguration配置工厂
     //  标记 CacheProperties就是yml文件中对于redis得配置 修改这个配工厂之后再加载RedisTemplate就会自动按照这个工厂得内容进行配置
