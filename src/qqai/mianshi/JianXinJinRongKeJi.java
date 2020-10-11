@@ -11,7 +11,7 @@ import java.util.Comparator;
 
 public class JianXinJinRongKeJi {
     public static void main(String[] args) {
-        int[] ints = {54,54532,4324,32432};
+        int[] ints = {54, 54532, 4324, 32432};
         int num = 43243;
         System.out.println(carsTrans(ints, num));
     }
