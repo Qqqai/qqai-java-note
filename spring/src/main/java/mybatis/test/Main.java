@@ -18,27 +18,26 @@ import java.util.List;
  */
 
 public class Main {
-    private SqlSession session = null;
 
     /*笔记 直接获取到项目路径下的SqlMapConfig.xml配置文件 然后开启sqlsession*/
-    public StudentDao open(Class<StudentDao> t) throws IOException {
+    public SqlSession open() throws IOException {
         InputStream inputStream = Resources.getResourceAsStream("SqlMapConfig.xml");
         SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(inputStream);
-        session = factory.openSession();
-        return session.getMapper(t);
+        return factory.openSession();
     }
 
     public static void main(String[] args) throws IOException {
         Main main = new Main();
-        StudentDao studentDao = main.open(StudentDao.class);
-        main.commit();
+        SqlSession session = main.open();
+        StudentDao studentDao = session.getMapper(StudentDao.class);
         List<Student> all = studentDao.queryAll();
+        main.commit(session);
         for (Student student : all) {
             System.out.println(student);
         }
     }
 
-    public void commit() {
+    public void commit(SqlSession session) {
         session.commit();
         session.close();
     }
