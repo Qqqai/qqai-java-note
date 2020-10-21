@@ -20,8 +20,6 @@ public class FileReadUtils {
             sb.append((char) reader.read());
             // 转成char加到StringBuffer对象中
         }
-
-
         System.out.println(sb.toString());
 
 
