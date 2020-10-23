@@ -21,7 +21,6 @@ public class QuiltSort {
                     temp = j;
                     compare = old[j];
                 }
-                new Thread().start();
             }
             if (temp != i) {
                 int change = old[i];
