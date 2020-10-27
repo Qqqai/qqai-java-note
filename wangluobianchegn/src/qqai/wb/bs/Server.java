@@ -23,11 +23,11 @@ public class Server {
                     Socket socket = serverSocket.accept();
                     // 获取输入流对象
                     InputStream inputStream = socket.getInputStream();
-                    //        int len;
-                    //        byte[] buffer = new byte[1024];
-                    //        while ((len = inputStream.read(buffer)) != -1) {
-                    //            System.out.println(new String(buffer, 0, len));
-                    //        }
+//                    int len;
+//                    byte[] buffer = new byte[1024];
+//                    while ((len = inputStream.read(buffer)) != -1) {
+//                        System.out.println(new String(buffer, 0, len));
+//                    }
                     // 使用buffeedr eader读取信息
                     BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                     // 获取第一行也就是请求得方式以及地址等信息
@@ -42,6 +42,7 @@ public class Server {
                     // 获取流
                     FileInputStream fileInputStream = new FileInputStream(path);
                     OutputStream outputStream = socket.getOutputStream();
+                    // 指定输出的响应格式
                     outputStream.write("HTTP/1.1 200 OK\r\n".getBytes());
                     outputStream.write("Content-Type:text/html\r\n".getBytes());
                     // 必须写入空行
