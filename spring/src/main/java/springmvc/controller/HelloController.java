@@ -3,6 +3,8 @@ package springmvc.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -65,6 +67,14 @@ public class HelloController {
 //        FileUtil.download(file, response);
         Files.copy(Paths.get(file.getAbsolutePath()), response.getOutputStream());
         return "success";
+    }
+
+    @GetMapping("/attr")
+    @ResponseBody
+    public String attr(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        request.setAttribute("name", "qqai");
+        redirectAttributes.addFlashAttribute("name", "qqai");
+        return "true";
     }
 
 }
