@@ -21,7 +21,7 @@ public class TestCglib {
         Enhancer enhancer = new Enhancer();
         //设置目标类的字节码文件
         enhancer.setSuperclass(Dog.class);
-        //设置回调函数
+        //设置回调代理类对象
         enhancer.setCallback(new MyMethodInterceptor());
 
         //这里的creat方法就是正式创建代理类
@@ -38,7 +38,7 @@ class MyMethodInterceptor implements MethodInterceptor {
     @Override
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
         System.out.println("这里是对目标类进行增强！！！");
-        //注意这里的方法调用，不是用反射哦！！！
+        //注意这里的方法调用，不是用反射哦！！！   cglib代理  具体实现看不懂
         Object object = proxy.invokeSuper(obj, args);
         System.out.println(object);//方法执行返回值
         return object;

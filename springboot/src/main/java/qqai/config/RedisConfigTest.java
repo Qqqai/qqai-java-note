@@ -19,6 +19,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  */
 
 @Configuration
+// 绑定spring.cache前缀的配置文件内容
 @EnableConfigurationProperties(CacheProperties.class)
 public class RedisConfigTest {
     /**
@@ -29,12 +30,19 @@ public class RedisConfigTest {
      */
     @Bean
     RedisTemplate<String, Object> CustomRedisTemplateOne(RedisConnectionFactory factory) {
+        // 创建出redisTemplate实例
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        // 设置连接工厂
         redisTemplate.setConnectionFactory(factory);
+        // 设置key的序列化方式
         redisTemplate.setKeySerializer(new StringRedisSerializer());
+        // 设置hashKey的序列化方式
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        // 设置hashValue的序列化方式
         redisTemplate.setHashValueSerializer(new StringRedisSerializer());
+        // 设置value的序列化方式
         redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        // 添加实例到ioc容器中
         return redisTemplate;
     }
 
