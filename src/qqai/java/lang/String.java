@@ -15,6 +15,8 @@ public class String {
      */
 
     public static void main(String[] args) {
+        new java.lang.String("ada");
+        new StringBuffer().append(1);
         System.out.println("hello world");
     }
 
