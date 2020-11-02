@@ -46,6 +46,7 @@ public class HelloController {
         String uuid = UUID.randomUUID().toString().replace("-", "");
         //唯一id
         filename = uuid + filename;
+        // 标记 springmvc提供的文件操作  基于字节流的读写方式
         upload.transferTo(new File(path, filename));
         return "success";
     }
@@ -65,6 +66,7 @@ public class HelloController {
         // 设置Headers
         response.setHeader("Content-Type", "application/octet-stream;charset=utf-8"); // 告诉浏览器输出内容为流
 //        FileUtil.download(file, response);
+        // 标记 nio的下载方式
         Files.copy(Paths.get(file.getAbsolutePath()), response.getOutputStream());
         return "success";
     }
