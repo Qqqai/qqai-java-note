@@ -15,6 +15,11 @@ public class Main {
 
     @Override
     public int hashCode() {
+        // 看源码
         return Objects.hash(name, age);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Main().hashCode());
     }
 }

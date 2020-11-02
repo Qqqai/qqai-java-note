@@ -22,7 +22,6 @@ public class ShuZiFanZhuan {
         StringBuffer buffer = new StringBuffer(String.valueOf(x));
         StringBuffer reverse = buffer.reverse();
         int i = Integer.parseInt(reverse.toString());
-//        System.out.println(i);
         return i;
     }
 }

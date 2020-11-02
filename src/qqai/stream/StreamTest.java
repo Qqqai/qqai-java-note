@@ -24,6 +24,9 @@ public class StreamTest {
         User user4 = new User("qqai-sg", 21, 4);
         User user5 = new User("qqai-df", 22, 5);
         List<User> list = Arrays.asList(user1, user2, user3, user4, user5);
+        // 笔记 Stream<T> filter(Predicate<? super T> predicate);  Predicate这是函数式接口
+        // 笔记 <? super T>是用来限定泛型的作用域的，?代表只要继承自这个泛型T的所有类型都可以成为泛型
+        // 笔记 <? super T>同样用来限定泛型，表示只要是T的父类型都可以成为泛型
         System.out.println(list.stream().filter((user) -> user.getId() % 2 == 0 && user.getAge() > 20).map(user -> {
             String username = user.getUsername();
             String lowerCase = username.toUpperCase();
@@ -32,6 +35,9 @@ public class StreamTest {
             return user;
         }).collect(Collectors.toList()));
 
+        /**
+         * 笔记 四大函数式接口
+         */
         //笔记 泛型前面的是输入，后面的是返回值
         Function<String, Integer> function = new Function<String, Integer>() {
             @Override
