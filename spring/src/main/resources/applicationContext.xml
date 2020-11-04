@@ -85,6 +85,10 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
+    <bean id="student" class="spring.entity.Student">
+        <property name="beanName" value="qqai"/>
+    </bean>
+
     <tx:annotation-driven transaction-manager="transactionManager"/>
 </beans>
 
