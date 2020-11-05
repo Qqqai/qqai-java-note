@@ -9,6 +9,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,15 +31,26 @@ public class Main {
         Main main = new Main();
         SqlSession session = main.open();
         StudentDao studentDao = session.getMapper(StudentDao.class);
-        List<Student> all = studentDao.queryAll();
+//        List<Student> all = studentDao.queryAll();
+        studentDao.insert(new Student().setAge(18).setBirthday(new Date()).setName("qqdsad"));
         main.commit(session);
-        for (Student student : all) {
-            System.out.println(student);
-        }
+//        for (Student student : all) {
+//            System.out.println(student);
+//        }
     }
 
     public void commit(SqlSession session) {
         session.commit();
+        // 执行得是JdbcTr..得事物  JdbcTransaction.class
+        //   @Override
+        //  public void commit() throws SQLException {
+        //    if (connection != null && !connection.getAutoCommit()) {
+        //      if (log.isDebugEnabled()) {
+        //        log.debug("Committing JDBC Connection [" + connection + "]");
+        //      }
+        //      connection.commit();
+        //    }
+        //  }
         session.close();
     }
 }

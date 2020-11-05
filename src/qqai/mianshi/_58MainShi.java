@@ -48,10 +48,10 @@ public class _58MainShi {
     }
 
     public static void main(String[] args) {
-//        String s = "GGGBBBGG";
-//        System.out.println(lineup(s));
-        int[] a = {1, 1, 1, 32, 43, 2, 4, 2, 4, 32, 423, 432, 4, 2, 4, 23, 42, 42, 2, 1};
-        System.out.println(Arrays.toString(removeDuplicate(a)));
+        String s = "GGGBBBGG";
+        System.out.println(lineup(s));
+//        int[] a = {1, 1, 1, 32, 43, 2, 4, 2, 4, 32, 423, 432, 4, 2, 4, 23, 42, 42, 2, 1};
+//        System.out.println(Arrays.toString(removeDuplicate(a)));
     }
 
     public static int[] removeDuplicate(int[] array) {

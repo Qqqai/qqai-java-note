@@ -18,7 +18,7 @@
 
     <!-- html视图解析器 必须先配置freemarkerConfig,注意html是没有prefix前缀属性的 -->
     <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
-        <property name="templateLoaderPath" value="/page/html/"/>
+        <property name="templateLoaderPath" value="/WEB-INF/page/html/"/>
         <property name="defaultEncoding" value="utf-8"/>
     </bean>
     <bean id="htmlViewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
@@ -33,7 +33,7 @@
     <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <!--配置jstl的视图解析-->
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-        <property name="prefix" value="/page/jsp/"/>
+        <property name="prefix" value="/WEB-INF/page/jsp/"/>
         <property name="suffix" value=".jsp"/>
         <property name="order" value="0"/>
     </bean>

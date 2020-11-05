@@ -3,12 +3,12 @@
 <mapper namespace="mybatis.mapper.StudentDao">
     <resultMap id="BaseResultMap" type="mybatis.entity.Student">
         <id column="sid" jdbcType="INTEGER" property="sid"/>
-        <result column="NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="age" jdbcType="INTEGER" property="age"/>
         <result column="birthday" jdbcType="DATE" property="birthday"/>
     </resultMap>
     <sql id="Base_Column_List">
-    sid, `NAME`, age, birthday
+    sid, name, age, birthday
   </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -25,17 +25,17 @@
   </delete>
     <insert id="insert" keyColumn="sid" keyProperty="sid" parameterType="mybatis.entity.Student"
             useGeneratedKeys="true">
-    insert into student (`NAME`, age, birthday
+    insert into student (`name`, age, birthday
       )
-    values (#{NAME,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{birthday,jdbcType=DATE}
+    values (#{name,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{birthday,jdbcType=DATE}
       )
   </insert>
     <insert id="insertSelective" keyColumn="sid" keyProperty="sid" parameterType="mybatis.entity.Student"
             useGeneratedKeys="true">
         insert into student
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="NAME != null">
-                `NAME`,
+            <if test="name != null">
+                name,
             </if>
             <if test="age != null">
                 age,
@@ -45,8 +45,8 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="NAME != null">
-                #{NAME,jdbcType=VARCHAR},
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
             </if>
             <if test="age != null">
                 #{age,jdbcType=INTEGER},
@@ -59,8 +59,8 @@
     <update id="updateByPrimaryKeySelective" parameterType="mybatis.entity.Student">
         update student
         <set>
-            <if test="NAME != null">
-                `NAME` = #{NAME,jdbcType=VARCHAR},
+            <if test="name != null">
+                `name` = #{name,jdbcType=VARCHAR},
             </if>
             <if test="age != null">
                 age = #{age,jdbcType=INTEGER},
@@ -73,7 +73,7 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="mybatis.entity.Student">
     update student
-    set `NAME` = #{NAME,jdbcType=VARCHAR},
+    set name = #{name,jdbcType=VARCHAR},
       age = #{age,jdbcType=INTEGER},
       birthday = #{birthday,jdbcType=DATE}
     where sid = #{sid,jdbcType=INTEGER}
