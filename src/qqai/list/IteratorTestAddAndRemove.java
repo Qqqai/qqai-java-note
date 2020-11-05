@@ -22,6 +22,8 @@ public class IteratorTestAddAndRemove {
                 iterator.remove();
             }
         }
+        list.removeIf(s -> s.equalsIgnoreCase("aaa"));
+        /*标记 以上两种一摸一样 拉姆达真好用啊*/
         //exception:  java.util.ConcurrentModificationException
 //        for (String s : list) {  //笔记 遍历得时候会默认记住这集合得长度，当遍历得时候长度不相等得时候就会抛出异常
 //            // private class Itr implements Iterator<E> {
