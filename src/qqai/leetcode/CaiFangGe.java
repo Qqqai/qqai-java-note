@@ -1,5 +1,8 @@
 package qqai.leetcode;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * 描述：踩方格
  *
@@ -9,8 +12,8 @@ package qqai.leetcode;
 
 public class CaiFangGe {
     public static void main(String[] args) {
-        int i = getShuWeiZhiHe(120, 320);
-        System.out.println(i);
+//        int i = getShuWeiZhiHe(120, 320);
+//        System.out.println(i);
     }
 
     //获取数位之和的方法
