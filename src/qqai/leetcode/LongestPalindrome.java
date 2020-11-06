@@ -20,39 +20,81 @@ import java.util.*;
 
 public class LongestPalindrome {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int num = sc.nextInt();
-        int count = sc.nextInt();
-        int sum = 0;
-        for (int i = count; i > 0; i--) {
-            sum += num * Math.pow(10, count - i) * i;
-        }
-        System.out.println(sum);
+        String s = "abcba";
+        System.out.println(new LongestPalindrome().longestPalindrome1(s));
     }
 
     public String longestPalindrome(String s) {
-        Stack<Character> stack = new Stack<>();
-        List<Character> list = new ArrayList<>();
-        List<Character> res = new ArrayList<>();
-
-        for (int i = 0; i < s.length(); i++) {
-            if (stack.contains(s.charAt(i))) {
-                int temp = 0;
-                while (stack.size() > 0) {
-                    if (s.charAt(temp + i) != stack.pop()) {
-                        stack.clear();
-                        break;
-                    }
-                    list.add(s.charAt(temp));
-                    temp++;
+        if (s.length() < 2) {
+            return s;
+        }
+        int maxLength = 1;
+        int begin = 0;
+        for (int i = 0; i < s.length() - 1; i++) {
+            for (int j = i + 1; j < s.length(); j++) {
+                if (j - i + 1 > maxLength && check(s, i, j)) {
+                    maxLength = j - i + 1;
+                    begin = i;
                 }
-                if (list.size() > res.size()) {
-                    res = list;
-                }
-            } else {
-                stack.push(s.charAt(i));
             }
         }
-        return list.toString();
+        return s.substring(begin, maxLength + begin);
+    }
+
+    private boolean check(String s, int i, int j) {
+        while (i < j) {
+            if (s.charAt(i) != s.charAt(j)) {
+                return false;
+            }
+            i++;
+            j--;
+        }
+        return true;
+    }
+
+    public String longestPalindrome1(String s) {
+        if (s.length() < 2) {
+            return s;
+        }
+        int maxLength = 1;
+        int begin = 0;
+        // 初始化动态转移表
+        boolean[][] dp = new boolean[s.length()][s.length()];
+        for (int i = 0; i < dp.length; i++) {
+            dp[i][i] = true;
+        }
+
+        char[] charArray = s.toCharArray();
+
+        TreeSet<Object> set = new TreeSet<>();
+        set.add(1);
+        set.add(2);
+        set.add(3);
+        for (Object o : set) {
+            System.out.println(o);
+        }
+
+        // 填表得过程
+        for (int j = 1; j < charArray.length; j++) {
+            for (int i = 0; i < j; i++) {
+                if (charArray[i] != charArray[j]) {
+                    dp[i][j] = false;
+                } else {
+                    if (j - i < 3) {
+                        dp[i][j] = true;
+                    } else {
+                        dp[i][j] = dp[i + 1][j - 1];
+                    }
+                }
+
+                for (int k = 0; k < dp.length; k++) {
+                    System.out.println(Arrays.toString(dp[k]));
+                }
+
+                System.out.println("======================================================");
+            }
+        }
+
+        return s;
     }
 }
