@@ -7,12 +7,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class TestApplication {
 
     /**
-     * 笔记 这个是自动注册得关键  遍历所有引用得类然后再按照全路径名称注册到ioc容器中
-     * static class Registrar implements ImportBeanDefinitionRegistrar, DeterminableImports {
+     * 笔记 ：AutoConfigurationImportSelector.class
      *
-     * @param args
-     * @Override public void registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionRegistry registry) {
-     * register(registry, new PackageImports(metadata).getPackageNames().toArray(new String[0]));
+     * @Override public String[] selectImports(AnnotationMetadata annotationMetadata) {
+     * if (!isEnabled(annotationMetadata)) {
+     * return NO_IMPORTS;
+     * }
+     * AutoConfigurationEntry autoConfigurationEntry = getAutoConfigurationEntry(annotationMetadata);
+     * return StringUtils.toStringArray(autoConfigurationEntry.getConfigurations());
      * }
      */
     public static void main(String[] args) {
