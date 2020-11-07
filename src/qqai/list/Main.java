@@ -21,6 +21,9 @@ public class Main {
     public static void main(String[] args) {
         List<Integer> linkedList = new LinkedList<Integer>();
         linkedList.add(2);
+
+        List<Integer> list = new ArrayList<>();
+
 //        LinkedList.Node;内部类  所以LinkedList是一个双向链表。
         //private static class Node<E> {
         //        E item;

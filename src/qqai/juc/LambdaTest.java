@@ -23,6 +23,8 @@ public class LambdaTest {
         //            System.out.println("********");
         Foo foo = Integer::sum;
 
+        Foo foo1 = (x, y) -> x + y;
+
         System.out.println(foo.add(3, 4));
         System.out.println(foo.div(10, 2));
     }
