@@ -49,28 +49,55 @@ public class TestThreadPool {
          *      maximumPoolSize执行完了 很多空闲，就会在指定的施放时间后释放掉线程
          *
          */
-        ExecutorService executor = new ThreadPoolExecutor(2,
-                5,
-                2L,
-                TimeUnit.SECONDS,
-                new LinkedBlockingDeque<>(2),
-                Executors.defaultThreadFactory(),
-                new ThreadPoolExecutor.AbortPolicy()//笔记 默认 当线程过多撑满最大线程的时候，就会抛出异常java.util.concurrent.RejectedExecutionException阻止系统继续运行
-                //new ThreadPoolExecutor.CallerRunsPolicy()//笔记  调用者机制，当线程撑爆时就会由哪个线程调度到线程池就回退到哪个线程执行  此处是main线程调度到线程池执行，所以这里就会由main执行
-                //new ThreadPoolExecutor.DiscardOldestPolicy()//笔记  抛弃等待队列中等待时间最久的任务
-                //new ThreadPoolExecutor.DiscardPolicy()//笔记  当线程池被撑爆时直接放弃多余的任务
-        );
-        try {
-            for (int i = 0; i < 10; i++) {
-                executor.execute(() -> {
-                    System.out.println(Thread.currentThread().getName() + " 办理业务");
-                });
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            //终止线程池
-            executor.shutdown();
+//        ExecutorService executor = new ThreadPoolExecutor(2,
+//                5,
+//                2L,
+//                TimeUnit.SECONDS,
+//                new LinkedBlockingDeque<>(2),
+//                Executors.defaultThreadFactory(),
+//                new ThreadPoolExecutor.AbortPolicy()//笔记 默认 当线程过多撑满最大线程的时候，就会抛出异常java.util.concurrent.RejectedExecutionException阻止系统继续运行
+//                //new ThreadPoolExecutor.CallerRunsPolicy()//笔记  调用者机制，当线程撑爆时就会由哪个线程调度到线程池就回退到哪个线程执行  此处是main线程调度到线程池执行，所以这里就会由main执行
+//                //new ThreadPoolExecutor.DiscardOldestPolicy()//笔记  抛弃等待队列中等待时间最久的任务
+//                //new ThreadPoolExecutor.DiscardPolicy()//笔记  当线程池被撑爆时直接放弃多余的任务
+//        );
+//        try {
+//            for (int i = 0; i < 10; i++) {
+//                executor.execute(() -> {
+//                    System.out.println(Thread.currentThread().getName() + " 办理业务");
+//                });
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            //终止线程池
+//            executor.shutdown();
+//        }
+
+        ExecutorService executorService1 = Executors.newFixedThreadPool(10);
+        ExecutorService executorService2 = Executors.newCachedThreadPool();
+        ExecutorService executorService3 = Executors.newSingleThreadExecutor();
+
+        for (int i = 0; i < 100; i++) {
+            executorService2.execute(new MyRunnableTask(i));
         }
+    }
+}
+
+class MyRunnableTask implements Runnable {
+
+    private int a;
+
+    public MyRunnableTask(int a) {
+        this.a = a;
+    }
+
+    @Override
+    public void run() {
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(Thread.currentThread().getName() + "--->" + a);
     }
 }

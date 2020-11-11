@@ -13,8 +13,9 @@ public class Main {
     public static void main(String[] args) throws ClassNotFoundException {
         Class<?> name = Class.forName("java.lang.String");
         Class<String> stringClass = String.class;
-        for (Field declaredField : name.getDeclaredFields()) {
-            System.out.println(declaredField.getName());
-        }
+        System.out.println(stringClass.getSimpleName());  // 获取类名
+//        for (Field declaredField : name.getDeclaredFields()) {
+//            System.out.println(declaredField.getName()); // 获取各个字段名
+//        }
     }
 }
