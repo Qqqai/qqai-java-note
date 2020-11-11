@@ -1,4 +1,4 @@
-package qqai.netty;
+package qqai.nio;
 
 import java.io.BufferedReader;
 import java.io.IOException;

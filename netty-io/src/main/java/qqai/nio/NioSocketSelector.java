@@ -1,94 +1,50 @@
-package qqai.netty;
+package qqai.nio;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
-import java.sql.Time;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.concurrent.BlockingDeque;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author qqai
- * @createTime 2020/10/28 00:35
- * @description：boss-workers模式
+ * @createTime 2020/10/24 18:01
+ * @description：多路复用
  */
 
-public class NioSocketMultipaleXingThreads {
+public class NioSocketSelector {
     // socket通道
     private ServerSocketChannel server = null;
     // 多路复用器
-    private Selector selector1 = null;
-    private Selector selector2 = null;
-    private Selector selector3 = null;
+    private Selector selector = null;
     // 端口
     int port = 9098;
 
-    public void initServer() throws IOException {
-        // 初始化一个socket通道
-        server = ServerSocketChannel.open();
-        // 配置阻塞状态
-        server.configureBlocking(false);
-        // 绑定端口
-        server.bind(new InetSocketAddress(port));
-        // 初始化一个多路复用器
-        selector1 = Selector.open();
-        selector2 = Selector.open();
-        selector3 = Selector.open();
-        // 把server注册到selector1里，并且只要未来通道出现有客户端建立连接，就通知server
-        server.register(selector1, SelectionKey.OP_ACCEPT);
-    }
-
-    public static void main(String[] args) throws IOException, InterruptedException {
-        NioSocketMultipaleXingThreads service = new NioSocketMultipaleXingThreads();
-        service.initServer();
-        NioThread T1 = new NioThread(service.selector1, 2);
-        NioThread T2 = new NioThread(service.selector2);
-        NioThread T3 = new NioThread(service.selector3);
-        T1.start();
-        TimeUnit.SECONDS.sleep(1);
-        T2.start();
-        T3.start();
-        System.out.println("服务启动了...");
-    }
-}
-
-class NioThread extends Thread {
-    Selector selector = null;
-    static int selectors = 0;
-    int id = 0;
-    boolean boss = false;
-    static BlockingDeque<SocketChannel>[] queue;
-    static AtomicInteger idx = new AtomicInteger();
-
-    NioThread(Selector sel, int n) {
-        this.selector = sel;
-        selectors = n;
-        boss = true;
-        queue = new LinkedBlockingDeque[n];
-        for (int i = 0; i < n; i++) {
-            queue[i] = new LinkedBlockingDeque<>();
+    public void initServer() {
+        try {
+            // 初始化一个socket通道
+            server = ServerSocketChannel.open();
+            // 配置阻塞状态
+            server.configureBlocking(false);
+            // 绑定端口
+            server.bind(new InetSocketAddress(port));
+            // 初始化一个多路复用器
+            selector = Selector.open();
+            // 把server注册到selector里，并且只要未来通道出现有客户端建立连接，就通知server
+            server.register(selector, SelectionKey.OP_ACCEPT);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        System.out.println("boss启动...");
     }
 
-    public NioThread(Selector selector) {
-        this.selector = selector;
-        id = idx.getAndIncrement() % selectors;
-        System.out.println("worker:" + id + "---启动");
-    }
-
-    @Override
-    public void run() {
+    public void start() {
+        initServer();
+        System.out.println("服务器启动了...");
         try {
             while (true) {
                 // 这里是查询内核有没有产生事件
-                while (selector.select(10) > 0) {
+                while (selector.select(0) > 0) {
                     // 从多路复用器取出有效的链接
                     Set<SelectionKey> keys = selector.selectedKeys();
                     // 拿到迭代器
@@ -108,17 +64,8 @@ class NioThread extends Thread {
                             }
                     }
                 }
-                // boss不参与读
-                if (!queue[id].isEmpty() && !boss) {
-                    ByteBuffer buffer = ByteBuffer.allocateDirect(8192);
-                    SocketChannel client = queue[id].take();
-                    client.register(selector, SelectionKey.OP_READ, buffer);
-                    System.out.println("-----------------------------------------------------------");
-                    System.out.println("新客户端：" + client.getRemoteAddress() + "被分配到了" + id + "workers");
-                    System.out.println("-----------------------------------------------------------");
-                }
             }
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -153,7 +100,6 @@ class NioThread extends Thread {
                     // 表示读到-1了  读到-1表示客户端进入了 close_wait状态，如果不关闭客户端就会进入死循环  cou炸掉
                     System.out.println("客户端：" + client.getLocalAddress() + "关闭");
                     System.out.println("-----------------------------------------------------------");
-                    idx.getAndDecrement();
                     client.close();
                     break;
                 }
@@ -169,8 +115,17 @@ class NioThread extends Thread {
         SocketChannel socket = ssc.accept();
         // 设置非阻塞
         socket.configureBlocking(false);
-        // 把这个请求分配到队列中去
-        int num = idx.getAndIncrement() % selectors;
-        queue[num].add(socket);
+        // 分配一个缓冲区
+        ByteBuffer buffer = ByteBuffer.allocateDirect(8192);
+        // 把客户端也注册到多路复用器上，并且把buffer也添加进去，这一步就是以后在获取的时候可以随意的取出client和buffer
+        socket.register(selector, SelectionKey.OP_READ, buffer);
+        // 打印
+        System.out.println("-----------------------------------------------------------");
+        System.out.println("新客户端：" + socket.getRemoteAddress());
+        System.out.println("-----------------------------------------------------------");
+    }
+
+    public static void main(String[] args) {
+        new NioSocketSelector().start();
     }
 }

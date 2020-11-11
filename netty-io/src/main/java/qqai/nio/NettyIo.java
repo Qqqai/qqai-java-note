@@ -1,16 +1,11 @@
-package qqai.netty;
+package qqai.nio;
 
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.util.ReferenceCountUtil;
-
-import java.net.SocketAddress;
-import java.nio.ByteBuffer;
 
 /**
  * @author qqai
