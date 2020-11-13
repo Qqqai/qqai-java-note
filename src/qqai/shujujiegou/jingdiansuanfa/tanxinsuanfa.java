@@ -1,4 +1,4 @@
-package qqai.shujujiegou.经典算法;
+package qqai.shujujiegou.jingdiansuanfa;
 
 import java.util.Arrays;
 

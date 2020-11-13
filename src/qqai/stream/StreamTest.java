@@ -2,6 +2,7 @@ package qqai.stream;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -27,6 +28,8 @@ public class StreamTest {
         // 笔记 Stream<T> filter(Predicate<? super T> predicate);  Predicate这是函数式接口
         // 笔记 <? super T>是用来限定泛型的作用域的，?代表只要继承自这个泛型T的所有类型都可以成为泛型
         // 笔记 <? super T>同样用来限定泛型，表示只要是T的父类型都可以成为泛型
+        Map<String, List<User>> collect = list.stream().collect(Collectors.groupingBy(User::getUsername));
+
         System.out.println(list.stream().filter((user) -> user.getId() % 2 == 0 && user.getAge() > 20).map(user -> {
             String username = user.getUsername();
             String lowerCase = username.toUpperCase();

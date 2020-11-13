@@ -1,4 +1,4 @@
-package qqai.shujujiegou.二叉树;
+package qqai.shujujiegou.erchaTree;
 
 /**
  * @author qqai

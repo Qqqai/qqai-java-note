@@ -1,4 +1,4 @@
-package qqai.leetcode;
+package qqai.suanfa;
 
 /**
  * @author qqai
@@ -9,13 +9,13 @@ package qqai.leetcode;
 // TODO 这题我不会
 public class WorkFloor {
     public static void main(String[] args) {
-        System.out.println(new WorkFloor().recursion(7));
+        System.out.println(new WorkFloor().recursion(10));
     }
 
     private int recursion(int i) {
         if (i < 0) return 0;
         if (i == 1 || i == 0) return 1;
         if (i == 2) return 2;
-        return recursion(i - 1) + recursion(i - 2) + recursion(i - 3);
+        return recursion(i - 1) + recursion(i - 2);
     }
 }

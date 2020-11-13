@@ -1,9 +1,6 @@
 package qqai.hashmap;
 
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * 描述：关于hashmap
@@ -14,8 +11,8 @@ import java.util.Stack;
 
 public class Main {
     public static void main(String[] args) {
-        Map<String, Object> map = new HashMap<>(12);
-        map.put("111", 1);
+        Map<String, Object> map1 = new HashMap<>(12);
+        map1.put("111", 1);
 //   static final int DEFAULT_INITIAL_CAPACITY = 1 << 4; // aka 16  如果不传递的话 hashmap的默认容量就是16
         //使用hashmap的一个参数的构造器的时候 这个参数表示集合容量  重要代码：
         // static final int tableSizeFor(int cap) {
@@ -36,6 +33,17 @@ public class Main {
         NBL nbl = new NBL();
         System.out.println(nbl.wbl);
 
+        List<HashMap<String, String>> list = new ArrayList<>();
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("paramName", "version");
+        hashMap.put("paramValue", "");
+        list.add(hashMap);
+        HashMap<String, String> map = new HashMap<>();
+        for (HashMap<String, String> stringStringHashMap : list) {
+            String value = stringStringHashMap.get("paramValue") == null ? "" : stringStringHashMap.get("paramValue");
+            map.put(stringStringHashMap.get("paramName"), value);
+        }
+        System.out.println(map);
     }
 
     @Override

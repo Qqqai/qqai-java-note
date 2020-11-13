@@ -1,4 +1,4 @@
-package qqai.shujujiegou.经典算法.sort;
+package qqai.shujujiegou.jingdiansuanfa.sort;
 
 import java.util.Arrays;
 

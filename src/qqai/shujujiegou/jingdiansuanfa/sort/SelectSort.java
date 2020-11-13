@@ -1,15 +1,15 @@
-package qqai.shujujiegou.经典算法.sort;
+package qqai.shujujiegou.jingdiansuanfa.sort;
 
 import java.util.Arrays;
 
 /**
- * 描述：快速排序
+ * 描述：选择排序
  *
  * @author qqai
  * @createTime 2020-09-25 18:57
  */
 
-public class QuiltSort {
+public class SelectSort {
 
     public static void main(String[] args) {
         int[] old = {5, 4, 6, 7, 354, 5644, 534, 5435, 534543754, 3, 3, 6, 4, 9, 6};
@@ -28,6 +28,17 @@ public class QuiltSort {
                 old[temp] = change;
             }
         }
+
+        /*for (int i = 0; i < old.length; i++) {
+            int temp = 0;
+            for (int j = i; j < old.length; j++) {
+                if (old[i] > old[j]) {
+                    temp = old[i];
+                    old[i] = old[j];
+                    old[j] = temp;
+                }
+            }
+        }*/
         System.out.println(Arrays.toString(old));
     }
 

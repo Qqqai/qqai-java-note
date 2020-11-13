@@ -11,8 +11,12 @@ import java.util.List;
  */
 
 public class Main {
+
+    private String string;
+
+
     public Main(String s) {
-        System.out.println(s);
+        string = s;
     }
 
     public static void main(String[] args) {
@@ -24,9 +28,20 @@ public class Main {
         //标记 以上两种方法等价
         //标记 此处调用的是Main类的构造方法
         list.forEach(Main::new);
+
+        ArrayList<Main> mains = new ArrayList<>();
+        mains.add(new Main("1"));
+        mains.add(new Main("2"));
+        mains.add(new Main("3"));
+
+        mains.forEach(Main::show);
     }
 
     public static void print(String txt) {
         System.out.println(txt);
+    }
+
+    public void show() {
+        System.out.println(string);
     }
 }

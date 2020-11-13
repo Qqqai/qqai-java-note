@@ -1,4 +1,4 @@
-package qqai.shujujiegou.经典算法;
+package qqai.shujujiegou.jingdiansuanfa;
 
 /**
  * 描述：深度优先搜索

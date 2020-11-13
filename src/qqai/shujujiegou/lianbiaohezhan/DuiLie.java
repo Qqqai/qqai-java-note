@@ -1,4 +1,4 @@
-package qqai.shujujiegou.链表和栈;
+package qqai.shujujiegou.lianbiaohezhan;
 
 
 import java.util.AbstractList;
