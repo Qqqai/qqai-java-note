@@ -1,4 +1,4 @@
-package qqai.jvm;
+package qqai.java.lang;
 
 /**
  * 描述：测试Integer
@@ -8,7 +8,7 @@ package qqai.jvm;
  */
 
 public class IntegerTest {
-    public static void main(String[] args) {
+    public static void main(java.lang.String[] args) {
         Integer i1 = 23;
         int i2 = 23;
         Integer i3 = Integer.valueOf(23);

@@ -18,7 +18,7 @@
         <!-- 配置environments中mysql的环境 -->
         <environment id="mysql">
             <!-- 配置事务类型 -->
-            <transactionManager type="JDBC"></transactionManager>
+            <transactionManager type="JDBC"/>
             <!-- 配置数据源  连接池  -->
             <dataSource type="POOLED">
                 <!-- 配置数据库的四个基本信息-->

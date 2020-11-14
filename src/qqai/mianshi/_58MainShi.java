@@ -41,10 +41,7 @@ public class _58MainShi {
                 }
             }
         }
-        if (leftCount > rightCount) {
-            return rightCount;
-        }
-        return leftCount;
+        return Math.min(leftCount, rightCount);
     }
 
     public static void main(String[] args) {
