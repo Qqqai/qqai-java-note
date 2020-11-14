@@ -24,7 +24,6 @@ public class ClassLoaderInfo extends A {
 //        System.out.println(info.getClass().getClassLoader().getParent().getParent());
 
 
-
         System.out.println();
     }
 

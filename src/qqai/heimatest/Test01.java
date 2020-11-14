@@ -14,7 +14,7 @@ public class Test01 {
 
     public static void main(String[] args) {
         // *************查找 binarySearch()****************
-        char[] e = { 'a', 'f', 'b', 'c', 'e', 'A', 'C', 'B' };
+        char[] e = {'a', 'f', 'b', 'c', 'e', 'A', 'C', 'B'};
         // 排序后再进行二分查找，否则找不到
         Arrays.sort(e);
         System.out.println("Arrays.sort(e)" + Arrays.toString(e));
@@ -34,7 +34,7 @@ public class Test01 {
 
         // *************复制 copy****************
         // copyOf 方法实现数组复制,h为数组，6为复制的长度
-        int[] h = { 1, 2, 3, 3, 3, 3, 6, 6, 6, };
+        int[] h = {1, 2, 3, 3, 3, 3, 6, 6, 6,};
         int[] i = Arrays.copyOf(h, 6);
         System.out.println("Arrays.copyOf(h, 6);：");
         // 输出结果：123333

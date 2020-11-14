@@ -23,6 +23,6 @@ public class Circle extends Shape {
     @Override
     public void draw() {
         //调用桥接的方法
-        drawAPI.drawCircle(radius,x,y);
+        drawAPI.drawCircle(radius, x, y);
     }
 }

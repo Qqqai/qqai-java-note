@@ -4,13 +4,14 @@ import java.util.Arrays;
 
 /**
  * 描述：贪心算法
+ *
  * @author qqai
  * @createTime 2020-9-26 10:59:35
  */
 public class tanxinsuanfa {
     private int MAX_WEIGHT = 150;
-    private int[] weights = new int[] { 35, 30, 60, 50, 40, 10, 24 };
-    private int[] values = new int[] { 10, 40, 30, 50, 35, 40, 30 };
+    private int[] weights = new int[]{35, 30, 60, 50, 40, 10, 24};
+    private int[] values = new int[]{10, 40, 30, 50, 35, 40, 30};
 
     public void greedypackage(int capacity, int[] wegiht, int[] values) {
         int n = wegiht.length;

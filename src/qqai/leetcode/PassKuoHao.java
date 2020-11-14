@@ -22,14 +22,11 @@ public class PassKuoHao {
         for (int i = 0; i < a.length; i++) {
             if (a[i] == '(') {
                 c[count++] = ')';
-            }
-            else if (a[i] == '[') {
+            } else if (a[i] == '[') {
                 c[count++] = ']';
-            }
-            else if (a[i] == '{') {
+            } else if (a[i] == '{') {
                 c[count++] = '}';
-            }
-            else if (count <= 0 || c[--count] != a[i]) {
+            } else if (count <= 0 || c[--count] != a[i]) {
                 return false;
             }
         }

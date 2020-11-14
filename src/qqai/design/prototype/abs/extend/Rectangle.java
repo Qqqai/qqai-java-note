@@ -11,7 +11,7 @@ import qqai.design.prototype.abs.Shape;
 
 public class Rectangle extends Shape {
 
-    public Rectangle(){
+    public Rectangle() {
         type = "Rectangle";
     }
 

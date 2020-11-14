@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/springcloud.iml" filepath="$PROJECT_DIR$/.idea/springcloud.iml" />
+      <module fileurl="file://$PROJECT_DIR$/springcloud01/springcloud01.iml" filepath="$PROJECT_DIR$/springcloud01/springcloud01.iml" />
+      <module fileurl="file://$PROJECT_DIR$/springcloud02/springcloud02.iml" filepath="$PROJECT_DIR$/springcloud02/springcloud02.iml" />
+      <module fileurl="file://$PROJECT_DIR$/springcloud03/springcloud03.iml" filepath="$PROJECT_DIR$/springcloud03/springcloud03.iml" />
+    </modules>
+  </component>
+</project>

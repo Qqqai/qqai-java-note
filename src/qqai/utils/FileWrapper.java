@@ -15,7 +15,7 @@ import java.util.Arrays;
 public class FileWrapper {
 
     // 变量
-    private File file;
+    private final File file;
 
     // 根据file对象初始化成员变量
     public FileWrapper(File file) {

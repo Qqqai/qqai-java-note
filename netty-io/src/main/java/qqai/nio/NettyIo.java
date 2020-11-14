@@ -10,7 +10,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 /**
  * @author qqai
  * @createTime 2020/10/28 01:18
- * @description：netty  TODO
+ * @description：netty TODO
  */
 
 public class NettyIo {

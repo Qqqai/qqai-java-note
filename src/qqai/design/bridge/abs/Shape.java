@@ -12,8 +12,10 @@ import qqai.design.bridge.inter.DrawAPI;
 public abstract class Shape {
     //需要桥接的对象
     protected DrawAPI drawAPI;
-    protected Shape(DrawAPI drawAPI){
+
+    protected Shape(DrawAPI drawAPI) {
         this.drawAPI = drawAPI;
     }
+
     public abstract void draw();
 }

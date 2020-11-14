@@ -12,11 +12,11 @@ import qqai.design.factory.abs.factory.extend.ShapeFactory;
  */
 
 public class FactoryProducer {
-    public static AbstractFactory getFactory(String choice){
-        if(choice.equalsIgnoreCase("SHAPE")){
+    public static AbstractFactory getFactory(String choice) {
+        if (choice.equalsIgnoreCase("SHAPE")) {
             System.out.println("FactoryProducer..SHAPE");
             return new ShapeFactory();
-        } else if(choice.equalsIgnoreCase("COLOR")){
+        } else if (choice.equalsIgnoreCase("COLOR")) {
             System.out.println("FactoryProducer..COLOR");
             return new ColorFactory();
         }

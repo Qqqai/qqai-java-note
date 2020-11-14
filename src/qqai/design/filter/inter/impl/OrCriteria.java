@@ -28,7 +28,7 @@ public class OrCriteria implements Criteria {
         List<Person> otherCriteriaItems = otherCriteria.meetCriteria(persons);
 
         for (Person person : otherCriteriaItems) {
-            if(!firstCriteriaItems.contains(person)){
+            if (!firstCriteriaItems.contains(person)) {
                 firstCriteriaItems.add(person);
             }
         }

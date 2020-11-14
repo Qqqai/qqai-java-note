@@ -20,8 +20,8 @@ public class zuichangzixulie {
         String y = generateRandomStr(size);// 调用两次生成两个由generateRandomStr方法中base而产生的新序列
 
         // 也可以指定初始的序列
-         x = "ACBDEGGGG";
-         y = "DEGGDJFFD";
+        x = "ACBDEGGGG";
+        y = "DEGGDJFFD";
 
         // 都是20
         int m = x.length();

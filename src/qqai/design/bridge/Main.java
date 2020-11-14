@@ -16,8 +16,8 @@ import qqai.design.bridge.inter.impl.RedCircle;
 public class Main {
     public static void main(String[] args) {
         //构造器 传递参数 最后一个参数表示需要桥接的类型
-        Shape redCircle = new Circle(100,100, 10, new RedCircle());
-        Shape greenCircle = new Circle(100,100, 10, new GreenCircle());
+        Shape redCircle = new Circle(100, 100, 10, new RedCircle());
+        Shape greenCircle = new Circle(100, 100, 10, new GreenCircle());
         //调用实现类的绘制方法 这个方法会调用桥接的类的绘制方法
         redCircle.draw();
         greenCircle.draw();

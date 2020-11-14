@@ -28,6 +28,7 @@ public class ReorderList {
         reorderList(l2);
         System.out.println(l2);
     }
+
     public static void reorderList(ListNode head) {
 
         if (head == null || head.next == null || head.next.next == null) {

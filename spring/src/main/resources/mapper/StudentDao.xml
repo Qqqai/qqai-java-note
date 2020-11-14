@@ -8,8 +8,8 @@
         <result column="birthday" jdbcType="DATE" property="birthday"/>
     </resultMap>
     <sql id="Base_Column_List">
-    sid, name, age, birthday
-  </sql>
+        sid, name, age, birthday
+    </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -17,19 +17,19 @@
         where sid = #{sid,jdbcType=INTEGER}
     </select>
     <select id="queryAll" resultType="mybatis.entity.Student">
-    select * from student
-  </select>
+        select * from student
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from student
-    where sid = #{sid,jdbcType=INTEGER}
-  </delete>
+        delete from student
+        where sid = #{sid,jdbcType=INTEGER}
+    </delete>
     <insert id="insert" keyColumn="sid" keyProperty="sid" parameterType="mybatis.entity.Student"
             useGeneratedKeys="true">
-    insert into student (`name`, age, birthday
-      )
-    values (#{name,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{birthday,jdbcType=DATE}
-      )
-  </insert>
+        insert into student (`name`, age, birthday
+        )
+        values (#{name,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{birthday,jdbcType=DATE}
+        )
+    </insert>
     <insert id="insertSelective" keyColumn="sid" keyProperty="sid" parameterType="mybatis.entity.Student"
             useGeneratedKeys="true">
         insert into student
@@ -72,10 +72,10 @@
         where sid = #{sid,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="mybatis.entity.Student">
-    update student
-    set name = #{name,jdbcType=VARCHAR},
-      age = #{age,jdbcType=INTEGER},
-      birthday = #{birthday,jdbcType=DATE}
-    where sid = #{sid,jdbcType=INTEGER}
-  </update>
+        update student
+        set name = #{name,jdbcType=VARCHAR},
+        age = #{age,jdbcType=INTEGER},
+        birthday = #{birthday,jdbcType=DATE}
+        where sid = #{sid,jdbcType=INTEGER}
+    </update>
 </mapper>

@@ -7,5 +7,5 @@ package qqai.suanfa;
  */
 
 public class Main {
-    
+
 }

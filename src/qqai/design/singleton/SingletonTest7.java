@@ -22,6 +22,7 @@ public class SingletonTest7 {
  */
 enum Singleton7 {
     SINGLETON;
+
     public void sayHello() {
         System.out.println("ok...");
     }

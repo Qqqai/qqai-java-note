@@ -36,6 +36,7 @@ public class OrderPizza {
             pizza.box();
         } while (true);
     }
+
     //获取客户订购的披萨的种类
     private String getType() {
         try {

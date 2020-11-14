@@ -58,7 +58,6 @@ public class ThreadTest01 {
         }, "售货员2号").start();
 
 
-
         new Thread(() -> {
             for (int i = 1; i <= 40; i++) {
                 ticket.saleTicket();
