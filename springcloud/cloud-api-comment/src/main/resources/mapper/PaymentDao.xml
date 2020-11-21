@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="qqai.cloud.dao.PaymentDao">
+
+    <resultMap type="qqai.cloud.entity.Payment" id="PaymentMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="serial" column="serial" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="PaymentMap">
+        select
+          id, serial
+        from clouddb.payment
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="PaymentMap">
+        select
+          id, serial
+        from clouddb.payment
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="PaymentMap">
+        select
+        id, serial
+        from clouddb.payment
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="serial != null and serial != ''">
+                and serial = #{serial}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into clouddb.payment(serial)
+        values (#{serial})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into clouddb.payment(serial)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.serial})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into clouddb.payment(serial)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.serial})
+        </foreach>
+        on duplicate key update
+        serial = values(serial)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update clouddb.payment
+        <set>
+            <if test="serial != null and serial != ''">
+                serial = #{serial},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from clouddb.payment where id = #{id}
+    </delete>
+
+</mapper>

@@ -11,8 +11,12 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        Map<String, Object> map1 = new HashMap<>(12);
+        int i = 999;
+        System.out.println(i >>>= 8);
+        Map<String, Object> map1 = new HashMap<>(1000);
         map1.put("111", 1);
+        map1.put(null, 1);
+        System.out.println(map1);
 //   static final int DEFAULT_INITIAL_CAPACITY = 1 << 4; // aka 16  如果不传递的话 hashmap的默认容量就是16
         //使用hashmap的一个参数的构造器的时候 这个参数表示集合容量  重要代码：
         // static final int tableSizeFor(int cap) {
