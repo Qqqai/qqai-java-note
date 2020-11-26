@@ -1,0 +1,11 @@
+server:
+  port: 80
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka
+
+feign:
+  hystrix:
+    #    开启服务端降级
+    enabled: true

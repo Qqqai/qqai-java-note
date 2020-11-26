@@ -1,0 +1,26 @@
+server:
+  port: 80
+eureka:
+  client:
+    register-with-eureka: false
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka,http://eureka7001.com:7001/eureka
+#设置feign客户端超时
+#ribbon:
+#  #  建立连接超时时间
+#  ReadTimeout: 5000
+#  #  获取资源超时时间
+#  ConnectTimeout: 5000
+feign:
+  client:
+    config:
+      default:
+        #        链接超时时间
+        connectTimeout: 5000
+        #        获取资源超时时间
+        readTimeout: 5000
+        #        日志等级（Feign日志等级）
+        loggerLevel: FULL
+logging:
+  level:
+    qqai.cloud.feign.PaymentFeignService: debug

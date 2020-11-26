@@ -1,0 +1,12 @@
+server:
+  port: 8006
+spring:
+  application:
+    name: consul-provider-payment
+  cloud:
+    consul:
+      discovery:
+        #        默认就是是本服务的启动ip
+        #        host: localhost
+        service-name: ${spring.application.name}
+        hostname: 127.0.0.1
