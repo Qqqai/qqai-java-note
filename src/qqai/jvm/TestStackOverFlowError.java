@@ -14,8 +14,8 @@ public class TestStackOverFlowError {
         //Exception in thread "main" java.lang.StackOverflowError  栈溢出错误
         m();
     }
-
     public static void main(String[] args) {
+        
 //        m();
         long maxMemory = Runtime.getRuntime().maxMemory();
         long totalMemory = Runtime.getRuntime().totalMemory();

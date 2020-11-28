@@ -8,21 +8,27 @@ spring:
     gateway:
       routes:
         - id: payment_routh #唯一就可以
-          uri: http://localhost:8001
+          #          uri: http://localhost:8001
+          #          动态路由 根据注册中心的服务名进行路由分发
+          uri: lb://CLOUD-PAYMENT-SERVICE
           predicates:
-            - Path=/payment/lb/**  #断言相匹配的进行路由
+            - Path=/payment/get/**  #断言相匹配的进行路由
 
         - id: payment_routh2
-          uri: http://localhost:8001
+          #          uri: http://localhost:8001
+          uri: lb://CLOUD-PAYMENT-SERVICE
           predicates:
             - Path=/payment/lb/**
+#            - Cookie=username, qqai
+#            - After=2020-11-28T19:59:50.790300900+08:00[Asia/Shanghai]
 
 
 eureka:
   client:
     service-url:
-      defalutZone: http://eureka7001.com:7001/eureka
+      defaultZone: http://eureka7001.com:7001/eureka
     register-with-eureka: true
     fetch-registry: true
   instance:
     hostname: cloud-gateway-service
+    prefer-ip-address: true

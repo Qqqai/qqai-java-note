@@ -68,4 +68,13 @@ public class PaymentController {
         return R.ok().put("payment", payment);
     }
 
+    /**
+     * 获取请求的端口号
+     *
+     * @return
+     */
+    @GetMapping("/lb")
+    public R lb() {
+        return R.ok().put("port", serverPort);
+    }
 }

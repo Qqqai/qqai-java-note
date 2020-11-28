@@ -1,0 +1,19 @@
+server:
+  port: 3344
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+spring:
+  application:
+    name: cloud-config-center
+  cloud:
+    config:
+      server:
+        git:
+          # 在github上搜做这个仓库的内容作为配置文件
+          uri: git@github.com:Qqqai/cloud-config-center.git
+          search-paths:
+            - cloud-config-center
+      # 读取的分支
+      label: master
