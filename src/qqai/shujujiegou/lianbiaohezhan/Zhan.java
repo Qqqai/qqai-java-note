@@ -1,5 +1,7 @@
 package qqai.shujujiegou.lianbiaohezhan;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * @author qqai
  * @createTime 2020/11/28 21:44
@@ -63,7 +65,7 @@ public class Zhan<T> {
         System.out.println(isValid(s));
     }
 
-    private static boolean isValid(String s) {
+    private static boolean isValid(@NotNull String s) {
         Zhan<Character> zhan = new Zhan<>();
         for (int i = 0; i < s.length(); i++) {
             switch (s.charAt(i)) {
