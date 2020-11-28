@@ -12,8 +12,17 @@ spring:
       server:
         git:
           # 在github上搜做这个仓库的内容作为配置文件
-          uri: git@github.com:Qqqai/cloud-config-center.git
-          search-paths:
-            - cloud-config-center
+          uri: https://github.com/Qqqai/cloud-config-center.git
+          search-paths: cloud-config-center
       # 读取的分支
-      label: master
+      label: main
+  #      消息总线mq的配置
+  rabbitmq:
+    host: 192.168.83.129
+
+#    暴漏监控
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'bus-refresh'

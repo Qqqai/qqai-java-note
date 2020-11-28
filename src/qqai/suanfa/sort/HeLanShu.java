@@ -1,4 +1,4 @@
-package qqai.suanfa;
+package qqai.suanfa.sort;
 
 import java.util.Arrays;
 
