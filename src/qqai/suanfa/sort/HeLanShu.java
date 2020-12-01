@@ -12,22 +12,7 @@ public class HeLanShu {
 
     public static void main(String[] args) {
         int[] a = {7, 3, 2, 4, 2, 3};
-        System.out.println(Arrays.toString(classifyNum(a, 4)));
         System.out.println(Arrays.toString(partition(a, 3, 0, a.length - 1)));
-    }
-
-    /*小于的放左边，大于的放右边*/
-    public static int[] classifyNum(int[] arr, int num) {
-        int x = 0;
-        int temp = 0;
-        for (int i = 1; i < arr.length; i++) {
-            if (arr[i] <= num) {
-                temp = arr[x];
-                arr[x++] = arr[i];
-                arr[i] = temp;
-            }
-        }
-        return arr;
     }
 
     /*标记 荷兰国旗*/

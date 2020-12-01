@@ -1,6 +1,6 @@
 package qqai.shujujiegou.lianbiaohezhan;
 
-import org.jetbrains.annotations.NotNull;
+import java.util.Stack;
 
 /**
  * @author qqai
@@ -65,7 +65,7 @@ public class Zhan<T> {
         System.out.println(isValid(s));
     }
 
-    private static boolean isValid(@NotNull String s) {
+    private static boolean isValid(String s) {
         Zhan<Character> zhan = new Zhan<>();
         for (int i = 0; i < s.length(); i++) {
             switch (s.charAt(i)) {

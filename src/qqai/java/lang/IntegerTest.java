@@ -1,5 +1,7 @@
 package qqai.java.lang;
 
+import qqai.java.base.Extend;
+
 /**
  * 描述：测试Integer
  *
@@ -32,6 +34,11 @@ public class IntegerTest {
 
 }
 
-class B {
+class B extends Extend {
+
+    public int getAge() {
+        return age;
+    }
+
     private int x = 0;
 }
