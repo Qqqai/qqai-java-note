@@ -8,6 +8,7 @@ import spring.entity.Student;
 import springmvc.service.TestService;
 
 import java.sql.Date;
+import java.util.logging.XMLFormatter;
 
 /**
  * @author qqai
@@ -21,6 +22,7 @@ public class TestIoc {
 //    private Environment environment;
 
     public static void main(String[] args) {
+
         // 根据配置文件获取到上下文内容
         AbstractApplicationContext abstractApplicationContext = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
 
