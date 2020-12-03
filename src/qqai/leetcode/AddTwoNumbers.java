@@ -18,22 +18,22 @@ package qqai.leetcode;
 
 public class AddTwoNumbers {
     public static void main(String[] args) {
-        ListNode node = new AddTwoNumbers().addTwoNumbers(new ListNode(2), new ListNode(2));
+        Node node = new AddTwoNumbers().addTwoNumbers(new Node(2), new Node(2));
         System.out.println(node);
     }
 
     /*标记 成功  按位运算，一个节点算一位  最后一位进位按1算*/
-    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        l1 = new ListNode(2);
-        l1.next = new ListNode(4);
-        l1.next.next = new ListNode(3);
+    public Node addTwoNumbers(Node l1, Node l2) {
+        l1 = new Node(2);
+        l1.next = new Node(4);
+        l1.next.next = new Node(3);
 
-        l2 = new ListNode(5);
-        l2.next = new ListNode(6);
-        l2.next.next = new ListNode(4);
+        l2 = new Node(5);
+        l2.next = new Node(6);
+        l2.next.next = new Node(4);
 
-        ListNode head = new ListNode(0);
-        ListNode temp = head;
+        Node head = new Node(0);
+        Node temp = head;
         int position = 0;
         while (l1 != null || l2 != null) {
             int a = l1 == null ? 0 : l1.val;
@@ -41,49 +41,48 @@ public class AddTwoNumbers {
             int sum = a + b + position;
             position = sum / 10;
             sum = sum % 10;
-            temp.next = new ListNode(sum);
+            temp.next = new Node(sum);
             temp = temp.next;
             l1 = l1 == null ? null : l1.next;
             l2 = l2 == null ? null : l2.next;
         }
         if (position == 1) {
-            temp.next = new ListNode(position);
+            temp.next = new Node(position);
         }
         return head.next;
     }
 
     /*标记 递归失败*/
-    public ListNode addTwoNumbersQQQQ(ListNode l1, ListNode l2) {
-        ListNode node1 = new ListNode(0);
-        node1.next = new ListNode(4);
-        node1.next.next = new ListNode(3);
+    public Node addTwoNumbersQQQQ(Node l1, Node l2) {
+        Node node1 = new Node(0);
+        node1.next = new Node(4);
+        node1.next.next = new Node(3);
 
-        ListNode node2 = new ListNode(0);
-        node2.next = new ListNode(6);
-        node2.next.next = new ListNode(4);
+        Node node2 = new Node(0);
+        node2.next = new Node(6);
+        node2.next.next = new Node(4);
 
         int a = getValue(node1);
         int b = getValue(node2);
         if (a + b == 0) {
-            return new ListNode(0);
+            return new Node(0);
         }
-        ListNode res = setValue(a + b);
-        return res;
+        return setValue(a + b);
     }
 
-    private ListNode setValue(int i) {
+    private Node setValue(int i) {
         if (i <= 0) {
             return null;
         }
-        ListNode node = new ListNode(i % 10);
-        ListNode setValue = setValue(i / 10);
+        Node node = new Node(i % 10);
+        Node setValue = setValue(i / 10);
         if (setValue != null) {
             node.next = setValue;
         }
         return node;
     }
 
-    private Integer getValue(ListNode l) {
+    private Integer getValue(Node l) {
         if (l.next == null) {
             return l.val;
         }

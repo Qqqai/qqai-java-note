@@ -1,4 +1,4 @@
-package qqai.leetcode;
+package qqai.suanfa.common;
 
 /**
  * @author qqai

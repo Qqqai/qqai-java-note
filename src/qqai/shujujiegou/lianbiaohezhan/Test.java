@@ -11,5 +11,7 @@ public class Test {
         String s = new String("abcx");
         String a = s;
         String res = new String(a + s);
+
+        String s1 = new String("hello" + "world");
     }
 }

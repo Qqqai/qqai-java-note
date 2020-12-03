@@ -27,23 +27,23 @@ package qqai.leetcode;
 
 public class SwapPairs {
     private int count = 0;
-    private ListNode resp = null;
+    private Node resp = null;
 
-    public ListNode swapPairs(ListNode head) {
+    public Node swapPairs(Node head) {
         if (head == null || head.next == null) {
             return head;
         }
-        ListNode newHead = head.next;
+        Node newHead = head.next;
         head.next = swapPairs(newHead.next);
         newHead.next = head;
         return newHead;
     }
 
     public static void main(String[] args) {
-        ListNode node1 = new ListNode(1);
-        ListNode node2 = new ListNode(2);
-        ListNode node3 = new ListNode(3);
-        ListNode node4 = new ListNode(4);
+        Node node1 = new Node(1);
+        Node node2 = new Node(2);
+        Node node3 = new Node(3);
+        Node node4 = new Node(4);
         node1.next = node2;
         node2.next = node3;
         node3.next = node4;

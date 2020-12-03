@@ -1,4 +1,4 @@
-package qqai.suanfa;
+package qqai.suanfa.some;
 
 /**
  * @author qqai

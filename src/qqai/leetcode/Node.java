@@ -6,11 +6,11 @@ package qqai.leetcode;
  * @description：节点类
  */
 
-public class ListNode {
-    int val;
-    ListNode next;
+public class Node {
+    public int val;
+    public Node next;
 
-    ListNode(int x) {
+    public Node(int x) {
         val = x;
     }
 

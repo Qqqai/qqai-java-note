@@ -18,24 +18,24 @@ package qqai.leetcode;
 
 public class ReorderList {
 
-    private static ListNode temp;
+    private static Node temp;
 
     public static void main(String[] args) {
-        ListNode l2 = new ListNode(1);
-        l2.next = new ListNode(2);
-        l2.next.next = new ListNode(3);
-        l2.next.next.next = new ListNode(4);
+        Node l2 = new Node(1);
+        l2.next = new Node(2);
+        l2.next.next = new Node(3);
+        l2.next.next.next = new Node(4);
         reorderList(l2);
         System.out.println(l2);
     }
 
-    public static void reorderList(ListNode head) {
+    public static void reorderList(Node head) {
 
         if (head == null || head.next == null || head.next.next == null) {
             return;
         }
         int len = 0;
-        ListNode h = head;
+        Node h = head;
         //求出节点数
         while (h != null) {
             len++;
@@ -45,22 +45,22 @@ public class ReorderList {
         reorderListHelper(head, len);
     }
 
-    private static ListNode reorderListHelper(ListNode head, int len) {
+    private static Node reorderListHelper(Node head, int len) {
         if (len == 1) {
-            ListNode outTail = head.next;
+            Node outTail = head.next;
             head.next = null;
             return outTail;
         }
         if (len == 2) {
-            ListNode outTail = head.next.next;
+            Node outTail = head.next.next;
             head.next.next = null;
             return outTail;
         }
         //得到对应的尾节点，并且将头结点和尾节点之间的链表通过递归处理
-        ListNode tail = reorderListHelper(head.next, len - 2);
-        ListNode subHead = head.next;//中间链表的头结点
+        Node tail = reorderListHelper(head.next, len - 2);
+        Node subHead = head.next;//中间链表的头结点
         head.next = tail;
-        ListNode outTail = tail.next;  //上一层 head 对应的 tail
+        Node outTail = tail.next;  //上一层 head 对应的 tail
         tail.next = subHead;
         return outTail;
     }

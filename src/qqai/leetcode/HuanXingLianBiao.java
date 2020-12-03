@@ -49,12 +49,12 @@ package qqai.leetcode;
  */
 
 public class HuanXingLianBiao {
-    public boolean hasCycle(ListNode head) {
+    public boolean hasCycle(Node head) {
         if (head == null || head.next == null || head.next.next == null) {
             return false;
         }
-        ListNode fast = head;
-        ListNode slow = head;
+        Node fast = head;
+        Node slow = head;
         while (fast != null && fast.next != null) {
             fast = fast.next.next;
             slow = slow.next;
