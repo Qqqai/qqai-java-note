@@ -10,6 +10,16 @@ public class TreeNode {
     public int val;
     public TreeNode left;
     public TreeNode right;
+    public TreeNode parent;
+
+    public TreeNode getParent() {
+        return parent;
+    }
+
+    public TreeNode setParent(TreeNode parent) {
+        this.parent = parent;
+        return this;
+    }
 
     public TreeNode() {
     }

@@ -13,6 +13,10 @@
         </typeAliases>-->
     <!-- 引用其他的配置文件 -->
     <properties resource="db.properties"/>
+    <settings>
+        <!--打印sql-->
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+    </settings>
     <!-- 配置环境 -->
     <environments default="mysql">
         <!-- 配置environments中mysql的环境 -->
