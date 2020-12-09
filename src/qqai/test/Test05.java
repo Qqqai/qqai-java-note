@@ -1,8 +1,5 @@
 package qqai.test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author qqai
  * @createTime 2020/12/6 18:20
@@ -11,7 +8,6 @@ import java.util.List;
 
 public class Test05 {
     public static void main(String[] args) {
-        List<Integer> list = new ArrayList<>();
-        list.add(111);
+        System.out.println(Math.random() * 10);
     }
 }
