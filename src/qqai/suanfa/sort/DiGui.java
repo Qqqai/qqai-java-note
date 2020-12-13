@@ -69,8 +69,6 @@ public class DiGui {
             help[i++] = arr[p2++];
         }
         // 标记 回填数据
-        for (int j = 0; j < help.length; j++) {
-            arr[left + j] = help[j];
-        }
+        if (help.length >= 0) System.arraycopy(help, 0, arr, left, help.length);
     }
 }

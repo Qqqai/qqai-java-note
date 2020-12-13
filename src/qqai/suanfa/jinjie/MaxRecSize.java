@@ -8,7 +8,7 @@ import java.util.Stack;
  * @description：单调栈——矩阵的最大面积 大根堆是一种解法
  */
 
-public class maxRecSize {
+public class MaxRecSize {
 
     public static int maxRecSize(int[][] map) {
         if (map == null || map.length == 0 || map[0].length == 0) {
