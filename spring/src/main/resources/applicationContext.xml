@@ -58,7 +58,7 @@
         <property name="basePackage" value="mybatis.mapper"/>
     </bean>
 
-    <!--讲dao代理对象交给IOC容器-->
+    <!--将dao代理对象交给IOC容器-->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="typeAliasesPackage" value="mybatis.entity"/>
