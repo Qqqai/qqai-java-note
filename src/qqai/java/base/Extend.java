@@ -6,8 +6,14 @@ package qqai.java.base;
  * @description：集成测试
  */
 
-public class Extend {
+public abstract class Extend {
     protected int age;
+
+    final void sendMsg(String msg) {
+        System.out.println(msg);
+    }
+
+    public abstract int getAge();
 
     public static void main(String[] args) {
 
