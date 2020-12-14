@@ -1,4 +1,4 @@
-package qqai.mianshi.qianxin;
+package qqai.bishi.qianxin;
 
 import java.math.BigInteger;
 import java.util.Scanner;

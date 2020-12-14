@@ -2,6 +2,7 @@ package qqai.suanfa.list.a;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * @author qqai
@@ -45,8 +46,23 @@ public class UnionFindSet {
         fatherMap.put(node, father);
         // 返回这个节点
         return father;
+
+        /*标记 非递归方式*/
+        /*Stack<Node> stack = new Stack<>();
+        Node cur = node;
+        Node parent = fatherMap.get(cur);
+        while (cur != parent) {
+            stack.push(cur);
+            cur = parent;
+            parent = fatherMap.get(cur);
+        }
+        while (!stack.isEmpty()) {
+            fatherMap.put(stack.pop(), parent);
+        }
+        return parent;*/
     }
 
+    /*是否是相同的集合*/
     public boolean isSameSet(Node a, Node b) {
         return findHead(a) == findHead(b);
     }

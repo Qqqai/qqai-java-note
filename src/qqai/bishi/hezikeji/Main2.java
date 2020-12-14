@@ -1,6 +1,4 @@
-package qqai.mianshi.hezikeji;
-
-import java.util.Arrays;
+package qqai.bishi.hezikeji;
 
 /**
  * @author qqai

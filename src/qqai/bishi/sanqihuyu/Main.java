@@ -1,4 +1,4 @@
-package qqai.mianshi.sanqihuyu;
+package qqai.bishi.sanqihuyu;
 
 /**
  * @author qqai

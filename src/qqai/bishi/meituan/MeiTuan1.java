@@ -1,9 +1,7 @@
-package qqai.mianshi.meituan;
+package qqai.bishi.meituan;
 
-import javax.crypto.interfaces.PBEKey;
 import java.util.HashSet;
 import java.util.Scanner;
-import java.util.Set;
 
 /**
  * @author qqai

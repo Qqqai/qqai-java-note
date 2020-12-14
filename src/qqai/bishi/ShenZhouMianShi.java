@@ -1,6 +1,5 @@
-package qqai.mianshi;
+package qqai.bishi;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 /**

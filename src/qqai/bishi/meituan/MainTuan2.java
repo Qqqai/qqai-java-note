@@ -1,4 +1,4 @@
-package qqai.mianshi.meituan;
+package qqai.bishi.meituan;
 
 import java.util.Arrays;
 import java.util.Scanner;

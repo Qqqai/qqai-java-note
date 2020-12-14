@@ -10,7 +10,8 @@ package qqai.design.singleton;
 public class JdkTestRuntime {
 
     public static void main(String[] args) {
-        Runtime.getRuntime();
+        Runtime runtime = Runtime.getRuntime();
+        System.out.println(runtime.freeMemory());
     }
 
 }

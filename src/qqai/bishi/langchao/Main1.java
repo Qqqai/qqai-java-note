@@ -1,4 +1,4 @@
-package qqai.mianshi.langchao;
+package qqai.bishi.langchao;
 
 /**
  * @author qqai
