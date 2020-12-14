@@ -4,11 +4,11 @@ import java.util.Arrays;
 import java.util.PriorityQueue;
 
 /**
+ * 哈夫曼编码
+ *
  * @author qqai
  * @createTime 2020/12/14 21:18
- * @description：哈夫曼编码
  */
-
 public class HaFuMan {
 
     public static void main(String[] args) {

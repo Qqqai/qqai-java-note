@@ -4,9 +4,10 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 /**
+ * 字符串拼接比较字典序问题
+ *
  * @author qqai
  * @createTime 2020/12/14 18:33
- * @description：字符串拼接比较字典序问题
  */
 
 public class LowestLexicography {
