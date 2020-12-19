@@ -22,6 +22,6 @@ public class User implements Serializable {
     private String sex;
     //标记 没测试出来
 //    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date birthday;
 }
