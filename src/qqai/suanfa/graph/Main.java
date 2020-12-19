@@ -1,6 +1,7 @@
 package qqai.suanfa.graph;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -26,7 +27,9 @@ public class Main {
 //        testBFS();
 //        testTOPO();
 //        testMST();
-        TestSP();
+//        testSP();
+//        testSP(2);
+        testMultiSP();
     }
 
     // 权值比较器
@@ -43,15 +46,51 @@ public class Main {
             public Double add(Double e1, Double e2) {
                 return e1 + e2;
             }
+
+            @Override
+            public Double zero() {
+                return 0D;
+            }
         };
     }
 
-    private static void TestSP() {
-        System.out.println(undirectedGraph(Data.SP).Dijkstra("A", weightManager));
+    private static void testMultiSP() {
+        Map<Object, Map<Object, Graph.PathInfo<Object, Double>>> map = undirectedGraph(Data.SP).shortPath();
+        map.forEach((k, infoMap) -> {
+            System.out.println("========================start==========================");
+            System.out.println(k + " 为起点:");
+            infoMap.forEach((key, info) -> {
+                System.out.println("---------------------------------------------------");
+                System.out.println(k + " to " + key + " weight = " + info.weight);
+                System.out.println("info:");
+                info.info.forEach(item -> {
+                    System.out.println(" from : " + item.from + " to : " + item.to + " weight : " + item.weight);
+                });
+            });
+            System.out.println("========================end==========================");
+        });
+    }
+
+    private static void testSP(int i) {
+//        Map<Object, Graph.PathInfo<Object, Double>> map = undirectedGraph(Data.SP).shortPath("A");
+        Map<Object, Graph.PathInfo<Object, Double>> map = directedGraph(Data.NEGATIVE_WEIGHT2).shortPath(0);
+        map.forEach((k, v) -> {
+            System.out.println(k + " weight = " + v.weight);
+            System.out.println("info: ");
+            v.info.forEach(item -> {
+                System.out.println(" from : " + item.from + " to : " + item.to + " weight : " + item.weight);
+            });
+            System.out.println("---------------------");
+        });
+    }
+
+
+    private static void testSP() {
+        System.out.println(undirectedGraph(Data.SP).shortPath("A"));
     }
 
     private static void testMST() {
-        Set<Graph.EdgeInfo<Object, Double>> mst = undirectedGraph(Data.MST_01).mst(weightManager);
+        Set<Graph.EdgeInfo<Object, Double>> mst = undirectedGraph(Data.MST_01).mst();
         System.out.println(mst);
     }
 
@@ -81,7 +120,7 @@ public class Main {
      * @return
      */
     private static Graph<Object, Double> directedGraph(Object[][] data) {
-        Graph<Object, Double> graph = new ListGraph<>();
+        Graph<Object, Double> graph = new ListGraph<>(weightManager);
         for (Object[] edge : data) {
             if (edge.length == 1) {
                 graph.addVerText(edge[0]);
@@ -102,7 +141,7 @@ public class Main {
      * @return
      */
     private static Graph<Object, Double> undirectedGraph(Object[][] data) {
-        Graph<Object, Double> graph = new ListGraph<>();
+        Graph<Object, Double> graph = new ListGraph<>(weightManager);
         for (Object[] edge : data) {
             if (edge.length == 1) {
                 graph.addVerText(edge[0]);

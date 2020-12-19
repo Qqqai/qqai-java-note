@@ -11,9 +11,10 @@ import java.util.*;
  */
 public interface Graph<V, E> {
 
-    Map<V, E> Dijkstra(V begin, WeightManager<E> weightManager);
 
-    Map<V, PathInfo<V, E>> DijkstraBetter(V begin, WeightManager<E> weightManager);
+    Map<V, Map<V, PathInfo<V, E>>> shortPath();
+
+    Map<V, PathInfo<V, E>> shortPath(V begin);
 
     List<V> topologicalSort();
 
@@ -37,7 +38,7 @@ public interface Graph<V, E> {
 
     void removeEdge(V from, V to);
 
-    Set<EdgeInfo<V, E>> mst(WeightManager<E> weightManager);
+    Set<EdgeInfo<V, E>> mst();
 
     interface VertexVisitor<V> {
         boolean visit(V v);
@@ -46,6 +47,15 @@ public interface Graph<V, E> {
     class PathInfo<V, E> {
         E weight;
         List<EdgeInfo<V, E>> info = new LinkedList<>();
+
+        @Override
+        public String toString() {
+            return "PathInfo{" +
+                    "weight=" + weight +
+                    ", info=" + info +
+                    '}'
+                    + "\n";
+        }
     }
 
     /**
@@ -55,13 +65,11 @@ public interface Graph<V, E> {
      */
     interface WeightManager<E> {
 
-        default int compare(E e1, E e2) {
-            return 1;
-        }
+        int compare(E e1, E e2);
 
-        default E add(E e1, E e2) {
-            return null;
-        }
+        E add(E e1, E e2);
+
+        E zero();
     }
 
     class EdgeInfo<V, E> {

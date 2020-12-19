@@ -1,8 +1,5 @@
 package qqai.suanfa.graph;
 
-import qqai.suanfa.common.MinHeap;
-import qqai.suanfa.common.UnionFind;
-
 import java.util.*;
 
 /**
@@ -19,11 +16,18 @@ public class ListGraph<V, E> implements Graph<V, E> {
     private final Set<Edge<V, E>> edges = new HashSet<>();
 
     // 权值管理器
-    private WeightManager<E> weightManager = new WeightManager<E>() {
-    };
-
+    private WeightManager<E> weightManager;
     // 比较器
     private final Comparator<Edge<V, E>> comparator = (o1, o2) -> weightManager.compare(o1.weight, o2.weight);
+
+    /**
+     * 创建图必须给定一个权值解释器
+     *
+     * @param weightManager 权值解释器
+     */
+    public ListGraph(WeightManager<E> weightManager) {
+        this.weightManager = weightManager;
+    }
 
     /**
      * 打印全局顶点和边信息
@@ -42,19 +46,181 @@ public class ListGraph<V, E> implements Graph<V, E> {
     }
 
     /**
-     * 最短路径
+     * 多源最短路径 标记 Floyd算法
+     *
+     * @return 最短路径表
+     */
+    @Override
+    public Map<V, Map<V, PathInfo<V, E>>> shortPath() {
+        // 初始化路径表
+        Map<V, Map<V, PathInfo<V, E>>> paths = new HashMap<>();
+        // 把所有的边的各类信息放进区
+        edges.forEach(edge -> {
+            // 从paths中拿到以edge节点出发到它直接链接的所有节点的Map<to,pathInfo>信息 如果没有这个信息就创建创建一个
+            Map<V, PathInfo<V, E>> map = paths.computeIfAbsent(edge.from.value, k -> new HashMap<>());
+//            Map<V, PathInfo<V, E>> map = paths.get(edge.from.value);
+//            if (map == null) {
+//                map = new HashMap<>();
+//                paths.put(edge.from.value, map);
+//            }
+            // 创建一个PathInfo对象
+            PathInfo<V, E> info = new PathInfo<>();
+            // info 的权值是当前边的权值
+            info.weight = edge.weight;
+            // info的info用有序链表保存这个边的EdgeInfo信息
+            info.info.add(edge.info());
+            // map中保存的是入度顶点和pathInfo信息
+            map.put(edge.to.value, info);
+        });
+        // 遍历全局顶点信息 三次 获取三个节点信息
+        vertices.forEach((k2, v2) -> {
+            vertices.forEach((k1, v1) -> {
+                vertices.forEach((k3, v3) -> {
+                    // 如果这三个对象是有两个是同一个对象那就不需要比较
+                    if (v1.equals(v2) || v2.equals(v3) || v1.equals(v3)) return;
+                    // v1 - v2  path
+                    PathInfo<V, E> v1tov2 = getPathInfo(k1, k2, paths);
+                    if (v1tov2 == null) return;
+                    // v2 - v3  path
+                    PathInfo<V, E> v2tov3 = getPathInfo(k2, k3, paths);
+                    if (v2tov3 == null) return;
+                    // v1 - v3  path
+                    PathInfo<V, E> v1tov3 = getPathInfo(k1, k3, paths);
+                    // compare
+                    E newWeight = weightManager.add(v1tov2.weight, v2tov3.weight);
+                    // like A-D compare A-D-E  如果权值比较新的权值边比较大那么就不要后续操作
+                    if (v1tov3 != null && weightManager.compare(newWeight, v1tov3.weight) >= 0)
+                        return;
+                    // 如果k1顶点到k3顶点没有信息就说明k1没有到k3的权值最小边还没有被计算过
+                    if (v1tov3 == null) {
+                        // 新建一个PathInfo表示k1-k3的权值边信息
+                        v1tov3 = new PathInfo<>();
+                        // get到k1为起点的map然后把k3作为终点的权值边信息放进去
+                        paths.get(k1).put(k3, v1tov3);
+                    } else {
+                        // 如果这个存在那么就需要清空原有的info信息然后设置新的info信息进去
+                        v1tov3.info.clear();
+                    }
+                    // 设置新权值
+                    v1tov3.weight = newWeight;
+                    // 把k1-k2的权值边信息设置进去
+                    v1tov3.info.addAll(v1tov2.info);
+                    // 把k2-k3的权值边信息也设置进去
+                    v1tov3.info.addAll(v2tov3.info);
+                });
+            });
+        });
+        // 返回权值路径表
+        return paths;
+    }
+
+    /**
+     * 获取从某个顶点到另一个顶点的权值边信息
+     *
+     * @param from  起点
+     * @param to    终点
+     * @param paths 全职路径表
+     * @return 如果存在返回 如果不存在返回null
+     */
+    private PathInfo<V, E> getPathInfo(V from, V to, Map<V, Map<V, PathInfo<V, E>>> paths) {
+        Map<V, PathInfo<V, E>> map = paths.get(from);
+        return map == null ? null : map.get(to);
+    }
+
+    /**
+     * 单源最短路径
+     *
+     * @param begin 源节点
+     * @return 最短路径表
+     */
+    @Override
+    public Map<V, PathInfo<V, E>> shortPath(V begin) {
+        //  return this.Dijkstra(begin);
+        //  return this.DijkstraBetter(begin);
+        return this.BellmanFord(begin);
+    }
+
+    /**
+     * BellmanFord()算法 单源最短路径算法
+     *
+     * @param begin 起点的值
+     * @return 最短路径表
+     */
+    private Map<V, PathInfo<V, E>> BellmanFord(V begin) {
+        // 获取源节点信息
+        Vertex<V, E> beginVertex = vertices.get(begin);
+        if (beginVertex == null) throw new RuntimeException("源节点不存在");
+        // 返回表
+        HashMap<V, PathInfo<V, E>> selected = new HashMap<>();
+        // 第一次返回表中没有数据 所以把初始节点的最短路径看成 0 或者 空 放进去
+        PathInfo<V, E> info = new PathInfo<>();
+        // 从权值管理器获取到初始节点的最短路径 也就是为0是什么情况
+        info.weight = weightManager.zero();
+        // 选择
+        selected.put(begin, info);
+        // 笔记 算法思想
+        for (int i = 0; i < vertices.size() - 1; i++) {
+            // 遍历每条边
+            edges.forEach(edge -> {
+                // 松弛 要先获取到from点的最短权值路径
+                PathInfo<V, E> from = selected.get(edge.from.value);
+                // 松弛操作
+                relaxForBellmanFord(weightManager, from, edge, selected);
+            });
+        }
+        // 标记 判断是否存在负权环  笔记 上面每个边已经松弛了V-1次了如果次数还能松弛成功那么就存在负权环 所以找不到最短路径
+        edges.forEach(edge -> {
+            PathInfo<V, E> from = selected.get(edge.from.value);
+            if (relaxForBellmanFord(weightManager, from, edge, selected)) throw new RuntimeException("存在负权环，无法找到最短路径");
+        });
+        // 删除放进区的起点
+        selected.remove(begin);
+        // 返回
+        return selected;
+    }
+
+    /**
+     * 松弛 服务于 BellmanFord()
+     *
+     * @param weightManager 权值比较器
+     * @param fromPath      当前取得的最小节点的最小权值边
+     * @param edge          当前边
+     * @param paths         可选边集
+     */
+    private boolean relaxForBellmanFord(WeightManager<E> weightManager, PathInfo<V, E> fromPath, Edge<V, E> edge, Map<V, PathInfo<V, E>> paths) {
+        if (fromPath == null) return false;
+        /* 比较 A-E 和 A-D-E的权值哪个小 */
+        // 标记 新的可选路径 minEntry的value保存的就是起始节点到minEntry节点权值最小的的路径 加上当前边的权值就是现在的路径权值大小
+        E newWeight = weightManager.add(fromPath.weight, edge.weight);
+        // 此处可能为空 标记 以前的路径 当前边的入度节点以前的路径
+        PathInfo<V, E> oldWeight = paths.get(edge.to.value);
+        //更新新的可选路径 如果新的路径比以前的路径小的情况下
+        if (oldWeight != null && weightManager.compare(newWeight, oldWeight.weight) >= 0) return false;
+        // 新建一个返回信息表
+        PathInfo<V, E> pathInfo = new PathInfo<>();
+        // 权值就是现在最小的权值
+        pathInfo.weight = newWeight;
+        // info里面保存的就是所有的可选边的信息
+        pathInfo.info.addAll(fromPath.info);
+        // 再把现在这条边加进去
+        pathInfo.info.add(edge.info());
+        // 更新这个节点的权值路径添加到可选表中
+        paths.put(edge.to.value, pathInfo);
+        return true;
+    }
+
+
+    /**
+     * 最短路径  标记 不能有负权边！！
      *
      * @param begin 开始节点
      * @return 到各个顶点的距离的返回
      */
-    @Override
-    public Map<V, E> Dijkstra(V begin, WeightManager<E> weightManager) {
+    private Map<V, E> Dijkstra(V begin) {
         // 获取初始开始节点的信息
         Vertex<V, E> beginVertex = vertices.get(begin);
-        // 设置权值管理器
-        this.weightManager = weightManager;
         // 如果无此节点信息 返回null
-        if (beginVertex == null) return null;
+        if (beginVertex == null) throw new RuntimeException("nothing...");
         // 选择过的表
         Map<V, E> selectedPath = new HashMap<>();
         // 可选表
@@ -120,14 +286,17 @@ public class ListGraph<V, E> implements Graph<V, E> {
         return minEntry;
     }
 
-    @Override
-    public Map<V, PathInfo<V, E>> DijkstraBetter(V begin, WeightManager<E> weightManager) {
+    /**
+     * 单源最短路径算法 标记 不能有负权边！！
+     *
+     * @param begin 源节点
+     * @return 单源最短路径表
+     */
+    private Map<V, PathInfo<V, E>> DijkstraBetter(V begin) {
         // 获取初始开始节点的信息
         Vertex<V, E> beginVertex = vertices.get(begin);
-        // 设置权值管理器
-        this.weightManager = weightManager;
         // 如果无此节点信息 返回null
-        if (beginVertex == null) return null;
+        if (beginVertex == null) throw new RuntimeException("nothing...");
         // 选择过的表
         Map<V, PathInfo<V, E>> selectedPath = new HashMap<>();
         // 可选表
@@ -148,7 +317,11 @@ public class ListGraph<V, E> implements Graph<V, E> {
             Vertex<V, E> minVertex = minEntry.getKey();
             // 表示这个节点被提起来了
             PathInfo<V, E> info = new PathInfo<>();
+            // 更新边的权值
             info.weight = minEntry.getValue().weight;
+            // 添加节点的最小边信息
+            info.info.addAll(minEntry.getValue().info);
+            // 在选择过的节点添加这个顶点
             selectedPath.put(minVertex.value, info);
             // 从可选节点删除这个节点
             paths.remove(minVertex);
@@ -156,16 +329,10 @@ public class ListGraph<V, E> implements Graph<V, E> {
             for (Edge<V, E> edge : minVertex.outEdge) {
                 // 如果当前的入度节点已经离开桌面 == 已经存在于selectedPath中 那么就不需要进行松弛操作
                 if (selectedPath.containsKey(edge.to.value)) continue;
-                /* 比较 A-E 和 A-D-E的权值哪个小 */
-                // 标记 新的可选路径 minEntry的value保存的就是起始节点到minEntry节点权值最小的的路径 加上当前边的权值就是现在的路径权值大小
-                E newWeight = weightManager.add(minEntry.getValue().weight, edge.weight);
-                // 此处可能为空 标记 以前的路径 当前边的入度节点以前的路径
-                E oldWeight = paths.get(edge.to).weight;
-                //更新新的可选路径 如果新的路径比以前的路径小的情况下
-                if (oldWeight == null || weightManager.compare(newWeight, oldWeight) < 0) {
-                    // 更新这个节点的权值路径添加到可选表中
-                    paths.put(edge.to, minEntry.getValue());
-                }
+                // 获得minEntry的权值最小路径
+                PathInfo<V, E> fromPath = minEntry.getValue();
+                // 松弛
+                relaxForDijkstra(weightManager, fromPath, edge, paths);
             }
         }
         // 返回所有被提起来的节点表 无向图的话这个表可能会包含开始节点 所以删除一下
@@ -174,7 +341,35 @@ public class ListGraph<V, E> implements Graph<V, E> {
     }
 
     /**
-     * 从paths中获取路径最短的一个节点 被提起来的节点
+     * 松弛 服务于Dijkstra()
+     *
+     * @param weightManager 权值比较器
+     * @param fromPath      当前取得的最小节点的最小权值边
+     * @param edge          当前边
+     * @param paths         可选边集
+     */
+    private void relaxForDijkstra(WeightManager<E> weightManager, PathInfo<V, E> fromPath, Edge<V, E> edge, Map<Vertex<V, E>, PathInfo<V, E>> paths) {
+        /* 比较 A-E 和 A-D-E的权值哪个小 */
+        // 标记 新的可选路径 minEntry的value保存的就是起始节点到minEntry节点权值最小的的路径 加上当前边的权值就是现在的路径权值大小
+        E newWeight = weightManager.add(fromPath.weight, edge.weight);
+        // 此处可能为空 标记 以前的路径 当前边的入度节点以前的路径
+        PathInfo<V, E> oldWeight = paths.get(edge.to);
+        //更新新的可选路径 如果新的路径比以前的路径小的情况下
+        if (oldWeight != null && weightManager.compare(newWeight, oldWeight.weight) >= 0) return;
+        // 新建一个返回信息表
+        PathInfo<V, E> pathInfo = new PathInfo<>();
+        // 权值就是现在最小的权值
+        pathInfo.weight = newWeight;
+        // info里面保存的就是所有的可选边的信息
+        pathInfo.info.addAll(fromPath.info);
+        // 再把现在这条边加进去
+        pathInfo.info.add(edge.info());
+        // 更新这个节点的权值路径添加到可选表中
+        paths.put(edge.to, pathInfo);
+    }
+
+    /**
+     * 从paths中获取路径最短的一个节点 被提起来的节点  服务于 DijkstraBetter()
      *
      * @param paths 路径表
      * @return 节点
@@ -257,7 +452,7 @@ public class ListGraph<V, E> implements Graph<V, E> {
         // 全局获取起点信息
         Vertex<V, E> veVertex = vertices.get(begin);
         // 全局没有保存起点信息  表示 没有这个节点 return
-        if (veVertex == null) return;
+        if (veVertex == null) throw new RuntimeException("nothing...");
         // 创建队列
         Queue<Vertex<V, E>> queue = new LinkedList<>();
         // 起点入队
@@ -435,13 +630,10 @@ public class ListGraph<V, E> implements Graph<V, E> {
     /**
      * 求图的最小生成树
      *
-     * @param weightManager 权值管理器
      * @return 最小生成树包含的边集合
      */
     @Override
-    public Set<EdgeInfo<V, E>> mst(WeightManager<E> weightManager) {
-        // 权值管理器
-        this.weightManager = weightManager;
+    public Set<EdgeInfo<V, E>> mst() {
         // 两个算法
         return kruskal();
         //return prim();
@@ -467,7 +659,7 @@ public class ListGraph<V, E> implements Graph<V, E> {
         Set<EdgeInfo<V, E>> edgeInfos = new HashSet<>();
         // 小根堆
         MinHeap<Edge<V, E>> heap = new MinHeap<>(next.outEdge, comparator);
-        // 最小数的边只有节点数减一条
+        // 最小数的边数有且只有节点数减一条
         int size = vertices.size() - 1;
         while (!heap.isEmpty() && edgeInfos.size() < size) {
             // 权值最小的边
@@ -490,20 +682,31 @@ public class ListGraph<V, E> implements Graph<V, E> {
      * @return 最小生成树
      */
     private Set<EdgeInfo<V, E>> kruskal() {
-        if (vertices.size() == 0) return null;
+        // 图为空异常
+        if (vertices.size() == 0) throw new RuntimeException("nothing...");
+        // 最小生成树的边集
         HashSet<EdgeInfo<V, E>> edgeInfos = new HashSet<>();
+        // 小根堆
         MinHeap<Edge<V, E>> heap = new MinHeap<>(edges, comparator);
         // 判断这个边是否会形成环 标记 并查集
         UnionFind<Vertex<V, E>> uf = new UnionFind<>();
+        // 遍历所有节点
         vertices.forEach((k, v) -> {
+            // 各自为根节点
             uf.makeSet(v);
         });
+        // 生成树的边只有节点数-1条
         while (!heap.isEmpty() && edgeInfos.size() < vertices.size() - 1) {
+            // 小根堆头节点弹出  标记 每次都是弹出现存的所有边中最小权值的边
             Edge<V, E> edge = heap.remove();
+            // 如果两个节点属于同一个集合 结束本次循环
             if (uf.isSame(edge.from, edge.to)) continue;
+            // 在生成树的边集添加这条边
             edgeInfos.add(edge.info());
+            // 合并这两个节点
             uf.union(edge.from, edge.to);
         }
+        // 返回生成树
         return edgeInfos;
     }
 
