@@ -8,19 +8,20 @@ import java.util.Arrays;
  * @description：快速排序
  */
 
-public class QuickSort {
+public class QuickSortTwo {
     public static void main(String[] args) {
-        int[] arr = {5, 3, 6, 7, 8, 9, 2, 4};
+        int[] arr = {5, 3, 6, 7, 8, 9, 2, 18};
         int[] res = quickSort(arr, 0, arr.length - 1);
         System.out.println(Arrays.toString(res));
     }
 
     private static int[] quickSort(int[] arr, int left, int right) {
         if (left < right) {
-            //　笔记 随机快排 因为partition用的是最后一个值作为基准值，所以就在right-left之间选择一个数和right交换位置，基准值就不确定了
+            //　标记 随机快排 因为partition用的是最后一个值作为基准值，所以就在right-left之间选择一个数和right交换位置，基准值就不确定了
             swap(arr, left + (int) (Math.random() * (right - left + 1)), right);
             int[] p = partition(arr, left, right);
-            quickSort(arr, left, p[0] - 1);
+            quickSort(arr, left, p[0]);
+            // 标记 p[1] + 1 是more位置后一个位置 相当于把没有交换的那个数直接放到了等于区域
             quickSort(arr, p[1] + 1, right);
         }
         return arr;
@@ -36,6 +37,7 @@ public class QuickSort {
                                 ←
         */
         int less = left - 1;
+        // 标记 more在right位置上  表示right位置的数并没有参与荷兰数的交换
         int more = right;
         while (left < more) {
             if (arr[left] < arr[right]) {
@@ -46,8 +48,10 @@ public class QuickSort {
                 left++;
             }
         }
+        // 交换大于区域的最后一个元素到more元素的位置上 标记 因为最大区域的最后一个元素并没有参加荷兰数的排序
         swap(arr, more, right);
-        return new int[]{less + 1, more};
+        // less + 1  把等于区域的第一个元素包含进去
+        return new int[]{less, more};
     }
 
     public static void swap(int[] arr, int l, int r) {

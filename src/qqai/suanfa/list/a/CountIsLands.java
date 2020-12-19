@@ -1,9 +1,10 @@
 package qqai.suanfa.list.a;
 
 /**
+ * 岛屿个数的判断
+ *
  * @author qqai
  * @createTime 2020/12/13 21:51
- * @description：岛屿个数的判断
  */
 
 public class CountIsLands {

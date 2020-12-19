@@ -2,9 +2,10 @@ package qqai.suanfa.sort;
 
 
 /**
+ * 归并求小和问题
+ *
  * @author qqai
  * @createTime 2020/11/12 22:21
- * @description：归并求小和问题
  */
 
 public class GuiBingQiuXiaoHe {
@@ -27,8 +28,7 @@ public class GuiBingQiuXiaoHe {
             return 0;
         }
         int mid = left + ((right - left) >> 1); // (left + right) / 2
-        return sortProcess(arr, left, mid) +
-                sortProcess(arr, mid + 1, right) +
+        return sortProcess(arr, left, mid) + sortProcess(arr, mid + 1, right) +
                 merge(arr, left, mid, right);
     }
 

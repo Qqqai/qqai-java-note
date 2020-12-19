@@ -11,8 +11,9 @@ import java.util.Arrays;
 public class HeLanShu {
 
     public static void main(String[] args) {
-        int[] a = {7, 3, 2, 4, 2, 3};
-        System.out.println(Arrays.toString(partition(a, 3, 0, a.length - 1)));
+//        int[] a = {7, 3, 2, 4, 2, 3};
+        int[] a = {3, 2, 4, 6, 7, 8, 3, 1, 9, 1, 18};
+        System.out.println(Arrays.toString(partition(a, 18, 0, a.length - 1)));
     }
 
     /*标记 荷兰国旗*/

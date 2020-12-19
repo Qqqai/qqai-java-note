@@ -5,9 +5,10 @@ import java.util.List;
 import java.util.Stack;
 
 /**
+ * 并查集集合的节点数
+ *
  * @author qqai
  * @createTime 2020/12/13 20:34
- * @description：集合的节点数
  */
 
 public class UnionFindSet {
