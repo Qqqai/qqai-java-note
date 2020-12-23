@@ -1,12 +1,12 @@
 package qqai.suanfa.some.i;
 
 /**
+ * 走楼梯
+ *
  * @author qqai
  * @createTime 2020/11/11 22:00
- * @description：走楼梯
  */
 
-// TODO 这题我不会
 public class WorkFloor {
     public static void main(String[] args) {
         System.out.println(new WorkFloor().recursion(10));

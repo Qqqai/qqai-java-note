@@ -1,4 +1,4 @@
-package qqai.suanfa.jinjie.recursion_and_dp;
+package qqai.suanfa.jinjie.recursion;
 
 /**
  * 给定一个数组和一个整数判断矩阵是否有值相加得到这个整数

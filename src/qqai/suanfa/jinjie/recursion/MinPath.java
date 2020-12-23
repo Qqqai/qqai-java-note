@@ -1,4 +1,4 @@
-package qqai.suanfa.jinjie.recursion_and_dp;
+package qqai.suanfa.jinjie.recursion;
 
 /**
  * 最小路径和
@@ -24,6 +24,13 @@ public class MinPath {
         System.out.println(path);
     }
 
+    /**
+     * TODO
+     * @param arr
+     * @param i
+     * @param j
+     * @return
+     */
     public static int walkDp(int[][] arr, int i, int j) {
         // 如果本身就在右下角那么就不用动
         if (i == arr.length - 1 && j == arr[i].length - 1) {

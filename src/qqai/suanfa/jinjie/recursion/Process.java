@@ -1,4 +1,4 @@
-package qqai.suanfa.jinjie.recursion_and_dp;
+package qqai.suanfa.jinjie.recursion;
 
 /**
  * 汉诺塔

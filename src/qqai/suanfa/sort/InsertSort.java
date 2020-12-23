@@ -5,7 +5,7 @@ import qqai.suanfa.common.Swap;
 import java.util.Arrays;
 
 /**
- * 插入排序
+ * 插入排序 稳定的排序
  *
  * @author qqai
  * @createTime 2020/12/15 22:06

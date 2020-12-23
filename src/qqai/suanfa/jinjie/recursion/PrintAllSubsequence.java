@@ -1,4 +1,4 @@
-package qqai.suanfa.jinjie.recursion_and_dp;
+package qqai.suanfa.jinjie.recursion;
 
 /**
  * 打印一个字符串的所有子序列

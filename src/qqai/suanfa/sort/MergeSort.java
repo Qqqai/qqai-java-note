@@ -3,7 +3,7 @@ package qqai.suanfa.sort;
 import java.util.Arrays;
 
 /**
- * 归并排序
+ * 归并排序 稳定的排序
  *
  * @author qqai
  * @createTime 2020/12/15 22:55

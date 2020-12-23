@@ -1,4 +1,4 @@
-package qqai.suanfa.jinjie.recursion_and_dp;
+package qqai.suanfa.jinjie.recursion;
 
 /**
  * 母牛生子问题  第0年有1只母牛 第1年有两只 每只牛需要三年成熟才能生子 所以第2年是3只 第3年是4只
