@@ -47,15 +47,19 @@ public class CoinChange {
             // 先求dp[1], dp[2], dp[3].... 一直到 dp[n]
             int min = Integer.MAX_VALUE;
             for (Integer integer : list) {
-                // 保证min是list中所有情况的最小值
-                if (i >= integer && min > dp[i - integer]) {
+                // 保证min是list中所有情况的最小值 dp[i - integer] < 0 表示这个也没法凑齐所以就不用计算
+                if (i >= integer && dp[i - integer] >= 0 && min > dp[i - integer]) {
                     min = dp[i - integer];
                     faces[i] = integer;
                 }
             }
-            // 获取dp[i]
-            dp[i] = min + 1;
-            print(i, faces);
+            if (min == Integer.MAX_VALUE) {
+                dp[i] = -1;
+            } else {
+                // 获取dp[i]
+                dp[i] = min + 1;
+                print(i, faces);
+            }
         }
 //        // 返回集合
 //        List<int[]> result = new ArrayList<>();

@@ -1,4 +1,4 @@
-package qqai.suanfa.jinjie.recursion;
+package qqai.suanfa.jinjie.dp;
 
 /**
  * 最小路径和
@@ -26,6 +26,7 @@ public class MinPath {
 
     /**
      * TODO
+     *
      * @param arr
      * @param i
      * @param j
@@ -41,7 +42,14 @@ public class MinPath {
         return 1;
     }
 
-    /*从i j 位置到右下角的最小路径和  标记 暴力递归*/
+    /**
+     * 从i j 位置到右下角的最小路径和  标记 暴力递归
+     *
+     * @param arr 矩阵数组
+     * @param i   起始位置
+     * @param j   起始位置
+     * @return 路径权值
+     */
     private static int walk(int[][] arr, int i, int j) {
         // 如果本身就在右下角那么就不用动
         if (i == arr.length - 1 && j == arr[i].length - 1) {

@@ -1,4 +1,4 @@
-package qqai.suanfa.jinjie.recursion;
+package qqai.suanfa.jinjie.dp;
 
 /**
  * 八皇后问题
@@ -9,7 +9,8 @@ package qqai.suanfa.jinjie.recursion;
 public class EightQueue {
 
     public static void main(String[] args) {
-        new EightQueue().placeQueens2(8);
+//        new EightQueue().placeQueens2(8);
+        System.out.println(new EightQueue().placeQueens3(8));
     }
 
     // 数组索引是行号 值是列号
@@ -26,6 +27,52 @@ public class EightQueue {
 
     // 某一列上是否有皇后
     private boolean colEnd[];
+
+    private int placeQueens3(int n) {
+        if (n < 1 || n > 32) {
+            return 0;
+        }
+        // 几皇后问题最右边就有几个1 其余全是0
+        int limit = n == 32 ? -1 : (1 << n) - 1;
+        return process(limit, 0, 0, 0);
+    }
+
+    /**
+     * 位运算
+     *
+     * @param limit       固定变量  问题的规模
+     * @param colLim      列限制
+     * @param leftDiaLim  左斜线的限制
+     * @param rightDiaLim 右斜线的限制
+     * @return
+     */
+    private int process(int limit, int colLim, int leftDiaLim, int rightDiaLim) {
+        // 所有列都摆上皇后了 就是齐活
+        if (colLim == limit) {
+            return 1;
+        }
+        // colLim | leftDiaLim | rightDiaLim 或出来是总的限制条件，取反之后右边部分为1的是可以尝试的位置
+        // 但是取反之后前面会多一串1  然后就与上limit就能得到正确的限制条件 然后所有可尝试的位置都在pos上了
+        int pos = limit & (~(colLim | leftDiaLim | rightDiaLim));
+        int res = 0;
+        int mostRightOne = 0;
+        while (pos != 0) {
+            // 提取出最右侧的1 = 本身 &（本身取反 + 1）
+            mostRightOne = pos & (~pos + 1);
+            // 把最右侧的1去掉 然后重回循环就能取到最右边的次一次1
+            pos = pos - mostRightOne;
+            res += process(
+                    // 不变
+                    limit,
+                    // 取到这个位置的信息之后按位或原来的列信息就能得到下一次递归需要的列信息 把当前列也置为1
+                    colLim | mostRightOne,
+                    // 左斜线的限制
+                    (leftDiaLim | mostRightOne) << 1,
+                    // 右斜线的限制
+                    (rightDiaLim | mostRightOne) >> 1);
+        }
+        return res;
+    }
 
     private void placeQueens2(int n) {
         // 0 没有结果
@@ -64,7 +111,7 @@ public class EightQueue {
             rightTop[rIndex] = true;
             // 递归 判断下一行
             place2(row + 1);
-            //笔记 递归走完之后 如果不把状态修改回来 那么就会拿着true去回溯到上一次的递归调用 就会出错
+            //笔记 恢复现场 递归走完之后 如果不把状态修改回来 那么就会拿着true去回溯到上一次的递归调用 就会出错
             colEnd[col] = false;
             leftTop[lIndex] = false;
             rightTop[rIndex] = false;
