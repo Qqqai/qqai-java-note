@@ -33,7 +33,6 @@ public class HelloController {
     @ResponseBody
     public String upload(MultipartFile upload, String name, HttpServletRequest request) throws IOException {
         System.out.println(upload.getOriginalFilename());
-//        System.out.println(name);
         //获取上传目录
         String path = request.getSession().getServletContext().getRealPath("/uploads/" + name + "/");
         System.out.println(path);

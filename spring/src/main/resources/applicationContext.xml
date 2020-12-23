@@ -18,7 +18,7 @@
             </property>
         </bean>-->
 
-    <!-- 阿里 druid 数据库连接池 配置  -->
+    <!-- 阿里 德鲁伊 数据库连接池 配置  -->
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
         <!-- 数据库基本信息配置 -->
         <property name="driverClassName" value="${jdbc.driver}"/>
@@ -61,8 +61,10 @@
     <!--将dao代理对象交给IOC容器-->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="typeAliasesPackage" value="mybatis.entity"/>
-        <property name="mapperLocations" value="classpath:mapper/*Dao.xml"/>
+        <!--为了显示日志（这办法好蠢）-->
+                <property name="configLocation" value="classpath:/SqlMapConfig.xml"/>
+<!--        <property name="typeAliasesPackage" value="mybatis.entity"/>-->
+<!--        <property name="mapperLocations" value="classpath:mapper/*Dao.xml"/>-->
         <!--分页-->
         <!-- 传入PageHelper的插件 -->
         <!-- <property name="plugins">
