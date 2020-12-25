@@ -11,8 +11,39 @@ package qqai.suanfa.jinjie.dp;
 public class ConvertString {
 
     public static void main(String[] args) {
-        String str = "13231232432";
+        String str = "11111";
         System.out.println(process(str.toCharArray(), 0));
+        System.out.println(dp(str.toCharArray()));
+    }
+
+    /**
+     * 动态规划
+     *
+     * @param str
+     * @param i
+     * @return
+     */
+    public static int dp(char[] str) {
+        // N
+        int N = str.length;
+        // dp
+        int[] dp = new int[N + 1];
+        // base case  if (i == str.length) return 1;
+        dp[N] = 1;
+        // for right to left replenish table
+        for (int index = N - 1; index >= 0; index--) {
+            // 递归改写得过程
+            if (str[index] == '0')
+                dp[index] = 0;
+            else if (str[index] == '1')
+                dp[index] = dp[index + 1] + (index + 1 < N ? dp[index + 2] : 0);
+            else if (str[index] == '2')
+                dp[index] = dp[index + 1] + (index + 1 < N && str[index + 1] <= '6' ? dp[index + 2] : 0);
+            else
+                dp[index] = dp[index + 1];
+        }
+        //return dp[0]
+        return dp[0];
     }
 
     /**

@@ -1,5 +1,6 @@
 package spring;
 
+import org.springframework.cglib.core.DebuggingClassWriter;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
@@ -15,7 +16,7 @@ import java.lang.reflect.Method;
 public class TestCglib {
     public static void main(String[] args) {
         //在指定目录下生成动态代理类，我们可以反编译看一下里面到底是一些什么东西
-//        System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "D:\\idea\\sources\\jvm\\qqai\\spring\\src\\main\\java\\spring");
+       System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "D:\\idea\\sources\\jvm\\qqai\\spring\\src\\main\\java\\spring");
 
         //创建Enhancer对象，类似于JDK动态代理的Proxy类，下一步就是设置几个参数
         Enhancer enhancer = new Enhancer();

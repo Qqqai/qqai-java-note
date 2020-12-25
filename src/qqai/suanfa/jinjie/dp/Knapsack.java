@@ -19,6 +19,14 @@ public class Knapsack {
         return dp(v, w, bag);
     }
 
+    /**
+     * 动态规划
+     *
+     * @param v
+     * @param w
+     * @param bag
+     * @return
+     */
     private static int dp(int[] v, int[] w, int bag) {
         // 填表 行 index  列是 rest  返回的是（0，bag）位置的解
         // base case是当index == w.length时返回0 所以最后一行的值应该全是0

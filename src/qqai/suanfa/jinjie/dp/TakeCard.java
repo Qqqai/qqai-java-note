@@ -8,10 +8,55 @@ package qqai.suanfa.jinjie.dp;
  */
 public class TakeCard {
     public static void main(String[] args) {
-        int[] arr = {1, 2, 3, 4, 3, 2, 3};
+        int[] arr = {4, 7, 9, 5, 19, 29, 80, 4};
         System.out.println(win(arr));
+        System.out.println(dp(arr));
     }
 
+    /**
+     * 动态规划
+     *
+     * @param arr
+     * @return
+     */
+    public static int dp(int[] arr) {
+        int N = arr.length;
+        // 两个方法互相依赖 就是两个表互相依赖
+        int[][] f = new int[N][N];
+        int[][] s = new int[N][N];
+        // 初始化
+        for (int i = 0; i < f.length; i++) {
+            // base case  if (L == R) return arr[L];
+            f[i][i] = arr[i];
+            // base case if (L == R) return 0;   array default 0
+            // s[i][i] = 0;
+        }
+        // 依次遍历就足够了
+        for (int i = 1; i < N; i++) {
+            // 表的行
+            int L = 0;
+            // 表的列
+            int R = i;
+            // 边界限定
+            while (L < N && R < N) {
+                // 递归改写
+                f[L][R] = Integer.max(arr[L] + s[L + 1][R], arr[R] + s[L][R - 1]);
+                s[L][R] = Integer.min(f[L + 1][R], f[L][R - 1]);
+                // 对角线填表
+                L++;
+                R++;
+            }
+        }
+        // 取值
+        return Integer.max(f[0][N - 1], s[0][N - 1]);
+    }
+
+    /**
+     * 获取最得值
+     *
+     * @param arr
+     * @return
+     */
     public static int win(int[] arr) {
         if (arr == null || arr.length < 1) return 0;
         return Integer.max(

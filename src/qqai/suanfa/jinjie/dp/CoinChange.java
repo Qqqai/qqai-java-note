@@ -28,7 +28,84 @@ public class CoinChange {
 //                }
 //            }
 //        });
-        System.out.println(coins3(money, list));
+        System.out.println(dp(faces, money));
+        System.out.println(process(faces, money, 0));
+    }
+
+    /**
+     * 动态规划
+     *
+     * @param faces
+     * @param money
+     * @return
+     */
+    public static int dp(int[] faces, int money) {
+        int N = faces.length;
+        int[][] dp = new int[N + 1][money + 1];
+        dp[N][0] = 1;
+        for (int index = N - 1; index >= 0; index--) {
+            for (int rest = 0; rest <= money; rest++) {
+
+                // 当前位置的面值乘以i张小于rest就进入循环 标记 循环是个枚举得过程
+//                for (int i = 0; i * faces[index] <= rest; i++) {
+//                    // 递归过程
+//                    dp[index][rest] += dp[index + 1][rest - (i * faces[index])];
+//                }
+
+                //笔记 改写for循环得枚举行为 dp[index][rest] = dp[index][rest - faces[index]] + dp[index + 1][rest];
+                dp[index][rest] = dp[index + 1][rest];
+                if (rest - faces[index] >= 0) {
+                    dp[index][rest] += dp[index][rest - faces[index]];
+                }
+
+            }
+        }
+        return dp[0][money];
+    }
+
+    /**
+     * 暴力递归 标记 这个方法求得是一共有多少种解法
+     *
+     * @param faces 可使用的面值
+     * @param rest  还需要多少钱要找
+     * @param index faces对应的下标索引
+     * @return 方法总数
+     */
+    public static int process(int[] faces, int rest, int index) {
+        // rest不能小于0 小于0就是代表亏了！ 但是因为递归的条件是i * faces[index] <= rest; 所以这里必不小于0
+        //        if (rest < 0) {
+        //            return 0;
+        //        }
+        // index == faces.length 就说明index到了faces最后一个元素的后一个位置 如果测试faces不等于0就说明方案失败
+        if (index == faces.length) {
+            return rest == 0 ? 1 : 0;
+        }
+        // 总路径
+        int ways = 0;
+        // 当前位置的面值乘以i张小于rest就进入循环
+        for (int i = 0; i * faces[index] <= rest; i++) {
+            // 递归过程
+            ways += process(faces, rest - (i * faces[index]), index + 1);
+        }
+        return ways;
+    }
+
+    /**
+     * dp 暴力递归出所有情况 然后取到最小的
+     *
+     * @param n    当前需要找的钱
+     * @param list 可以找的钱
+     * @return 最大值
+     */
+    public static int coins(int n, List<Integer> list) {
+        // 递归基  此处返回一个最大的值
+        if (n < 1) return Integer.MAX_VALUE;
+        if (list.contains(n)) return 1;
+        int min = Integer.MAX_VALUE;
+        for (Integer i : list) {
+            min = Integer.min(min, coins(n - i, list));
+        }
+        return min + 1;
     }
 
     /**
@@ -58,7 +135,6 @@ public class CoinChange {
             } else {
                 // 获取dp[i]
                 dp[i] = min + 1;
-                print(i, faces);
             }
         }
 //        // 返回集合
@@ -123,24 +199,6 @@ public class CoinChange {
             dp[n] = min + 1;
         }
         return dp[n];
-    }
-
-    /**
-     * dp 暴力递归出所有情况 然后取到最小的
-     *
-     * @param n    当前需要找的钱
-     * @param list 可以找的钱
-     * @return 最大值
-     */
-    public static int coins(int n, List<Integer> list) {
-        // 递归基  此处返回一个最大的值
-        if (n < 1) return Integer.MAX_VALUE;
-        if (list.contains(n)) return 1;
-        int min = Integer.MAX_VALUE;
-        for (Integer i : list) {
-            min = Integer.min(min, coins(n - i, list));
-        }
-        return min + 1;
     }
 
     /**

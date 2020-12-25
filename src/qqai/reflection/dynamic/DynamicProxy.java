@@ -14,7 +14,7 @@ import java.lang.reflect.Proxy;
 
 public class DynamicProxy implements InvocationHandler {
 
-    private Object object;  //笔记  被代理的对象
+    private final Object object;  //笔记  被代理的对象
 
     /**
      * 笔记  构造器 实例化被代理的对象

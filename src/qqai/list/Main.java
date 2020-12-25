@@ -19,24 +19,24 @@ public class Main {
      * @param
      */
     public static void main(String[] args) {
-        List<Integer> linkedList = new LinkedList<Integer>();
+        List<Integer> linkedList = new LinkedList<>();
         linkedList.add(2);
 
         List<Integer> list = new ArrayList<>();
 
 //        LinkedList.Node;内部类  所以LinkedList是一个双向链表。
-        //private static class Node<E> {
-        //        E item;
-        //        Node<E> next;
-        //        Node<E> prev;
-        //
-        //        Node(Node<E> prev, E element, Node<E> next) {
-        //            this.item = element;
-        //            this.next = next;
-        //            this.prev = prev;
-        //        }
-        //    }
-        List<Integer> arrayList = new ArrayList<Integer>();
+//        private static class Node<E> {
+//            E item;
+//            Node<E> next;
+//            Node<E> prev;
+//
+//            Node(Node<E> prev, E element, Node<E> next) {
+//                this.item = element;
+//                this.next = next;
+//                this.prev = prev;
+//            }
+//        }
+        List<Integer> arrayList = new ArrayList<>();
         arrayList.add(1);
         System.out.println(arrayList.get(0));
         //arrayList添加是这样的
