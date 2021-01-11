@@ -1,5 +1,6 @@
 package qqai.suanfa.jinjie.monotonous_stack;
 
+import java.util.Arrays;
 import java.util.Stack;
 
 /**

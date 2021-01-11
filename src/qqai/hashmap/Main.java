@@ -1,6 +1,7 @@
 package qqai.hashmap;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 描述：关于hashmap
@@ -16,6 +17,7 @@ public class Main {
         Map<String, Object> map1 = new HashMap<>(1000);
         map1.put("111", 1);
         map1.put(null, 1);
+        map1.containsKey("111");
         System.out.println(map1);
 //   static final int DEFAULT_INITIAL_CAPACITY = 1 << 4; // aka 16  如果不传递的话 hashmap的默认容量就是16
         //使用hashmap的一个参数的构造器的时候 这个参数表示集合容量  重要代码：
@@ -28,15 +30,16 @@ public class Main {
         //        n |= n >>> 16;
         //        return (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
         //    }
-        //这段代码是全残构造器会执行的一个方法，这个方法的参数是传入的容量，这个容量如果不是2的幂次倍的话  这个方法就会执行直接把容量换成
+        //这段代码是全参构造器会执行的一个方法，这个方法的参数是传入的容量，这个容量如果不是2的幂次倍的话  这个方法就会执行直接把容量换成
         //2的幂次倍
 
+        HashSet<Integer> set = new HashSet<>();
+        set.add(1);
         Map<String, Integer> hashtable = new Hashtable<>();
 
         Stack<Integer> stack = new Stack<>();
         NBL nbl = new NBL();
         System.out.println(nbl.wbl);
-
         List<HashMap<String, String>> list = new ArrayList<>();
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("paramName", "version");

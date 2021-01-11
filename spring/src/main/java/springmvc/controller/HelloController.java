@@ -53,10 +53,10 @@ public class HelloController {
     @GetMapping("/down/{filename}")
     @ResponseBody
     public String down(@PathVariable String filename, HttpServletResponse response) throws IOException {
-        System.out.println(filename);
+//        System.out.println(filename);
         String path = "D:\\idea\\sources\\jvm\\qqai\\spring\\target\\spring\\uploads\\qqai\\" + filename;
         File file = new File(path += ".md");
-        System.out.println(path);
+//        System.out.println(path);
         if (!file.exists()) {
             throw new RuntimeException("文件不存在");
         }

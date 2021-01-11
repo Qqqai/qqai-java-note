@@ -13,7 +13,7 @@ import java.util.Properties;
 
 class ContextLoaderGetResourceFutureTest {
     public static void main(String[] args) throws IOException {
-        InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream("qqai/thredpool/a.properties");
+        InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream("thredpool/a.properties");
         Properties properties = new Properties();
         properties.load(stream);
         assert stream != null;

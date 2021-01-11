@@ -17,10 +17,10 @@ public class Server {
         ServerSocket serverSocket = new ServerSocket(8080);
 
         while (true) {
+            // 获取请求信息
+            Socket socket = serverSocket.accept();
             new Thread(() -> {
                 try {
-                    // 获取请求信息
-                    Socket socket = serverSocket.accept();
                     // 获取输入流对象
                     InputStream inputStream = socket.getInputStream();
 //                    int len;
