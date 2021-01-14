@@ -17,7 +17,7 @@ public class TestClassObjForGetAnno {
         } catch (Throwable e) {
             e.printStackTrace();
         }
-        System.out.println((Boolean) (myAnno == null ? 0 : myAnno));
+        System.out.println(myAnno == null ? 0 : myAnno);
 //        Annotation[] annotations = dog.getAnnotations();
 //        for (Annotation annotation : annotations) {
 //            System.out.println(annotation.toString());
