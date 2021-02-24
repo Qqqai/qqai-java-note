@@ -1,0 +1,42 @@
+<!--
+   
+   by qqai
+   2021/2/23 19:25
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>聊天室</title>
+</head>
+<body>
+<input type="text" id="massage">
+<input type="button" onclick="sendMassage()" value="发送消息">
+<p id="chat" style="background-color: burlywood"></p>
+<script>
+    let websocket = null;
+    // 判断当前浏览器是否支持webSocket
+    if (window.WebSocket) {
+        websocket = new WebSocket("ws://localhost:9090/ws")
+        websocket.onopen = function () {
+            console.log("建立连接...")
+        }
+        websocket.onclose = function () {
+            console.log("断开连接...")
+        }
+        websocket.onmessage = function (e) {
+            console.log("接收到服务器消息为 : " + e.data)
+            let chat = document.getElementById("chat");
+            chat.innerHTML += e.data + "</br>";
+        }
+    } else {
+        alert("当前浏览器不支持websocket")
+    }
+
+    function sendMassage() {
+        let massage = document.getElementById("massage");
+        websocket.send(massage.value);
+    }
+</script>
+</body>
+</html>

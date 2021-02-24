@@ -8,15 +8,11 @@ package qqai.anno;
  * @createTime 2020/12/27 14:36
  */
 public class TestClassObjForGetAnno {
-    public static void main(String[] args) throws NoSuchFieldException, IllegalAccessException {
+    public static void main(String[] args) {
         Class<Dog> dog = Dog.class;
         Class<MyAnno> anno = MyAnno.class;
         MyAnno myAnno = null;
-        try {
-//            myAnno = dog.getAnnotation(MyAnno.class);
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
+        myAnno = dog.getAnnotation(MyAnno.class);
         System.out.println(myAnno == null ? 0 : myAnno);
 //        Annotation[] annotations = dog.getAnnotations();
 //        for (Annotation annotation : annotations) {

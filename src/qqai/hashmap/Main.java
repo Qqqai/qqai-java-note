@@ -42,7 +42,7 @@ public class Main {
         System.out.println(nbl.wbl);
         List<HashMap<String, String>> list = new ArrayList<>();
         HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("paramName", "version");
+        hashMap.put("paramName", "\u2062\u2063\u2062兔");
         hashMap.put("paramValue", "");
         list.add(hashMap);
         HashMap<String, String> map = new HashMap<>();

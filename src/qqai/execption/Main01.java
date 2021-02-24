@@ -1,9 +1,9 @@
 package qqai.execption;
 
 /**
- * @author qqai
- * @createTime 2020/10/18 20:42
- * @description：异常测试
+ * 异常测试
+ * by qqai
+ * 2020/10/18 20:42
  */
 
 public class Main01 {

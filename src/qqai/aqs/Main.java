@@ -8,14 +8,13 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * 描述：AQS学习
- *
- * @author qqai
- * @createTime 2020-09-24 20:44
+ * AQS学习
+ * by qqai
+ * 2020/09/24 20:44
  */
 
 public class Main {
-    private Lock lock = new ReentrantLock();
+    private final Lock lock = new ReentrantLock();
 //    new CountDownLatch
 
     public void test() {
@@ -24,6 +23,6 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        
+
     }
 }
