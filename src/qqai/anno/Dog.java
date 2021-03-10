@@ -6,5 +6,6 @@ package qqai.anno;
  */
 @MyAnno(name = "qqai", age = 21)
 public class Dog {
-    public int a = 0;
+  public int a = 0;
+  private int b = 1;
 }
