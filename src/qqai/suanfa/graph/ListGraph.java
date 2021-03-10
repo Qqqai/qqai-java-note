@@ -1,6 +1,7 @@
 package qqai.suanfa.graph;
 
 import java.util.*;
+import qqai.suanfa.common.UnionFind;
 
 /**
  * @author qqai
