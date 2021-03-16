@@ -176,13 +176,13 @@ public class ClassLoaderWrapper {
    * @throws ClassNotFoundException - Remember the wisdom of Judge Smails: Well, the world needs ditch diggers, too.
    */
   Class<?> classForName(String name, ClassLoader[] classLoader) throws ClassNotFoundException {
-
+    // 拿到所有的类加载器
     for (ClassLoader cl : classLoader) {
 
       if (null != cl) {
 
         try {
-
+          // 尝试加载这个类
           return Class.forName(name, true, cl);
 
         } catch (ClassNotFoundException e) {

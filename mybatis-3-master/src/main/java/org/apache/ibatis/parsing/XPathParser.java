@@ -1,17 +1,14 @@
 /**
- *    Copyright 2009-2019 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * Copyright 2009-2019 the original author or authors.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a
+ * copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.ibatis.parsing;
 
@@ -207,10 +204,23 @@ public class XPathParser {
     return xnodes;
   }
 
+  /**
+   * 根据流文件生成的
+   *
+   * @param expression /configuration xpath表达式
+   * @return XmlNode对象
+   */
   public XNode evalNode(String expression) {
     return evalNode(document, expression);
   }
 
+  /**
+   * 获取XmlNode对象
+   *
+   * @param root       document文档流
+   * @param expression /configuration xpath表达式
+   * @return XmlNode对象
+   */
   public XNode evalNode(Object root, String expression) {
     Node node = (Node) evaluate(expression, root, XPathConstants.NODE);
     if (node == null) {
@@ -221,6 +231,7 @@ public class XPathParser {
 
   private Object evaluate(String expression, Object root, QName returnType) {
     try {
+      // xml-html-dom求值...
       return xpath.evaluate(expression, root, returnType);
     } catch (Exception e) {
       throw new BuilderException("Error evaluating XPath.  Cause: " + e, e);
@@ -230,17 +241,25 @@ public class XPathParser {
   private Document createDocument(InputSource inputSource) {
     // important: this must only be called AFTER common constructor
     try {
+      // dom解析方式
       DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+      // 安全处理??
       factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+      // 指定此代码生成的解析器将在文档被解析时验证它们。默认情况下，这个值被设置为false。
       factory.setValidating(validation);
-
+      // 名称空间
       factory.setNamespaceAware(false);
+      // 忽略注释
       factory.setIgnoringComments(true);
+      // 忽略空白
       factory.setIgnoringElementContentWhitespace(false);
+      // 吧Cdata节点转成Text对象
       factory.setCoalescing(false);
+      // 指定此代码生成的解析器将扩展实体引用节点。默认情况下，这个值被设置为true
       factory.setExpandEntityReferences(true);
-
+      // 使用当前配置的参数创建DocumentBuilder的新实例
       DocumentBuilder builder = factory.newDocumentBuilder();
+      //需要注意的就是定义了EntityResolver(XMLMapperEntityResolver)，这样不用联网去获取DTD， 将DTD放在org\apache\ibatis\builder\xml\mybatis-3-config.dtd,来达到验证xml合法性的目的
       builder.setEntityResolver(entityResolver);
       builder.setErrorHandler(new ErrorHandler() {
         @Override
@@ -268,6 +287,7 @@ public class XPathParser {
     this.validation = validation;
     this.entityResolver = entityResolver;
     this.variables = variables;
+    //共通构造函数，除了把参数都设置到实例变量里面去以外，还初始化了XPath
     XPathFactory factory = XPathFactory.newInstance();
     this.xpath = factory.newXPath();
   }

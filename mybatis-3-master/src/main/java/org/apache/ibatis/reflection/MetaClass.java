@@ -36,10 +36,12 @@ public class MetaClass {
 
   private MetaClass(Class<?> type, ReflectorFactory reflectorFactory) {
     this.reflectorFactory = reflectorFactory;
+    // 方法获取到Reflector对象 一个简单的映射器
     this.reflector = reflectorFactory.findForClass(type);
   }
 
   public static MetaClass forClass(Class<?> type, ReflectorFactory reflectorFactory) {
+    // 根据指定的反射工厂 创建MetaClass对象
     return new MetaClass(type, reflectorFactory);
   }
 

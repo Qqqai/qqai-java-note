@@ -1,17 +1,14 @@
 /**
- *    Copyright 2009-2020 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * Copyright 2009-2020 the original author or authors.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a
+ * copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.ibatis.type;
 
@@ -101,7 +98,9 @@ public class TypeAliasRegistry {
   }
 
   @SuppressWarnings("unchecked")
-  // throws class cast exception as well if types cannot be assigned
+  /**
+   * 根据全限定路径解析class 如果不能分配类型，也会抛出类强制转换异常
+   */
   public <T> Class<T> resolveAlias(String string) {
     try {
       if (string == null) {
@@ -113,6 +112,7 @@ public class TypeAliasRegistry {
       if (typeAliases.containsKey(key)) {
         value = (Class<T>) typeAliases.get(key);
       } else {
+        // 用类加载器尝试加载这个类
         value = (Class<T>) Resources.classForName(string);
       }
       return value;
@@ -121,44 +121,80 @@ public class TypeAliasRegistry {
     }
   }
 
+  /**
+   * 根据包名注册所有别名
+   */
   public void registerAliases(String packageName) {
     registerAliases(packageName, Object.class);
   }
 
+  /**
+   * 根据包名注册所有别名
+   */
   public void registerAliases(String packageName, Class<?> superType) {
+    // ResolverUtil用于定位在/a类路径中可用并满足任意条件的类。
     ResolverUtil<Class<?>> resolverUtil = new ResolverUtil<>();
+    // 定位
     resolverUtil.find(new ResolverUtil.IsA(superType), packageName);
+    // 获取所有可配置类的全限定类名加载出来的class对象
     Set<Class<? extends Class<?>>> typeSet = resolverUtil.getClasses();
     for (Class<?> type : typeSet) {
       // Ignore inner classes and interfaces (including package-info.java)
       // Skip also inner classes. See issue #6
+      // java.lang.Class.isAnonymousClass() 当且仅当底层类是匿名类，则返回true。
+      // java.lang.Class.isMemberClass() 用于检查基础类是否为成员类。
       if (!type.isAnonymousClass() && !type.isInterface() && !type.isMemberClass()) {
+        //注册
         registerAlias(type);
       }
     }
   }
 
+  /**
+   * 注册
+   *
+   * @param type class对象
+   */
   public void registerAlias(Class<?> type) {
+    // 获取别名
     String alias = type.getSimpleName();
+    // 判断是否有Alias注解
     Alias aliasAnnotation = type.getAnnotation(Alias.class);
     if (aliasAnnotation != null) {
+      // 有的话按照Alias的value配置别名
       alias = aliasAnnotation.value();
     }
+    // 注册
     registerAlias(alias, type);
   }
 
+  /**
+   * 注册别名
+   *
+   * @param alias 别名
+   * @param value 别名对应的class对象
+   */
   public void registerAlias(String alias, Class<?> value) {
+    // 别名不能为空
     if (alias == null) {
       throw new TypeException("The parameter alias cannot be null");
     }
-    // issue #748
+    // issue #748  别名全小写
     String key = alias.toLowerCase(Locale.ENGLISH);
+    // 判断是否已存在
     if (typeAliases.containsKey(key) && typeAliases.get(key) != null && !typeAliases.get(key).equals(value)) {
       throw new TypeException("The alias '" + alias + "' is already mapped to the value '" + typeAliases.get(key).getName() + "'.");
     }
+    // 添加
     typeAliases.put(key, value);
   }
 
+  /**
+   * 注册别名
+   *
+   * @param alias 别名
+   * @param value 别名对应的class对象
+   */
   public void registerAlias(String alias, String value) {
     try {
       registerAlias(alias, Resources.classForName(value));
