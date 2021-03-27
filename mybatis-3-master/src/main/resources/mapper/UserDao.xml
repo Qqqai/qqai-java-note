@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="study.dao.UserDao">
-
-  <resultMap type="study.entity.User" id="UserMap">
+<mapper namespace="study.dao.UserDao" >
+  <resultMap type="study.entity.User" id="UserMap" autoMapping="true">
     <result property="id" column="id" jdbcType="INTEGER"/>
     <result property="username" column="username" jdbcType="VARCHAR"/>
     <result property="age" column="age" jdbcType="INTEGER"/>
@@ -11,15 +10,19 @@
     <result property="birthday" column="birthday" jdbcType="TIMESTAMP"/>
   </resultMap>
 
+  <sql id="base">
+    id, username, age, email, sex, birthday
+  </sql>
   <!--查询单个-->
   <select id="queryById" resultMap="UserMap">
-    select id, username, age, email, sex, birthday
+    select
+    <include refid="base"/>
     from test.user
     where id = #{id}
   </select>
 
   <!--查询指定行数据-->
-  <select id="queryAllByLimit" resultMap="UserMap">
+  <select id="queryAllByLimit" resultMap="UserMap" resultSetType="FORWARD_ONLY">
     select id, username, age, email, sex, birthday
     from test.user
     limit #{offset}, #{limit}

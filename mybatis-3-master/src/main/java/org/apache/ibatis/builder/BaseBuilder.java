@@ -93,12 +93,17 @@ public abstract class BaseBuilder {
     }
   }
 
+  /**
+   * 创建实例
+   */
   protected Object createInstance(String alias) {
+    // 全限定类名获取class对象
     Class<?> clazz = resolveClass(alias);
     if (clazz == null) {
       return null;
     }
     try {
+      // 获取实例
       return clazz.getDeclaredConstructor().newInstance();
     } catch (Exception e) {
       throw new BuilderException("Error creating instance. Cause: " + e, e);
@@ -135,6 +140,9 @@ public abstract class BaseBuilder {
     return resolveTypeHandler(javaType, typeHandlerType);
   }
 
+  /**
+   * 根据 typeHandler 获取解析 javaType 的类型解析器
+   */
   protected TypeHandler<?> resolveTypeHandler(Class<?> javaType, Class<? extends TypeHandler<?>> typeHandlerType) {
     if (typeHandlerType == null) {
       return null;
@@ -142,7 +150,7 @@ public abstract class BaseBuilder {
     // javaType ignored for injected handlers see issue #746 for full detail
     TypeHandler<?> handler = typeHandlerRegistry.getMappingTypeHandler(typeHandlerType);
     if (handler == null) {
-      // not in registry, create a new one
+      // 不在注册表中，新建一个
       handler = typeHandlerRegistry.getInstance(javaType, typeHandlerType);
     }
     return handler;

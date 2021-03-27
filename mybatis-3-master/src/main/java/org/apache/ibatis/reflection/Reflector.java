@@ -44,14 +44,28 @@ import org.apache.ibatis.reflection.property.PropertyNamer;
  * @author Clinton Begin
  */
 public class Reflector {
-
+  /**
+   * 指向的实体对象
+   */
   private final Class<?> type;
+  /**
+   * get 对应read  标识可以get的属性名  set对应write标识可以set的属性名
+   */
   private final String[] readablePropertyNames;
   private final String[] writablePropertyNames;
+  /**
+   * get set方法集合 key是字段名 value是对应的方法代理
+   */
   private final Map<String, Invoker> setMethods = new HashMap<>();
   private final Map<String, Invoker> getMethods = new HashMap<>();
+  /**
+   *  字段类型对应set get方法需要类型集 k 字段名  v 类型class
+   */
   private final Map<String, Class<?>> setTypes = new HashMap<>();
   private final Map<String, Class<?>> getTypes = new HashMap<>();
+  /**
+   *  默认构造器
+   */
   private Constructor<?> defaultConstructor;
 
   private Map<String, String> caseInsensitivePropertyMap = new HashMap<>();
@@ -79,13 +93,11 @@ public class Reflector {
   }
 
   /**
-   * 根据clazz的反射对象创建一个 FIXME 有参的构造器
-   *
-   * @param clazz
+   * 根据clazz的反射对象创建一个 NOTE 无参的构造器
    */
   private void addDefaultConstructor(Class<?> clazz) {
     Constructor<?>[] constructors = clazz.getDeclaredConstructors();
-    // 过滤无参
+    // 过滤只要无参的构造器
     Arrays.stream(constructors).filter(constructor -> constructor.getParameterTypes().length == 0)
         // 赋值 如果存在
         .findAny().ifPresent(constructor -> this.defaultConstructor = constructor);
@@ -93,8 +105,6 @@ public class Reflector {
 
   /**
    * 获取clazz所哟的Get类型的方法
-   *
-   * @param clazz
    */
   private void addGetMethods(Class<?> clazz) {
     Map<String, List<Method>> conflictingGetters = new HashMap<>();
@@ -396,7 +406,7 @@ public class Reflector {
   private void addUniqueMethods(Map<String, Method> uniqueMethods, Method[] methods) {
     // 遍历这个methods获取到所有具体的方法
     for (Method currentMethod : methods) {
-      // 桥接方法是 JDK 1.5 引入泛型后，为了使Java的泛型方法生成的字节码和 1.5 版本前的字节码相兼容，由编译器自动生成的方法 isBridge()判断是否是　 FIXME 桥接方法
+      // 桥接方法是 JDK 1.5 引入泛型后，为了使Java的泛型方法生成的字节码和 1.5 版本前的字节码相兼容，由编译器自动生成的方法 isBridge()判断是否是　 NOTE 桥接方法
       if (!currentMethod.isBridge()) {
         // 获取方法的签名
         String signature = getSignature(currentMethod);

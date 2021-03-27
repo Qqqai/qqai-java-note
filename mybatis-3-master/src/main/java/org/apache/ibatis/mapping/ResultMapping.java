@@ -58,6 +58,13 @@ public class ResultMapping {
       resultMapping.typeHandler = typeHandler;
     }
 
+    /**
+     * 根据类型创建结果集映射
+     * @param configuration  全局配置
+     * @param property 属性名
+     * @param column 数据库字段名
+     * @param javaType javaType类型
+     */
     public Builder(Configuration configuration, String property, String column, Class<?> javaType) {
       this(configuration, property);
       resultMapping.column = column;
@@ -141,6 +148,9 @@ public class ResultMapping {
       return resultMapping;
     }
 
+    /**
+     * 校验数据合法性
+     */
     private void validate() {
       // Issue #697: cannot define both nestedQueryId and nestedResultMapId
       if (resultMapping.nestedQueryId != null && resultMapping.nestedResultMapId != null) {
@@ -169,6 +179,9 @@ public class ResultMapping {
       }
     }
 
+    /**
+     * 类型解析器
+     */
     private void resolveTypeHandler() {
       if (resultMapping.typeHandler == null && resultMapping.javaType != null) {
         Configuration configuration = resultMapping.configuration;

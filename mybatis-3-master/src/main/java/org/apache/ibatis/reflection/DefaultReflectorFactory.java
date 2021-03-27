@@ -33,7 +33,7 @@ public class DefaultReflectorFactory implements ReflectorFactory {
   }
 
   /**
-   * 添加clazz和Reflector的映射关系
+   * 工厂模式
    */
   @Override
   public Reflector findForClass(Class<?> type) {

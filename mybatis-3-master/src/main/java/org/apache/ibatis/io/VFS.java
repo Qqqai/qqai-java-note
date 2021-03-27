@@ -170,7 +170,7 @@ public abstract class VFS {
   }
 
   /**
-   * Get a list of {@link URL}s from the context classloader for all the resources found at the specified path. FIXME 从上下文类加载器中获取在指定路径上找到的所有资源的url列表。
+   * Get a list of {@link URL}s from the context classloader for all the resources found at the specified path. NOTE 从上下文类加载器中获取在指定路径上找到的所有资源的url列表。
    *
    * @param path The resource path.
    * @return A list of {@link URL}s, as returned by {@link ClassLoader#getResources(String)}.
@@ -199,8 +199,8 @@ public abstract class VFS {
   protected abstract List<String> list(URL url, String forPath) throws IOException;
 
   /**
-   * Recursively list the full resource path of all the resources that are children of all the resources found at the specified path. FIXME
-   * 获取包下所有子项目的全限定名称
+   * Recursively list the full resource path of all the resources that are children of all the resources found at the specified path.
+   * NOTE 获取包下所有子项目的全限定名称
    *
    * @param path The path of the resource(s) to list.
    * @return A list containing the names of the child resources.

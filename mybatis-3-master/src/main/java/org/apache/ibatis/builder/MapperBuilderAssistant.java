@@ -1,17 +1,14 @@
 /**
- *    Copyright 2009-2020 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * Copyright 2009-2020 the original author or authors.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a
+ * copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.ibatis.builder;
 
@@ -61,6 +58,7 @@ public class MapperBuilderAssistant extends BaseBuilder {
 
   public MapperBuilderAssistant(Configuration configuration, String resource) {
     super(configuration);
+    // ErrorContext对象存在ThreadLocal对象中  一个线程获取肯定是一个对象  把resource  eg. study/dao/UserDao.java (best guess)  注册进去
     ErrorContext.instance().resource(resource);
     this.resource = resource;
   }
@@ -69,6 +67,9 @@ public class MapperBuilderAssistant extends BaseBuilder {
     return currentNamespace;
   }
 
+  /**
+   * 注册名称空间
+   */
   public void setCurrentNamespace(String currentNamespace) {
     if (currentNamespace == null) {
       throw new BuilderException("The mapper element requires a namespace attribute to be specified.");
@@ -82,6 +83,9 @@ public class MapperBuilderAssistant extends BaseBuilder {
     this.currentNamespace = currentNamespace;
   }
 
+  /**
+   * 构建名称空间信息
+   */
   public String applyCurrentNamespace(String base, boolean isReference) {
     if (base == null) {
       return null;
@@ -92,7 +96,7 @@ public class MapperBuilderAssistant extends BaseBuilder {
         return base;
       }
     } else {
-      // is it qualified with this namespace yet?
+      // is it qualified with this namespace yet?  判断名称空间是否被使用过
       if (base.startsWith(currentNamespace + ".")) {
         return base;
       }
@@ -100,9 +104,13 @@ public class MapperBuilderAssistant extends BaseBuilder {
         throw new BuilderException("Dots are not allowed in element names, please remove it from " + base);
       }
     }
+    // 设置名称空间
     return currentNamespace + "." + base;
   }
 
+  /**
+   * 指定使用cache-ref作为二级缓存
+   */
   public Cache useCacheRef(String namespace) {
     if (namespace == null) {
       throw new BuilderException("cache-ref element requires a namespace attribute.");
@@ -149,6 +157,9 @@ public class MapperBuilderAssistant extends BaseBuilder {
     return parameterMap;
   }
 
+  /**
+   * 构建参数表
+   */
   public ParameterMapping buildParameterMapping(
       Class<?> parameterType,
       String property,
@@ -173,6 +184,9 @@ public class MapperBuilderAssistant extends BaseBuilder {
         .build();
   }
 
+  /**
+   * 添加结果集信息
+   */
   public ResultMap addResultMap(
       String id,
       Class<?> type,
@@ -180,9 +194,10 @@ public class MapperBuilderAssistant extends BaseBuilder {
       Discriminator discriminator,
       List<ResultMapping> resultMappings,
       Boolean autoMapping) {
+    // 获取全限定名称空间
     id = applyCurrentNamespace(id, false);
     extend = applyCurrentNamespace(extend, true);
-
+    // 全限定的resultMapId
     if (extend != null) {
       if (!configuration.hasResultMap(extend)) {
         throw new IncompleteElementException("Could not find a parent resultmap with id '" + extend + "'");
@@ -241,6 +256,30 @@ public class MapperBuilderAssistant extends BaseBuilder {
     return new Discriminator.Builder(configuration, resultMapping, namespaceDiscriminatorMap).build();
   }
 
+  /**
+   * 添加构建信息
+   * @param id 方法名
+   * @param sqlSource
+   * @param statementType
+   * @param sqlCommandType
+   * @param fetchSize
+   * @param timeout
+   * @param parameterMap
+   * @param parameterType
+   * @param resultMap
+   * @param resultType
+   * @param resultSetType
+   * @param flushCache
+   * @param useCache
+   * @param resultOrdered
+   * @param keyGenerator
+   * @param keyProperty
+   * @param keyColumn
+   * @param databaseId
+   * @param lang
+   * @param resultSets
+   * @return
+   */
   public MappedStatement addMappedStatement(
       String id,
       SqlSource sqlSource,
@@ -301,44 +340,25 @@ public class MapperBuilderAssistant extends BaseBuilder {
   /**
    * Backward compatibility signature 'addMappedStatement'.
    *
-   * @param id
-   *          the id
-   * @param sqlSource
-   *          the sql source
-   * @param statementType
-   *          the statement type
-   * @param sqlCommandType
-   *          the sql command type
-   * @param fetchSize
-   *          the fetch size
-   * @param timeout
-   *          the timeout
-   * @param parameterMap
-   *          the parameter map
-   * @param parameterType
-   *          the parameter type
-   * @param resultMap
-   *          the result map
-   * @param resultType
-   *          the result type
-   * @param resultSetType
-   *          the result set type
-   * @param flushCache
-   *          the flush cache
-   * @param useCache
-   *          the use cache
-   * @param resultOrdered
-   *          the result ordered
-   * @param keyGenerator
-   *          the key generator
-   * @param keyProperty
-   *          the key property
-   * @param keyColumn
-   *          the key column
-   * @param databaseId
-   *          the database id
-   * @param lang
-   *          the lang
+   * @param id             the id
+   * @param sqlSource      the sql source
+   * @param statementType  the statement type
+   * @param sqlCommandType the sql command type
+   * @param fetchSize      the fetch size
+   * @param timeout        the timeout
+   * @param parameterMap   the parameter map
+   * @param parameterType  the parameter type
+   * @param resultMap      the result map
+   * @param resultType     the result type
+   * @param resultSetType  the result set type
+   * @param flushCache     the flush cache
+   * @param useCache       the use cache
+   * @param resultOrdered  the result ordered
+   * @param keyGenerator   the key generator
+   * @param keyProperty    the key property
+   * @param keyColumn      the key column
+   * @param databaseId     the database id
+   * @param lang           the lang
    * @return the mapped statement
    */
   public MappedStatement addMappedStatement(String id, SqlSource sqlSource, StatementType statementType,
@@ -347,10 +367,10 @@ public class MapperBuilderAssistant extends BaseBuilder {
       boolean resultOrdered, KeyGenerator keyGenerator, String keyProperty, String keyColumn, String databaseId,
       LanguageDriver lang) {
     return addMappedStatement(
-      id, sqlSource, statementType, sqlCommandType, fetchSize, timeout,
-      parameterMap, parameterType, resultMap, resultType, resultSetType,
-      flushCache, useCache, resultOrdered, keyGenerator, keyProperty,
-      keyColumn, databaseId, lang, null);
+        id, sqlSource, statementType, sqlCommandType, fetchSize, timeout,
+        parameterMap, parameterType, resultMap, resultType, resultSetType,
+        flushCache, useCache, resultOrdered, keyGenerator, keyProperty,
+        keyColumn, databaseId, lang, null);
   }
 
   private <T> T valueOrDefault(T value, T defaultValue) {
@@ -423,25 +443,38 @@ public class MapperBuilderAssistant extends BaseBuilder {
       String resultSet,
       String foreignColumn,
       boolean lazy) {
+    // 根据映射关系和jdbcType解析出javaType
     Class<?> javaTypeClass = resolveResultJavaType(resultType, property, javaType);
+    // 根据typeHandler获取解析javaClass的类型解析器
     TypeHandler<?> typeHandlerInstance = resolveTypeHandler(javaTypeClass, typeHandler);
     List<ResultMapping> composites;
+    // 判断是否是复合的结果映射
     if ((nestedSelect == null || nestedSelect.isEmpty()) && (foreignColumn == null || foreignColumn.isEmpty())) {
+      // 不是  空集合
       composites = Collections.emptyList();
     } else {
+      // 解析符合映射
       composites = parseCompositeColumnName(column);
     }
+    // 结果集映射构建
     return new ResultMapping.Builder(configuration, property, column, javaTypeClass)
+        // 指定javaType
         .jdbcType(jdbcType)
+        // 复合查询
         .nestedQueryId(applyCurrentNamespace(nestedSelect, true))
+        // 复合查询结果集
         .nestedResultMapId(applyCurrentNamespace(nestedResultMap, true))
+        //  resultSet
         .resultSet(resultSet)
+        // 类型处理器实例
         .typeHandler(typeHandlerInstance)
+        // id or constructor
         .flags(flags == null ? new ArrayList<>() : flags)
         .composites(composites)
         .notNullColumns(parseMultipleColumnNames(notNullColumn))
         .columnPrefix(columnPrefix)
         .foreignColumn(foreignColumn)
+        // 懒加载
         .lazy(lazy)
         .build();
   }
@@ -449,43 +482,31 @@ public class MapperBuilderAssistant extends BaseBuilder {
   /**
    * Backward compatibility signature 'buildResultMapping'.
    *
-   * @param resultType
-   *          the result type
-   * @param property
-   *          the property
-   * @param column
-   *          the column
-   * @param javaType
-   *          the java type
-   * @param jdbcType
-   *          the jdbc type
-   * @param nestedSelect
-   *          the nested select
-   * @param nestedResultMap
-   *          the nested result map
-   * @param notNullColumn
-   *          the not null column
-   * @param columnPrefix
-   *          the column prefix
-   * @param typeHandler
-   *          the type handler
-   * @param flags
-   *          the flags
+   * @param resultType      the result type
+   * @param property        the property
+   * @param column          the column
+   * @param javaType        the java type
+   * @param jdbcType        the jdbc type
+   * @param nestedSelect    the nested select
+   * @param nestedResultMap the nested result map
+   * @param notNullColumn   the not null column
+   * @param columnPrefix    the column prefix
+   * @param typeHandler     the type handler
+   * @param flags           the flags
    * @return the result mapping
    */
   public ResultMapping buildResultMapping(Class<?> resultType, String property, String column, Class<?> javaType,
       JdbcType jdbcType, String nestedSelect, String nestedResultMap, String notNullColumn, String columnPrefix,
       Class<? extends TypeHandler<?>> typeHandler, List<ResultFlag> flags) {
     return buildResultMapping(
-      resultType, property, column, javaType, jdbcType, nestedSelect,
-      nestedResultMap, notNullColumn, columnPrefix, typeHandler, flags, null, null, configuration.isLazyLoadingEnabled());
+        resultType, property, column, javaType, jdbcType, nestedSelect,
+        nestedResultMap, notNullColumn, columnPrefix, typeHandler, flags, null, null, configuration.isLazyLoadingEnabled());
   }
 
   /**
    * Gets the language driver.
    *
-   * @param langClass
-   *          the lang class
+   * @param langClass the lang class
    * @return the language driver
    * @deprecated Use {@link Configuration#getLanguageDriver(Class)}
    */
@@ -510,6 +531,9 @@ public class MapperBuilderAssistant extends BaseBuilder {
     return columns;
   }
 
+  /**
+   * 解析复合的结果映射
+   */
   private List<ResultMapping> parseCompositeColumnName(String columnName) {
     List<ResultMapping> composites = new ArrayList<>();
     if (columnName != null && (columnName.indexOf('=') > -1 || columnName.indexOf(',') > -1)) {
@@ -525,10 +549,15 @@ public class MapperBuilderAssistant extends BaseBuilder {
     return composites;
   }
 
+  /**
+   * 根据返回对象创建set get映射 通过Reflector构造映射器
+   */
   private Class<?> resolveResultJavaType(Class<?> resultType, String property, Class<?> javaType) {
     if (javaType == null && property != null) {
       try {
+        // 使用同一个ReflectorFactory所以缓存对应的Reflector一个type只会存在一个  (map覆盖)
         MetaClass metaResultType = MetaClass.forClass(resultType, configuration.getReflectorFactory());
+        // 获取javaType
         javaType = metaResultType.getSetterType(property);
       } catch (Exception e) {
         // ignore, following null check statement will deal with the situation

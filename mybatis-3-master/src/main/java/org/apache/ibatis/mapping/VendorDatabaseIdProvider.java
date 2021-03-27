@@ -1,17 +1,14 @@
 /**
- *    Copyright 2009-2019 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * Copyright 2009-2019 the original author or authors.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a
+ * copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.ibatis.mapping;
 
@@ -41,12 +38,16 @@ public class VendorDatabaseIdProvider implements DatabaseIdProvider {
 
   private Properties properties;
 
+  /**
+   * 获取数据库的厂商标识
+   */
   @Override
   public String getDatabaseId(DataSource dataSource) {
     if (dataSource == null) {
       throw new NullPointerException("dataSource cannot be null");
     }
     try {
+      // 获取数据源名
       return getDatabaseName(dataSource);
     } catch (Exception e) {
       LogHolder.log.error("Could not get a databaseId from dataSource", e);
@@ -59,7 +60,11 @@ public class VendorDatabaseIdProvider implements DatabaseIdProvider {
     this.properties = p;
   }
 
+  /**
+   * 获取数据库的厂商标识
+   */
   private String getDatabaseName(DataSource dataSource) throws SQLException {
+    // 获取获取数据库的厂商标识
     String productName = getDatabaseProductName(dataSource);
     if (this.properties != null) {
       for (Map.Entry<Object, Object> property : properties.entrySet()) {
@@ -73,6 +78,9 @@ public class VendorDatabaseIdProvider implements DatabaseIdProvider {
     return productName;
   }
 
+  /**
+   * 获取数据库的厂商标识  eg. MySQL
+   */
   private String getDatabaseProductName(DataSource dataSource) throws SQLException {
     try (Connection con = dataSource.getConnection()) {
       DatabaseMetaData metaData = con.getMetaData();

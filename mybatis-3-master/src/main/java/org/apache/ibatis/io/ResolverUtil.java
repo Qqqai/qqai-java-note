@@ -261,10 +261,10 @@ public class ResolverUtil<T> {
 
   /**
    * Add the class designated by the fully qualified class name provided to the set of resolved classes if and only if it is approved by the Test
-   * supplied. FIXME 当且仅当提供的测试批准了由提供的完全限定类名指定的类时，将其添加到已解析的类集。
+   * supplied. NOTE 当且仅当提供的测试批准了由提供的完全限定类名指定的类时，将其添加到已解析的类集。
    *
    * @param test the test used to determine if the class matches
-   * @param fqn  FIXME 全限定类名 like study/entity/User.class
+   * @param fqn  NOTE 全限定类名 like study/entity/User.class
    */
   @SuppressWarnings("unchecked")
   protected void addIfMatching(Test test, String fqn) {
