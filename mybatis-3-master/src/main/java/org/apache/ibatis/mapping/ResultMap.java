@@ -258,4 +258,22 @@ public class ResultMap {
     return autoMapping;
   }
 
+  @Override
+  public String toString() {
+    return "ResultMap{" +
+        "configuration=" + configuration +
+        ", id='" + id + '\'' +
+        ", type=" + type +
+        ", resultMappings=" + resultMappings +
+        ", idResultMappings=" + idResultMappings +
+        ", constructorResultMappings=" + constructorResultMappings +
+        ", propertyResultMappings=" + propertyResultMappings +
+        ", mappedColumns=" + mappedColumns +
+        ", mappedProperties=" + mappedProperties +
+        ", discriminator=" + discriminator +
+        ", hasNestedResultMaps=" + hasNestedResultMaps +
+        ", hasNestedQueries=" + hasNestedQueries +
+        ", autoMapping=" + autoMapping +
+        '}';
+  }
 }

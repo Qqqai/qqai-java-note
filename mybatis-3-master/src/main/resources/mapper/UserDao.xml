@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="study.dao.UserDao" >
+<mapper namespace="study.dao.UserDao">
+
+  <cache flushInterval="1500" size="512" readOnly="false" eviction="FIFO"/>
+
+
   <resultMap type="study.entity.User" id="UserMap" autoMapping="true">
     <result property="id" column="id" jdbcType="INTEGER"/>
     <result property="username" column="username" jdbcType="VARCHAR"/>
@@ -13,6 +17,8 @@
   <sql id="base">
     id, username, age, email, sex, birthday
   </sql>
+
+
   <!--查询单个-->
   <select id="queryById" resultMap="UserMap">
     select

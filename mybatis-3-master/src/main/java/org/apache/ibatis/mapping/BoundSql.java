@@ -1,17 +1,14 @@
 /**
- *    Copyright 2009-2019 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * Copyright 2009-2019 the original author or authors.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a
+ * copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.ibatis.mapping;
 
@@ -34,11 +31,15 @@ import org.apache.ibatis.session.Configuration;
  * @author Clinton Begin
  */
 public class BoundSql {
-
+  // 一个完整的 SQL 语句,可能会包含问号 ? 占位符
   private final String sql;
+  // 参数映射列表,SQL 中的每个 #{xxx} 占位符都会被解析成相应的 ParameterMapping 对象
   private final List<ParameterMapping> parameterMappings;
+  //运行时参数,即用户传入的参数,比如 Article 对象,或是其他的参数
   private final Object parameterObject;
+  // 附加参数集合,用于存储一些额外的信息,比如 datebaseId 等
   private final Map<String, Object> additionalParameters;
+  //  additionalParameters 的元信息对象
   private final MetaObject metaParameters;
 
   public BoundSql(Configuration configuration, String sql, List<ParameterMapping> parameterMappings, Object parameterObject) {

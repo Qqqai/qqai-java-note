@@ -1,17 +1,14 @@
 /**
- *    Copyright 2009-2020 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * Copyright 2009-2020 the original author or authors.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a
+ * copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.ibatis.executor.loader.javassist;
 
@@ -55,11 +52,13 @@ public class JavassistProxyFactory implements org.apache.ibatis.executor.loader.
   }
 
   @Override
-  public Object createProxy(Object target, ResultLoaderMap lazyLoader, Configuration configuration, ObjectFactory objectFactory, List<Class<?>> constructorArgTypes, List<Object> constructorArgs) {
+  public Object createProxy(Object target, ResultLoaderMap lazyLoader, Configuration configuration, ObjectFactory objectFactory,
+      List<Class<?>> constructorArgTypes, List<Object> constructorArgs) {
     return EnhancedResultObjectProxyImpl.createProxy(target, lazyLoader, configuration, objectFactory, constructorArgTypes, constructorArgs);
   }
 
-  public Object createDeserializationProxy(Object target, Map<String, ResultLoaderMap.LoadPair> unloadedProperties, ObjectFactory objectFactory, List<Class<?>> constructorArgTypes, List<Object> constructorArgs) {
+  public Object createDeserializationProxy(Object target, Map<String, ResultLoaderMap.LoadPair> unloadedProperties, ObjectFactory objectFactory,
+      List<Class<?>> constructorArgTypes, List<Object> constructorArgs) {
     return EnhancedDeserializationProxyImpl.createProxy(target, unloadedProperties, objectFactory, constructorArgTypes, constructorArgs);
   }
 
@@ -75,7 +74,7 @@ public class JavassistProxyFactory implements org.apache.ibatis.executor.loader.
         LogHolder.log.debug(WRITE_REPLACE_METHOD + " method was found on bean " + type + ", make sure it returns this");
       }
     } catch (NoSuchMethodException e) {
-      enhancer.setInterfaces(new Class[] { WriteReplaceInterface.class });
+      enhancer.setInterfaces(new Class[]{WriteReplaceInterface.class});
     } catch (SecurityException e) {
       // nothing to do here
     }
@@ -102,7 +101,8 @@ public class JavassistProxyFactory implements org.apache.ibatis.executor.loader.
     private final List<Class<?>> constructorArgTypes;
     private final List<Object> constructorArgs;
 
-    private EnhancedResultObjectProxyImpl(Class<?> type, ResultLoaderMap lazyLoader, Configuration configuration, ObjectFactory objectFactory, List<Class<?>> constructorArgTypes, List<Object> constructorArgs) {
+    private EnhancedResultObjectProxyImpl(Class<?> type, ResultLoaderMap lazyLoader, Configuration configuration, ObjectFactory objectFactory,
+        List<Class<?>> constructorArgTypes, List<Object> constructorArgs) {
       this.type = type;
       this.lazyLoader = lazyLoader;
       this.aggressive = configuration.isAggressiveLazyLoading();
@@ -112,9 +112,11 @@ public class JavassistProxyFactory implements org.apache.ibatis.executor.loader.
       this.constructorArgs = constructorArgs;
     }
 
-    public static Object createProxy(Object target, ResultLoaderMap lazyLoader, Configuration configuration, ObjectFactory objectFactory, List<Class<?>> constructorArgTypes, List<Object> constructorArgs) {
+    public static Object createProxy(Object target, ResultLoaderMap lazyLoader, Configuration configuration, ObjectFactory objectFactory,
+        List<Class<?>> constructorArgTypes, List<Object> constructorArgs) {
       final Class<?> type = target.getClass();
-      EnhancedResultObjectProxyImpl callback = new EnhancedResultObjectProxyImpl(type, lazyLoader, configuration, objectFactory, constructorArgTypes, constructorArgs);
+      EnhancedResultObjectProxyImpl callback = new EnhancedResultObjectProxyImpl(type, lazyLoader, configuration, objectFactory, constructorArgTypes,
+          constructorArgs);
       Object enhanced = crateProxy(type, callback, constructorArgTypes, constructorArgs);
       PropertyCopier.copyBeanProperties(type, target, enhanced);
       return enhanced;
@@ -125,6 +127,7 @@ public class JavassistProxyFactory implements org.apache.ibatis.executor.loader.
       final String methodName = method.getName();
       try {
         synchronized (lazyLoader) {
+          // 针对 writeReplace 方法的处理逻辑,与延迟加载无关
           if (WRITE_REPLACE_METHOD.equals(methodName)) {
             Object original;
             if (constructorArgTypes.isEmpty()) {
@@ -139,21 +142,28 @@ public class JavassistProxyFactory implements org.apache.ibatis.executor.loader.
               return original;
             }
           } else {
+            // 如果 aggressive 为 true,或触发方法(比如 equals, hashCode 等)被调用,则加载所有的所有延迟加载的数据
             if (lazyLoader.size() > 0 && !FINALIZE_METHOD.equals(methodName)) {
               if (aggressive || lazyLoadTriggerMethods.contains(methodName)) {
                 lazyLoader.loadAll();
               } else if (PropertyNamer.isSetter(methodName)) {
                 final String property = PropertyNamer.methodToProperty(methodName);
+
+                // 如果使用者显示调用了 setter 方法,则将相应的延迟加载类从 loaderMap 中移除
                 lazyLoader.remove(property);
+                // 检测使用者是否调用 getter 方法
               } else if (PropertyNamer.isGetter(methodName)) {
                 final String property = PropertyNamer.methodToProperty(methodName);
+                // 检测该属性是否有相应的 LoadPair 对象
                 if (lazyLoader.hasLoader(property)) {
+                  // 执行延迟加载逻辑
                   lazyLoader.load(property);
                 }
               }
             }
           }
         }
+        // 调用被代理类的方法
         return methodProxy.invoke(enhanced, args);
       } catch (Throwable t) {
         throw ExceptionUtil.unwrapThrowable(t);
@@ -164,14 +174,15 @@ public class JavassistProxyFactory implements org.apache.ibatis.executor.loader.
   private static class EnhancedDeserializationProxyImpl extends AbstractEnhancedDeserializationProxy implements MethodHandler {
 
     private EnhancedDeserializationProxyImpl(Class<?> type, Map<String, ResultLoaderMap.LoadPair> unloadedProperties, ObjectFactory objectFactory,
-            List<Class<?>> constructorArgTypes, List<Object> constructorArgs) {
+        List<Class<?>> constructorArgTypes, List<Object> constructorArgs) {
       super(type, unloadedProperties, objectFactory, constructorArgTypes, constructorArgs);
     }
 
     public static Object createProxy(Object target, Map<String, ResultLoaderMap.LoadPair> unloadedProperties, ObjectFactory objectFactory,
-            List<Class<?>> constructorArgTypes, List<Object> constructorArgs) {
+        List<Class<?>> constructorArgTypes, List<Object> constructorArgs) {
       final Class<?> type = target.getClass();
-      EnhancedDeserializationProxyImpl callback = new EnhancedDeserializationProxyImpl(type, unloadedProperties, objectFactory, constructorArgTypes, constructorArgs);
+      EnhancedDeserializationProxyImpl callback = new EnhancedDeserializationProxyImpl(type, unloadedProperties, objectFactory, constructorArgTypes,
+          constructorArgs);
       Object enhanced = crateProxy(type, callback, constructorArgTypes, constructorArgs);
       PropertyCopier.copyBeanProperties(type, target, enhanced);
       return enhanced;
@@ -184,8 +195,9 @@ public class JavassistProxyFactory implements org.apache.ibatis.executor.loader.
     }
 
     @Override
-    protected AbstractSerialStateHolder newSerialStateHolder(Object userBean, Map<String, ResultLoaderMap.LoadPair> unloadedProperties, ObjectFactory objectFactory,
-            List<Class<?>> constructorArgTypes, List<Object> constructorArgs) {
+    protected AbstractSerialStateHolder newSerialStateHolder(Object userBean, Map<String, ResultLoaderMap.LoadPair> unloadedProperties,
+        ObjectFactory objectFactory,
+        List<Class<?>> constructorArgTypes, List<Object> constructorArgs) {
       return new JavassistSerialStateHolder(userBean, unloadedProperties, objectFactory, constructorArgTypes, constructorArgs);
     }
   }

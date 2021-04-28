@@ -136,8 +136,7 @@ public class Configuration {
 
   protected String databaseId;
   /**
-   * Configuration factory class.
-   * Used to create Configuration for loading deserialized unread properties.
+   * Configuration factory class. Used to create Configuration for loading deserialized unread properties.
    *
    * @see <a href='https://github.com/mybatis/old-google-code-issues/issues/300'>Issue 300 (google code)</a>
    */
@@ -257,8 +256,7 @@ public class Configuration {
   /**
    * Sets an applying type when omit a type on sql provider annotation(e.g. {@link org.apache.ibatis.annotations.SelectProvider}).
    *
-   * @param defaultSqlProviderType
-   *          the default type for sql provider annotation
+   * @param defaultSqlProviderType the default type for sql provider annotation
    * @since 3.5.6
    */
   public void setDefaultSqlProviderType(Class<?> defaultSqlProviderType) {
@@ -374,8 +372,7 @@ public class Configuration {
   /**
    * Sets the auto mapping unknown column behavior.
    *
-   * @param autoMappingUnknownColumnBehavior
-   *          the new auto mapping unknown column behavior
+   * @param autoMappingUnknownColumnBehavior the new auto mapping unknown column behavior
    * @since 3.4.0
    */
   public void setAutoMappingUnknownColumnBehavior(AutoMappingUnknownColumnBehavior autoMappingUnknownColumnBehavior) {
@@ -470,8 +467,7 @@ public class Configuration {
   /**
    * Sets the default fetch size.
    *
-   * @param defaultFetchSize
-   *          the new default fetch size
+   * @param defaultFetchSize the new default fetch size
    * @since 3.3.0
    */
   public void setDefaultFetchSize(Integer defaultFetchSize) {
@@ -491,8 +487,7 @@ public class Configuration {
   /**
    * Sets the default result set type.
    *
-   * @param defaultResultSetType
-   *          the new default result set type
+   * @param defaultResultSetType the new default result set type
    * @since 3.5.2
    */
   public void setDefaultResultSetType(ResultSetType defaultResultSetType) {
@@ -536,8 +531,8 @@ public class Configuration {
   }
 
   /**
-   * Set a default {@link TypeHandler} class for {@link Enum}.
-   * A default {@link TypeHandler} is {@link org.apache.ibatis.type.EnumTypeHandler}.
+   * Set a default {@link TypeHandler} class for {@link Enum}. A default {@link TypeHandler} is {@link org.apache.ibatis.type.EnumTypeHandler}.
+   *
    * @param typeHandler a type handler class for {@link Enum}
    * @since 3.4.5
    */
@@ -613,8 +608,7 @@ public class Configuration {
   /**
    * Gets the language driver.
    *
-   * @param langClass
-   *          the lang class
+   * @param langClass the lang class
    * @return the language driver
    * @since 3.5.1
    */
@@ -657,7 +651,9 @@ public class Configuration {
 
   public StatementHandler newStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameterObject, RowBounds rowBounds,
       ResultHandler resultHandler, BoundSql boundSql) {
+    // 创建具有路由功能的 StatementHandler
     StatementHandler statementHandler = new RoutingStatementHandler(executor, mappedStatement, parameterObject, rowBounds, resultHandler, boundSql);
+    // 应用插件到 StatementHandler 上
     statementHandler = (StatementHandler) interceptorChain.pluginAll(statementHandler);
     return statementHandler;
   }
@@ -666,17 +662,25 @@ public class Configuration {
     return newExecutor(transaction, defaultExecutorType);
   }
 
+  /**
+   * 获取执行器
+   */
   public Executor newExecutor(Transaction transaction, ExecutorType executorType) {
+    // 获取执行器类型
     executorType = executorType == null ? defaultExecutorType : executorType;
     executorType = executorType == null ? ExecutorType.SIMPLE : executorType;
     Executor executor;
+    // 批量获取
     if (ExecutorType.BATCH == executorType) {
       executor = new BatchExecutor(this, transaction);
     } else if (ExecutorType.REUSE == executorType) {
+      // 复用
       executor = new ReuseExecutor(this, transaction);
     } else {
+      // 简易
       executor = new SimpleExecutor(this, transaction);
     }
+    // 缓存否?
     if (cacheEnabled) {
       executor = new CachingExecutor(executor);
     }
@@ -818,6 +822,7 @@ public class Configuration {
 
   /**
    * 获取
+   *
    * @param id
    * @param validateIncompleteStatements
    * @return
@@ -932,8 +937,7 @@ public class Configuration {
   /**
    * Extracts namespace from fully qualified statement id.
    *
-   * @param statementId
-   *          the statement id
+   * @param statementId the statement id
    * @return namespace or null when id does not contain period.
    */
   protected String extractNamespace(String statementId) {
@@ -1005,6 +1009,7 @@ public class Configuration {
      * Assign a function for producing a conflict error message when contains value with the same key.
      * <p>
      * function arguments are 1st is saved value and 2nd is target value.
+     *
      * @param conflictMessageProducer A function for producing a conflict error message
      * @return a conflict error message
      * @since 3.5.0

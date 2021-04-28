@@ -23,10 +23,11 @@ import java.util.List;
  * @author Clinton Begin
  */
 public class InterceptorChain {
-
+  // 拦截器
   private final List<Interceptor> interceptors = new ArrayList<>();
 
   public Object pluginAll(Object target) {
+    // 使用每一个拦截器包装执行器
     for (Interceptor interceptor : interceptors) {
       target = interceptor.plugin(target);
     }

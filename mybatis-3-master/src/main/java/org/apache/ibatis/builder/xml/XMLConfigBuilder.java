@@ -425,7 +425,7 @@ public class XMLConfigBuilder extends BaseBuilder {
           DataSourceFactory dsFactory = dataSourceElement(child.evalNode("dataSource"));
           // 从工厂获取到数据源
           DataSource dataSource = dsFactory.getDataSource();
-          // 设置Environment.Builder对象 指定id事物工厂数据源
+          // 设置Environment.Builder对象 指定id  事物工厂  数据源
           Environment.Builder environmentBuilder = new Environment.Builder(id)
               .transactionFactory(txFactory)
               .dataSource(dataSource);
@@ -550,12 +550,14 @@ public class XMLConfigBuilder extends BaseBuilder {
             ErrorContext.instance().resource(resource);
             try (InputStream inputStream = Resources.getResourceAsStream(resource)) {
               XMLMapperBuilder mapperParser = new XMLMapperBuilder(inputStream, configuration, resource, configuration.getSqlFragments());
+              // 解析mapper文件
               mapperParser.parse();
             }
           } else if (resource == null && url != null && mapperClass == null) {
             ErrorContext.instance().resource(url);
             try (InputStream inputStream = Resources.getUrlAsStream(url)) {
               XMLMapperBuilder mapperParser = new XMLMapperBuilder(inputStream, configuration, url, configuration.getSqlFragments());
+              // 解析mapper文件
               mapperParser.parse();
             }
           } else if (resource == null && url == null && mapperClass != null) {

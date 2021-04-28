@@ -43,6 +43,7 @@ public class DynamicContext {
   private int uniqueNumber = 0;
 
   public DynamicContext(Configuration configuration, Object parameterObject) {
+    // 创建 ContextMap
     if (parameterObject != null && !(parameterObject instanceof Map)) {
       MetaObject metaObject = configuration.newMetaObject(parameterObject);
       boolean existsTypeHandler = configuration.getTypeHandlerRegistry().hasTypeHandler(parameterObject.getClass());
@@ -50,6 +51,7 @@ public class DynamicContext {
     } else {
       bindings = new ContextMap(null, false);
     }
+    // 存放运行时参数 parameterObject 以及 databaseId
     bindings.put(PARAMETER_OBJECT_KEY, parameterObject);
     bindings.put(DATABASE_ID_KEY, configuration.getDatabaseId());
   }

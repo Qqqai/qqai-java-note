@@ -1,17 +1,14 @@
 /**
- *    Copyright 2009-2018 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * Copyright 2009-2018 the original author or authors.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a
+ * copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.ibatis.executor.statement;
 
@@ -37,7 +34,8 @@ import org.apache.ibatis.session.RowBounds;
  */
 public class PreparedStatementHandler extends BaseStatementHandler {
 
-  public PreparedStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
+  public PreparedStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameter, RowBounds rowBounds,
+      ResultHandler resultHandler, BoundSql boundSql) {
     super(executor, mappedStatement, parameter, rowBounds, resultHandler, boundSql);
   }
 
@@ -48,6 +46,7 @@ public class PreparedStatementHandler extends BaseStatementHandler {
     int rows = ps.getUpdateCount();
     Object parameterObject = boundSql.getParameterObject();
     KeyGenerator keyGenerator = mappedStatement.getKeyGenerator();
+    // 获取自增主键的值,并将值填入到参数对象中
     keyGenerator.processAfter(executor, mappedStatement, ps, parameterObject);
     return rows;
   }
@@ -58,10 +57,20 @@ public class PreparedStatementHandler extends BaseStatementHandler {
     ps.addBatch();
   }
 
+  /**
+   * 被代理的方法  数据库查执行
+   *
+   * @param statement     jdbc statement对象
+   * @param resultHandler 结果集处理器
+   * @return 结果list
+   */
   @Override
   public <E> List<E> query(Statement statement, ResultHandler resultHandler) throws SQLException {
+    // 强制转换预编译
     PreparedStatement ps = (PreparedStatement) statement;
+    // ps也是被代理的对象
     ps.execute();
+    // 处理结果
     return resultSetHandler.handleResultSets(ps);
   }
 
@@ -75,7 +84,9 @@ public class PreparedStatementHandler extends BaseStatementHandler {
   @Override
   protected Statement instantiateStatement(Connection connection) throws SQLException {
     String sql = boundSql.getSql();
+    // 根据条件调用不同的 prepareStatement 方法创建 PreparedStatement
     if (mappedStatement.getKeyGenerator() instanceof Jdbc3KeyGenerator) {
+      // 设置生成键值在表中的列名
       String[] keyColumnNames = mappedStatement.getKeyColumns();
       if (keyColumnNames == null) {
         return connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -91,6 +102,7 @@ public class PreparedStatementHandler extends BaseStatementHandler {
 
   @Override
   public void parameterize(Statement statement) throws SQLException {
+    // 通过参数处理器 ParameterHandler 设置运行时参数到 PreparedStatement 中
     parameterHandler.setParameters((PreparedStatement) statement);
   }
 

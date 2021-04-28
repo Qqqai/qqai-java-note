@@ -21,6 +21,21 @@ public class User implements Serializable {
 
   private Date birthday;
 
+  public User() {
+  }
+
+  public User(String username, Integer age, String email, String sex, Date birthday) {
+    this.username = username;
+    this.age = age;
+    this.email = email;
+    this.sex = sex;
+    this.birthday = birthday;
+  }
+
+  public User(int i) {
+    this.id = i;
+  }
+
   public Integer getId() {
     return id;
   }

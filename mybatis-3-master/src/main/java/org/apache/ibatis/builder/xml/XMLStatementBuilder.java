@@ -51,7 +51,7 @@ public class XMLStatementBuilder extends BaseBuilder {
   }
 
   /**
-   * 解析statement语句
+   * 解析statement对象  note  1.解析<include>节点 2.解析<selectKey>节点 3.解析 SQL，获取 SqlSource 4.构建 MappedStatement 实例
    */
   public void parseStatementNode() {
     // 唯一id对应方法
@@ -69,13 +69,12 @@ public class XMLStatementBuilder extends BaseBuilder {
     SqlCommandType sqlCommandType = SqlCommandType.valueOf(nodeName.toUpperCase(Locale.ENGLISH));
     // 查询
     boolean isSelect = sqlCommandType == SqlCommandType.SELECT;
-    // 是否刷新缓存  查询不
+    // 是否刷新缓存  查询刷新
     boolean flushCache = context.getBooleanAttribute("flushCache", !isSelect);
     // 是否添加如缓存 查询加
     boolean useCache = context.getBooleanAttribute("useCache", isSelect);
-    //
+    // 结果集优先级???
     boolean resultOrdered = context.getBooleanAttribute("resultOrdered", false);
-
     // 在解析标签之前解析include标签  把base sql等解析进去
     XMLIncludeTransformer includeParser = new XMLIncludeTransformer(configuration, builderAssistant);
     // 获取到的是整个标签内容
@@ -90,9 +89,10 @@ public class XMLStatementBuilder extends BaseBuilder {
 
     // Parse selectKey after includes and remove them. 在includes并删除它们之后解析selectKey。
     processSelectKeyNodes(id, parameterTypeClass, langDriver);
+
     // 对于oracle：xml的传入参数是map，selectKey会将结果放到入参数map中。用POJO的情况一样，但是有一点需要注意的是，keyProperty对应的字段在POJO中必须有相应的setter方法，setter的参数类型还要一致，否则会报错。
     //     <insert id="insertUser" parameterClass="XXX.User">
-    //           <selectKey resultClass="long" keyProperty="id"order="BEFORE">
+    //           <selectKey resultClass="long" keyProperty="id" order="BEFORE">
     //               select SEQ_USER_ID.nextval as id from dual
     //           </selectKey>
     //            insert into user  (id,name,password)
@@ -112,8 +112,10 @@ public class XMLStatementBuilder extends BaseBuilder {
     String keyStatementId = id + SelectKeyGenerator.SELECT_KEY_SUFFIX;
     keyStatementId = builderAssistant.applyCurrentNamespace(keyStatementId, true);
     if (configuration.hasKeyGenerator(keyStatementId)) {
+      // 获取keyGenerator实例
       keyGenerator = configuration.getKeyGenerator(keyStatementId);
     } else {
+      // 创建keyGenerator实例
       keyGenerator = context.getBooleanAttribute("useGeneratedKeys",
           configuration.isUseGeneratedKeys() && SqlCommandType.INSERT.equals(sqlCommandType))
           ? Jdbc3KeyGenerator.INSTANCE : NoKeyGenerator.INSTANCE;
@@ -142,26 +144,39 @@ public class XMLStatementBuilder extends BaseBuilder {
         keyGenerator, keyProperty, keyColumn, databaseId, langDriver, resultSets);
   }
 
+  /**
+   * 解析SelectKey标签
+   */
   private void processSelectKeyNodes(String id, Class<?> parameterTypeClass, LanguageDriver langDriver) {
     List<XNode> selectKeyNodes = context.evalNodes("selectKey");
+    // 一般不配置数据库提供商
     if (configuration.getDatabaseId() != null) {
       parseSelectKeyNodes(id, selectKeyNodes, parameterTypeClass, langDriver, configuration.getDatabaseId());
     }
+    // 调用 数据库服务商id为null
     parseSelectKeyNodes(id, selectKeyNodes, parameterTypeClass, langDriver, null);
+    // 将 <selectKey> 节点从 dom 树中移除
     removeSelectKeyNodes(selectKeyNodes);
   }
 
+  /**
+   * 解析SelectKey
+   */
   private void parseSelectKeyNodes(String parentId, List<XNode> list, Class<?> parameterTypeClass, LanguageDriver langDriver,
       String skRequiredDatabaseId) {
     for (XNode nodeToHandle : list) {
       String id = parentId + SelectKeyGenerator.SELECT_KEY_SUFFIX;
       String databaseId = nodeToHandle.getStringAttribute("databaseId");
       if (databaseIdMatchesCurrent(id, databaseId, skRequiredDatabaseId)) {
+        // 解析
         parseSelectKeyNode(id, nodeToHandle, parameterTypeClass, langDriver, databaseId);
       }
     }
   }
 
+  /**
+   * 解析SelectKey
+   */
   private void parseSelectKeyNode(String id, XNode nodeToHandle, Class<?> parameterTypeClass, LanguageDriver langDriver, String databaseId) {
     String resultType = nodeToHandle.getStringAttribute("resultType");
     Class<?> resultTypeClass = resolveClass(resultType);

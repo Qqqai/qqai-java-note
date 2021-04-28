@@ -4,8 +4,13 @@
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
   <settings>
-    <setting name="logImpl" value="LOG4J"/>
+    <setting name="logImpl" value="SLF4J"/>
+    <setting name="autoMappingUnknownColumnBehavior" value="WARNING"/>
   </settings>
+  <plugins>
+    <plugin interceptor="study.intercepter.InterceptsCustomer"/>
+    <plugin interceptor="study.intercepter.MySqlPagingPlugin"/>
+  </plugins>
   <!-- 配置环境 -->
   <environments default="mysql">
     <!-- 配置environments中mysql的环境 -->
@@ -24,7 +29,6 @@
   </environments>
   <!-- 指定映射配置文件的位置，每个dao的xml的位置 -->
   <mappers>
-    <mapper class="study.dao.UserDao"/>
     <mapper resource="mapper/UserDao.xml"/>
   </mappers>
 </configuration>

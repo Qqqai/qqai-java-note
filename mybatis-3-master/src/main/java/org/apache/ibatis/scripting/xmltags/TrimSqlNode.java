@@ -1,17 +1,14 @@
 /**
- *    Copyright 2009-2018 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * Copyright 2009-2018 the original author or authors.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a
+ * copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.ibatis.scripting.xmltags;
 
@@ -36,11 +33,13 @@ public class TrimSqlNode implements SqlNode {
   private final List<String> suffixesToOverride;
   private final Configuration configuration;
 
-  public TrimSqlNode(Configuration configuration, SqlNode contents, String prefix, String prefixesToOverride, String suffix, String suffixesToOverride) {
+  public TrimSqlNode(Configuration configuration, SqlNode contents, String prefix, String prefixesToOverride, String suffix,
+      String suffixesToOverride) {
     this(configuration, contents, prefix, parseOverrides(prefixesToOverride), suffix, parseOverrides(suffixesToOverride));
   }
 
-  protected TrimSqlNode(Configuration configuration, SqlNode contents, String prefix, List<String> prefixesToOverride, String suffix, List<String> suffixesToOverride) {
+  protected TrimSqlNode(Configuration configuration, SqlNode contents, String prefix, List<String> prefixesToOverride, String suffix,
+      List<String> suffixesToOverride) {
     this.contents = contents;
     this.prefix = prefix;
     this.prefixesToOverride = prefixesToOverride;
@@ -51,8 +50,11 @@ public class TrimSqlNode implements SqlNode {
 
   @Override
   public boolean apply(DynamicContext context) {
+    // 创建具有过滤功能的 DynamicContext
     FilteredDynamicContext filteredDynamicContext = new FilteredDynamicContext(context);
+    // 解析节点内容
     boolean result = contents.apply(filteredDynamicContext);
+    // 过滤掉前缀和后缀
     filteredDynamicContext.applyAll();
     return result;
   }
@@ -71,6 +73,9 @@ public class TrimSqlNode implements SqlNode {
 
   private class FilteredDynamicContext extends DynamicContext {
     private DynamicContext delegate;
+    /**
+     * 构造方法会将下面两个布尔值置为 false
+     */
     private boolean prefixApplied;
     private boolean suffixApplied;
     private StringBuilder sqlBuffer;
@@ -83,13 +88,19 @@ public class TrimSqlNode implements SqlNode {
       this.sqlBuffer = new StringBuilder();
     }
 
+    /**
+     * 去除掉前缀和后缀
+     */
     public void applyAll() {
       sqlBuffer = new StringBuilder(sqlBuffer.toString().trim());
+      // sqlBuffer = and id = #{id}    trimmedUppercaseSql = AND ID = #{ID}
       String trimmedUppercaseSql = sqlBuffer.toString().toUpperCase(Locale.ENGLISH);
       if (trimmedUppercaseSql.length() > 0) {
+        // 引用前缀和后缀,也就是对 sql 进行过滤操作,移除掉前缀或后缀
         applyPrefix(sqlBuffer, trimmedUppercaseSql);
         applySuffix(sqlBuffer, trimmedUppercaseSql);
       }
+      // 将当前对象的 sqlBuffer 内容添加到代理类中
       delegate.appendSql(sqlBuffer.toString());
     }
 
@@ -118,17 +129,27 @@ public class TrimSqlNode implements SqlNode {
       return delegate.getSql();
     }
 
+    /**
+     * remove prefix  eg. and
+     *
+     * @param sql                 and id = #{id}
+     * @param trimmedUppercaseSql AND ID = #{ID}
+     */
     private void applyPrefix(StringBuilder sql, String trimmedUppercaseSql) {
       if (!prefixApplied) {
+        // 设置 prefixApplied 为 true,以下逻辑仅会被执行一次
         prefixApplied = true;
         if (prefixesToOverride != null) {
           for (String toRemove : prefixesToOverride) {
+            // 检测当前 sql 字符串是否包含前缀,比如 'AND ', 'AND\t'等
             if (trimmedUppercaseSql.startsWith(toRemove)) {
+              // 移除前缀
               sql.delete(0, toRemove.trim().length());
               break;
             }
           }
         }
+        // 插入前缀,比如 WHERE
         if (prefix != null) {
           sql.insert(0, " ");
           sql.insert(0, prefix);
@@ -136,6 +157,9 @@ public class TrimSqlNode implements SqlNode {
       }
     }
 
+    /**
+     * 类似于 applyPrefix 方法
+     */
     private void applySuffix(StringBuilder sql, String trimmedUppercaseSql) {
       if (!suffixApplied) {
         suffixApplied = true;

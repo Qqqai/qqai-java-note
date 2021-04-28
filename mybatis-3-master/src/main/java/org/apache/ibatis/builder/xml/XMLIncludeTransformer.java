@@ -40,6 +40,9 @@ public class XMLIncludeTransformer {
     this.builderAssistant = builderAssistant;
   }
 
+  /**
+   * 解析<include>节点
+   */
   public void applyIncludes(Node source) {
     Properties variablesContext = new Properties();
     Properties configurationVariables = configuration.getVariables();
@@ -54,7 +57,7 @@ public class XMLIncludeTransformer {
    * @param variablesContext Current context for static variables with values 带值静态变量的当前上下文
    */
   private void applyIncludes(Node source, final Properties variablesContext, boolean included) {
-    // 获取标签名
+    // 第一个条件分支
     if ("include".equals(source.getNodeName())) {
       // 从include标签的refid属性获去引入的片段id信息  解析
       Node toInclude = findSqlFragment(getStringAttribute(source, "refid"), variablesContext);
@@ -62,22 +65,29 @@ public class XMLIncludeTransformer {
       Properties toIncludeContext = getVariablesContext(source, variablesContext);
       // 递归
       applyIncludes(toInclude, toIncludeContext, true);
-      // 解析 note 看不懂
+      // 如果 <sql> 和 <include> 节点不在一个文档中，
+      // 则从其他文档中将 <sql> 节点引入到 <include> 所在文档中
       if (toInclude.getOwnerDocument() != source.getOwnerDocument()) {
         toInclude = source.getOwnerDocument().importNode(toInclude, true);
       }
+      // 将 <include> 节点替换为 <sql> 节点
       source.getParentNode().replaceChild(toInclude, source);
       while (toInclude.hasChildNodes()) {
+        // 将 <sql> 中的内容插入到 <sql> 节点之前
         toInclude.getParentNode().insertBefore(toInclude.getFirstChild(), toInclude);
       }
+      // 前面已经将 <sql> 节点的内容插入到 dom 中了，
+      // 现在不需要 <sql> 节点了，这里将该节点从 dom 中移除
       toInclude.getParentNode().removeChild(toInclude);
-      // 判断标签类型
+
+      // 第二个条件分支
     } else if (source.getNodeType() == Node.ELEMENT_NODE) {
       if (included && !variablesContext.isEmpty()) {
         // replace variables in attribute values
         NamedNodeMap attributes = source.getAttributes();
         for (int i = 0; i < attributes.getLength(); i++) {
           Node attr = attributes.item(i);
+          // 将 source 节点属性中的占位符 ${} 替换成具体的属性值
           attr.setNodeValue(PropertyParser.parse(attr.getNodeValue(), variablesContext));
         }
       }
@@ -85,9 +95,11 @@ public class XMLIncludeTransformer {
       for (int i = 0; i < children.getLength(); i++) {
         applyIncludes(children.item(i), variablesContext, included);
       }
+
+      // 第三个条件分支
     } else if (included && (source.getNodeType() == Node.TEXT_NODE || source.getNodeType() == Node.CDATA_SECTION_NODE)
         && !variablesContext.isEmpty()) {
-      // replace variables in text node
+      // 替换文本节点中的变量
       source.setNodeValue(PropertyParser.parse(source.getNodeValue(), variablesContext));
     }
   }

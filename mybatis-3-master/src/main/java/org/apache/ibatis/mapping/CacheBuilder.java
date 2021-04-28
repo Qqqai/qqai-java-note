@@ -1,17 +1,14 @@
 /**
- *    Copyright 2009-2019 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * Copyright 2009-2019 the original author or authors.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a
+ * copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.ibatis.mapping;
 
@@ -89,18 +86,30 @@ public class CacheBuilder {
     return this;
   }
 
+  /**
+   * 构建者模式
+   *
+   * @return cache对象
+   */
   public Cache build() {
+    // 可能为空??
     setDefaultImplementations();
+    // cache实例
     Cache cache = newBaseCacheInstance(implementation, id);
     setCacheProperties(cache);
     // issue #352, do not apply decorators to custom caches
     if (PerpetualCache.class.equals(cache.getClass())) {
+      // 遍历装饰器集合
       for (Class<? extends Cache> decorator : decorators) {
+        // 反射创建装饰器实例
         cache = newCacheDecoratorInstance(decorator, cache);
+        // 将属性设置到缓存实例中
         setCacheProperties(cache);
       }
+      // 应用标准装饰器
       cache = setStandardDecorators(cache);
     } else if (!LoggingCache.class.isAssignableFrom(cache.getClass())) {
+      // 应用具有日志功能的缓存装饰器
       cache = new LoggingCache(cache);
     }
     return cache;
@@ -115,6 +124,9 @@ public class CacheBuilder {
     }
   }
 
+  /**
+   * 应用标准的装饰器，比如 LoggingCache、SynchronizedCache
+   */
   private Cache setStandardDecorators(Cache cache) {
     try {
       MetaObject metaCache = SystemMetaObject.forObject(cache);
@@ -122,15 +134,19 @@ public class CacheBuilder {
         metaCache.setValue("size", size);
       }
       if (clearInterval != null) {
+        // 装饰  ScheduledCache中存了原本的cache对象
         cache = new ScheduledCache(cache);
         ((ScheduledCache) cache).setClearInterval(clearInterval);
       }
       if (readWrite) {
+        // 同上装饰
         cache = new SerializedCache(cache);
       }
+      // 同上装饰
       cache = new LoggingCache(cache);
       cache = new SynchronizedCache(cache);
       if (blocking) {
+        // 同上装饰
         cache = new BlockingCache(cache);
       }
       return cache;
@@ -181,7 +197,7 @@ public class CacheBuilder {
         ((InitializingObject) cache).initialize();
       } catch (Exception e) {
         throw new CacheException("Failed cache initialization for '"
-          + cache.getId() + "' on '" + cache.getClass().getName() + "'", e);
+            + cache.getId() + "' on '" + cache.getClass().getName() + "'", e);
       }
     }
   }
@@ -200,7 +216,7 @@ public class CacheBuilder {
       return cacheClass.getConstructor(String.class);
     } catch (Exception e) {
       throw new CacheException("Invalid base cache implementation (" + cacheClass + ").  "
-        + "Base cache implementations must have a constructor that takes a String id as a parameter.  Cause: " + e, e);
+          + "Base cache implementations must have a constructor that takes a String id as a parameter.  Cause: " + e, e);
     }
   }
 
@@ -218,7 +234,7 @@ public class CacheBuilder {
       return cacheClass.getConstructor(Cache.class);
     } catch (Exception e) {
       throw new CacheException("Invalid cache decorator (" + cacheClass + ").  "
-        + "Cache decorators must have a constructor that takes a Cache instance as a parameter.  Cause: " + e, e);
+          + "Cache decorators must have a constructor that takes a Cache instance as a parameter.  Cause: " + e, e);
     }
   }
 }

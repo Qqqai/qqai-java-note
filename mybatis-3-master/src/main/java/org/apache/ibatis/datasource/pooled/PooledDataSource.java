@@ -1,17 +1,14 @@
 /**
- *    Copyright 2009-2020 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * Copyright 2009-2020 the original author or authors.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a
+ * copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.ibatis.datasource.pooled;
 
@@ -375,27 +372,37 @@ public class PooledDataSource implements DataSource {
   protected void pushConnection(PooledConnection conn) throws SQLException {
 
     synchronized (state) {
+      // 从活跃连接池中移除连接
       state.activeConnections.remove(conn);
       if (conn.isValid()) {
+        // 空闲连接集合未满
         if (state.idleConnections.size() < poolMaximumIdleConnections && conn.getConnectionTypeCode() == expectedConnectionTypeCode) {
           state.accumulatedCheckoutTime += conn.getCheckoutTime();
+          // 回滚未提交的事务
           if (!conn.getRealConnection().getAutoCommit()) {
             conn.getRealConnection().rollback();
           }
+          // 创建新的 PooledConnection
           PooledConnection newConn = new PooledConnection(conn.getRealConnection(), this);
           state.idleConnections.add(newConn);
+          // 复用时间信息
           newConn.setCreatedTimestamp(conn.getCreatedTimestamp());
           newConn.setLastUsedTimestamp(conn.getLastUsedTimestamp());
+          // 将原连接置为无效状态
           conn.invalidate();
           if (log.isDebugEnabled()) {
             log.debug("Returned connection " + newConn.getRealHashCode() + " to pool.");
           }
+          // 通知等待的线程
           state.notifyAll();
         } else {
+          // 空闲连接集合已满
           state.accumulatedCheckoutTime += conn.getCheckoutTime();
           if (!conn.getRealConnection().getAutoCommit()) {
+            // 回滚未提交的事务
             conn.getRealConnection().rollback();
           }
+          // 关闭数据库连接
           conn.getRealConnection().close();
           if (log.isDebugEnabled()) {
             log.debug("Closed connection " + conn.getRealHashCode() + ".");
@@ -411,6 +418,21 @@ public class PooledDataSource implements DataSource {
     }
   }
 
+  /**
+   * 从数据库连接池拿数据库连接
+   * 1. 连接池中有空闲连接
+   * 2. 连接池中无空闲连接
+   * 对于第一种情况,处理措施就很简单了,把连接取出返回即可。对于第二种情况,则
+   * 要进行细分,会有如下的情况。
+   * 1. 活跃连接数没有超出最大活跃连接数
+   * 2. 活跃连接数超出最大活跃连接数
+   * 对于上面两种情况,第一种情况比较好处理,直接创建新的连接即可。至于第二种情
+   * 况,需要再次进行细分。
+   * 1. 活跃连接的运行时间超出限制,即超时了
+   * 2. 活跃连接未超时
+   * 对于第一种情况,我们直接将超时连接强行中断,并进行回滚,然后复用部分字段重新
+   * 创建 PooledConnection 即可。对于第二种情况,目前没有更好的处理方式了,只能等待了。
+   */
   private PooledConnection popConnection(String username, String password) throws SQLException {
     boolean countedWait = false;
     PooledConnection conn = null;
@@ -418,6 +440,7 @@ public class PooledDataSource implements DataSource {
     int localBadConnectionCount = 0;
 
     while (conn == null) {
+      // 锁住state对象
       synchronized (state) {
         if (!state.idleConnections.isEmpty()) {
           // Pool has available connection

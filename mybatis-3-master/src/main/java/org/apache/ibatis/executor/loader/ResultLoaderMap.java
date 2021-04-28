@@ -1,17 +1,14 @@
 /**
- *    Copyright 2009-2019 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * Copyright 2009-2019 the original author or authors.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a
+ * copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.ibatis.executor.loader;
 
@@ -53,9 +50,10 @@ public class ResultLoaderMap {
     String upperFirst = getUppercaseFirstProperty(property);
     if (!upperFirst.equalsIgnoreCase(property) && loaderMap.containsKey(upperFirst)) {
       throw new ExecutorException("Nested lazy loaded result property '" + property
-              + "' for query id '" + resultLoader.mappedStatement.getId()
-              + " already exists in the result map. The leftmost property of all lazy loaded properties must be unique within a result map.");
+          + "' for query id '" + resultLoader.mappedStatement.getId()
+          + " already exists in the result map. The leftmost property of all lazy loaded properties must be unique within a result map.");
     }
+    // 创建 LoadPair,并将 <大写属性名,LoadPair 对象> 键值对添加到 loaderMap 中
     loaderMap.put(upperFirst, new LoadPair(property, metaResultObject, resultLoader));
   }
 
@@ -163,9 +161,9 @@ public class ResultLoaderMap {
           Log log = this.getLogger();
           if (log.isDebugEnabled()) {
             log.debug("Property [" + this.property + "] of ["
-                    + metaResultObject.getOriginalObject().getClass() + "] cannot be loaded "
-                    + "after deserialization. Make sure it's loaded before serializing "
-                    + "forenamed object.");
+                + metaResultObject.getOriginalObject().getClass() + "] cannot be loaded "
+                + "after deserialization. Make sure it's loaded before serializing "
+                + "forenamed object.");
           }
         }
       }
@@ -188,22 +186,22 @@ public class ResultLoaderMap {
       if (this.metaResultObject == null || this.resultLoader == null) {
         if (this.mappedParameter == null) {
           throw new ExecutorException("Property [" + this.property + "] cannot be loaded because "
-                  + "required parameter of mapped statement ["
-                  + this.mappedStatement + "] is not serializable.");
+              + "required parameter of mapped statement ["
+              + this.mappedStatement + "] is not serializable.");
         }
 
         final Configuration config = this.getConfiguration();
         final MappedStatement ms = config.getMappedStatement(this.mappedStatement);
         if (ms == null) {
           throw new ExecutorException("Cannot lazy load property [" + this.property
-                  + "] of deserialized object [" + userObject.getClass()
-                  + "] because configuration does not contain statement ["
-                  + this.mappedStatement + "]");
+              + "] of deserialized object [" + userObject.getClass()
+              + "] because configuration does not contain statement ["
+              + this.mappedStatement + "]");
         }
 
         this.metaResultObject = config.newMetaObject(userObject);
         this.resultLoader = new ResultLoader(config, new ClosedExecutor(), ms, this.mappedParameter,
-                metaResultObject.getSetterType(this.property), null, null);
+            metaResultObject.getSetterType(this.property), null, null);
       }
 
       /* We are using a new executor because we may be (and likely are) on a new thread
@@ -213,7 +211,7 @@ public class ResultLoaderMap {
       if (this.serializationCheck == null) {
         final ResultLoader old = this.resultLoader;
         this.resultLoader = new ResultLoader(old.configuration, new ClosedExecutor(), old.mappedStatement,
-                old.parameterObject, old.targetType, old.cacheKey, old.boundSql);
+            old.parameterObject, old.targetType, old.cacheKey, old.boundSql);
       }
 
       this.metaResultObject.setValue(property, this.resultLoader.loadResult());
@@ -229,8 +227,8 @@ public class ResultLoaderMap {
         final Method factoryMethod = this.configurationFactory.getDeclaredMethod(FACTORY_METHOD);
         if (!Modifier.isStatic(factoryMethod.getModifiers())) {
           throw new ExecutorException("Cannot get Configuration as factory method ["
-                  + this.configurationFactory + "]#["
-                  + FACTORY_METHOD + "] is not static.");
+              + this.configurationFactory + "]#["
+              + FACTORY_METHOD + "] is not static.");
         }
 
         if (!factoryMethod.isAccessible()) {
@@ -249,23 +247,23 @@ public class ResultLoaderMap {
         throw ex;
       } catch (final NoSuchMethodException ex) {
         throw new ExecutorException("Cannot get Configuration as factory class ["
-                + this.configurationFactory + "] is missing factory method of name ["
-                + FACTORY_METHOD + "].", ex);
+            + this.configurationFactory + "] is missing factory method of name ["
+            + FACTORY_METHOD + "].", ex);
       } catch (final PrivilegedActionException ex) {
         throw new ExecutorException("Cannot get Configuration as factory method ["
-                + this.configurationFactory + "]#["
-                + FACTORY_METHOD + "] threw an exception.", ex.getCause());
+            + this.configurationFactory + "]#["
+            + FACTORY_METHOD + "] threw an exception.", ex.getCause());
       } catch (final Exception ex) {
         throw new ExecutorException("Cannot get Configuration as factory method ["
-                + this.configurationFactory + "]#["
-                + FACTORY_METHOD + "] threw an exception.", ex);
+            + this.configurationFactory + "]#["
+            + FACTORY_METHOD + "] threw an exception.", ex);
       }
 
       if (!(configurationObject instanceof Configuration)) {
         throw new ExecutorException("Cannot get Configuration as factory method ["
-                + this.configurationFactory + "]#["
-                + FACTORY_METHOD + "] didn't return [" + Configuration.class + "] but ["
-                + (configurationObject == null ? "null" : configurationObject.getClass()) + "].");
+            + this.configurationFactory + "]#["
+            + FACTORY_METHOD + "] didn't return [" + Configuration.class + "] but ["
+            + (configurationObject == null ? "null" : configurationObject.getClass()) + "].");
       }
 
       return Configuration.class.cast(configurationObject);
@@ -301,7 +299,8 @@ public class ResultLoaderMap {
     }
 
     @Override
-    protected <E> List<E> doQuery(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
+    protected <E> List<E> doQuery(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql)
+        throws SQLException {
       throw new UnsupportedOperationException("Not supported.");
     }
 

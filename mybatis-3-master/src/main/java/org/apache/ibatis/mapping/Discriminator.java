@@ -61,4 +61,11 @@ public class Discriminator {
     return discriminatorMap.get(s);
   }
 
+  @Override
+  public String toString() {
+    return "Discriminator{" +
+        "resultMapping=" + resultMapping +
+        ", discriminatorMap=" + discriminatorMap +
+        '}';
+  }
 }

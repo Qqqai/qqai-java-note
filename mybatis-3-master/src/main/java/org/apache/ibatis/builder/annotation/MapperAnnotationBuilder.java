@@ -121,8 +121,10 @@ public class MapperAnnotationBuilder {
     if (!configuration.isResourceLoaded(resource)) {
       // 加载
       loadXmlResource();
+      // 添加mapper路径
       configuration.addLoadedResource(resource);
       assistant.setCurrentNamespace(type.getName());
+      // TODO
       parseCache();
       parseCacheRef();
       for (Method method : type.getMethods()) {
@@ -194,6 +196,9 @@ public class MapperAnnotationBuilder {
     }
   }
 
+  /**
+   * 根据指定的名称空间解析缓存作用域
+   */
   private void parseCache() {
     CacheNamespace cacheDomain = type.getAnnotation(CacheNamespace.class);
     if (cacheDomain != null) {
@@ -218,6 +223,9 @@ public class MapperAnnotationBuilder {
     return props;
   }
 
+  /**
+   * 根据指定的CacheNamespaceRef解析cacheRef的创建信息
+   */
   private void parseCacheRef() {
     CacheNamespaceRef cacheDomainRef = type.getAnnotation(CacheNamespaceRef.class);
     if (cacheDomainRef != null) {

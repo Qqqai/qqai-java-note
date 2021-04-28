@@ -3,6 +3,7 @@ package study.dao;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
 import study.entity.User;
 
 /**
@@ -35,7 +36,7 @@ public interface UserDao {
    * @param user 实例对象
    * @return 对象列表
    */
-  List<User> queryAll(User user);
+  List<User> queryAll(User user, RowBounds rowBounds);
 
   /**
    * 新增数据

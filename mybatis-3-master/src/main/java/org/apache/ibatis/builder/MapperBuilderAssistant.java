@@ -117,7 +117,9 @@ public class MapperBuilderAssistant extends BaseBuilder {
     }
     try {
       unresolvedCacheRef = true;
+      // 根据命名空间从全局配置对象（Configuration）中查找相应的缓存实例
       Cache cache = configuration.getCache(namespace);
+      // 1. 使用者在cache-ref配置了不存在的namespace  2. 使用者使用的cache-ref还未创建出来
       if (cache == null) {
         throw new IncompleteElementException("No cache for namespace '" + namespace + "' could be found.");
       }
@@ -129,6 +131,18 @@ public class MapperBuilderAssistant extends BaseBuilder {
     }
   }
 
+  /**
+   * 配置二级缓存
+   *
+   * @param typeClass     类型  有默认
+   * @param evictionClass 置换算法 默认lru
+   * @param flushInterval 刷新时长
+   * @param size          最多可以存储结果对象或列表的引用，
+   * @param readWrite     是否只读
+   * @param blocking      blocking（是否使用阻塞缓存）: 默认为false，当指定为true时将采用BlockingCache进行封装，blocking，阻塞的意思，使用BlockingCache会在查询缓存时锁住对应的Key，如果缓存命中了则会释放对应的锁，否则会在查询数据库以后再释放锁这样可以阻止并发情况下多个线程同时查询数据，详情可参考BlockingCache的源码。
+   * @param props         子标签配置
+   * @return cache对象
+   */
   public Cache useNewCache(Class<? extends Cache> typeClass,
       Class<? extends Cache> evictionClass,
       Long flushInterval,
@@ -136,7 +150,7 @@ public class MapperBuilderAssistant extends BaseBuilder {
       boolean readWrite,
       boolean blocking,
       Properties props) {
-    Cache cache = new CacheBuilder(currentNamespace)
+    Cache cache = new CacheBuilder(currentNamespace) // 名称空间
         .implementation(valueOrDefault(typeClass, PerpetualCache.class))
         .addDecorator(valueOrDefault(evictionClass, LruCache.class))
         .clearInterval(flushInterval)
@@ -145,6 +159,7 @@ public class MapperBuilderAssistant extends BaseBuilder {
         .blocking(blocking)
         .properties(props)
         .build();
+    // 添加二级缓存
     configuration.addCache(cache);
     currentCache = cache;
     return cache;
@@ -258,27 +273,6 @@ public class MapperBuilderAssistant extends BaseBuilder {
 
   /**
    * 添加构建信息
-   * @param id 方法名
-   * @param sqlSource
-   * @param statementType
-   * @param sqlCommandType
-   * @param fetchSize
-   * @param timeout
-   * @param parameterMap
-   * @param parameterType
-   * @param resultMap
-   * @param resultType
-   * @param resultSetType
-   * @param flushCache
-   * @param useCache
-   * @param resultOrdered
-   * @param keyGenerator
-   * @param keyProperty
-   * @param keyColumn
-   * @param databaseId
-   * @param lang
-   * @param resultSets
-   * @return
    */
   public MappedStatement addMappedStatement(
       String id,
@@ -327,12 +321,15 @@ public class MapperBuilderAssistant extends BaseBuilder {
         .useCache(valueOrDefault(useCache, isSelect))
         .cache(currentCache);
 
+    // 获取或创建 ParameterMap
     ParameterMap statementParameterMap = getStatementParameterMap(parameterMap, parameterType, id);
     if (statementParameterMap != null) {
       statementBuilder.parameterMap(statementParameterMap);
     }
 
+    // 构建 MappedStatement，没有什么复杂逻辑，不跟下去了
     MappedStatement statement = statementBuilder.build();
+    // 添加 MappedStatement 到 configuration 的mappedStatements 集合中
     configuration.addMappedStatement(statement);
     return statement;
   }
@@ -453,7 +450,7 @@ public class MapperBuilderAssistant extends BaseBuilder {
       // 不是  空集合
       composites = Collections.emptyList();
     } else {
-      // 解析符合映射
+      // 解析 column = {property1=column1, property2=column2} 的情况， 这里会将 column 拆分成多个 ResultMapping
       composites = parseCompositeColumnName(column);
     }
     // 结果集映射构建

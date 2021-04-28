@@ -1,17 +1,14 @@
 /**
- *    Copyright 2009-2020 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * Copyright 2009-2020 the original author or authors.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a
+ * copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.ibatis.executor;
 
@@ -82,25 +79,39 @@ public class CachingExecutor implements Executor {
     return delegate.queryCursor(ms, parameter, rowBounds);
   }
 
+  /**
+   * 执行sql
+   */
   @Override
   public <E> List<E> query(MappedStatement ms, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler) throws SQLException {
+    // 绑定并获取sql信息
     BoundSql boundSql = ms.getBoundSql(parameterObject);
+    // 构建缓存key
     CacheKey key = createCacheKey(ms, parameterObject, rowBounds, boundSql);
+    // 查
     return query(ms, parameterObject, rowBounds, resultHandler, key, boundSql);
   }
 
   @Override
-  public <E> List<E> query(MappedStatement ms, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, CacheKey key, BoundSql boundSql)
+  public <E> List<E> query(MappedStatement ms, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, CacheKey key,
+      BoundSql boundSql)
       throws SQLException {
+    // 从mapperStatement获取二级缓存信息
     Cache cache = ms.getCache();
+    // 判断cache是否存在  在mapper.xml中是否配置了cache标签
     if (cache != null) {
+      // 如果是需要更新二级缓存的操作  那就会先刷新缓存
       flushCacheIfRequired(ms);
+      // 缓存获取
       if (ms.isUseCache() && resultHandler == null) {
         ensureNoOutParams(ms, boundSql);
+        // 获取缓存
         @SuppressWarnings("unchecked")
         List<E> list = (List<E>) tcm.getObject(cache, key);
         if (list == null) {
+          // 查
           list = delegate.query(ms, parameterObject, rowBounds, resultHandler, key, boundSql);
+          // 添加缓存
           tcm.putObject(cache, key, list); // issue #578 and #116
         }
         return list;
@@ -135,7 +146,8 @@ public class CachingExecutor implements Executor {
     if (ms.getStatementType() == StatementType.CALLABLE) {
       for (ParameterMapping parameterMapping : boundSql.getParameterMappings()) {
         if (parameterMapping.getMode() != ParameterMode.IN) {
-          throw new ExecutorException("Caching stored procedures with OUT params is not supported.  Please configure useCache=false in " + ms.getId() + " statement.");
+          throw new ExecutorException(
+              "Caching stored procedures with OUT params is not supported.  Please configure useCache=false in " + ms.getId() + " statement.");
         }
       }
     }
@@ -161,8 +173,13 @@ public class CachingExecutor implements Executor {
     delegate.clearLocalCache();
   }
 
+  /**
+   * 刷新缓存
+   */
   private void flushCacheIfRequired(MappedStatement ms) {
+    // 获取到cache对象
     Cache cache = ms.getCache();
+    // cache != null  且按照配置的flushCache刷新缓存
     if (cache != null && ms.isFlushCacheRequired()) {
       tcm.clear(cache);
     }

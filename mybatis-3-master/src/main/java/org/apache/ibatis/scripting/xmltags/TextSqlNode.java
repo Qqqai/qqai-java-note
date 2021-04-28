@@ -1,17 +1,14 @@
 /**
- *    Copyright 2009-2019 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * Copyright 2009-2019 the original author or authors.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a
+ * copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.ibatis.scripting.xmltags;
 
@@ -26,6 +23,9 @@ import org.apache.ibatis.type.SimpleTypeRegistry;
  * @author Clinton Begin
  */
 public class TextSqlNode implements SqlNode {
+  /**
+   * 存储带有${}占位符的文本
+   */
   private final String text;
   private final Pattern injectionFilter;
 
@@ -47,7 +47,9 @@ public class TextSqlNode implements SqlNode {
 
   @Override
   public boolean apply(DynamicContext context) {
+    // 创建解析 ${} 文本的解析器
     GenericTokenParser parser = createParser(new BindingTokenParser(context, injectionFilter));
+    // 解析 text文本信息 并拼接上去
     context.appendSql(parser.parse(text));
     return true;
   }
@@ -74,8 +76,10 @@ public class TextSqlNode implements SqlNode {
       } else if (SimpleTypeRegistry.isSimpleType(parameter.getClass())) {
         context.getBindings().put("value", parameter);
       }
+      // 通过 ONGL 从用户传入的参数中获取结果
       Object value = OgnlCache.getValue(content, context.getBindings());
       String srtValue = value == null ? "" : String.valueOf(value); // issue #274 return "" instead of "null"
+      // 通过正则表达式检测 srtValue 有效性
       checkInjection(srtValue);
       return srtValue;
     }

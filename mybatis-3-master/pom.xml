@@ -46,6 +46,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>fastjson</artifactId>
+      <version>1.2.74</version>
+    </dependency>
+    <dependency>
       <groupId>ognl</groupId>
       <artifactId>ognl</artifactId>
       <version>3.2.18</version>
@@ -83,12 +88,13 @@
       <version>2.14.0</version>
       <optional>true</optional>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/commons-logging/commons-logging -->
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
       <version>1.2</version>
-      <optional>true</optional>
     </dependency>
+
     <dependency>
       <groupId>cglib</groupId>
       <artifactId>cglib</artifactId>
